@@ -55,12 +55,12 @@ function initStaggerGroups(): void {
       {
         y: 0,
         opacity: 1,
-        duration: 0.8,
-        stagger: 0.08,
+        duration: 0.72,
+        stagger: 0.07,
         ease: 'power3.out',
         scrollTrigger: {
           trigger: group,
-          start: 'top 85%',
+          start: 'top 90%',
           once: true,
         },
       }

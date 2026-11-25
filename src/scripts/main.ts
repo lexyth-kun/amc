@@ -164,6 +164,18 @@ function boot(): void {
     finishProductPortalEntry();
   }
 
+  if (document.getElementById('about-particles-canvas')) {
+    void import('./about-particles').then(({ initAboutFluidParticles }) => {
+      initAboutFluidParticles();
+    });
+  }
+
+  if (document.getElementById('next-page-scroll-gate')) {
+    void import('./next-page-gate').then(({ initNextPageScrollGate }) => {
+      initNextPageScrollGate();
+    });
+  }
+
   window.setTimeout(() => {
     initMilestoneBInteractions();
     setupDeferredCinematicTunnel();

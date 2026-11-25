@@ -15,16 +15,18 @@
       { "label": "Kategori", "href": "/kategori/" },
       { "label": "Flash Sale", "href": "/flash-sale/" },
       { "label": "Cara Order", "href": "/cara-order/" },
+      { "label": "Tentang", "href": "/about/" },
       { "label": "FAQ", "href": "/faq/" }
     ],
     "overlayLinks": [
       { "num": "01", "label": "BERANDA", "href": "/" },
-      { "num": "02", "label": "PRODUK", "href": "/produk/" },
-      { "num": "03", "label": "KATEGORI", "href": "/kategori/" },
-      { "num": "04", "label": "FLASH SALE", "href": "/flash-sale/" },
-      { "num": "05", "label": "CARA ORDER", "href": "/cara-order/" },
-      { "num": "06", "label": "FAQ", "href": "/faq/" },
-      { "num": "07", "label": "KONTAK", "href": "/kontak/" }
+      { "num": "02", "label": "TENTANG", "href": "/about/" },
+      { "num": "03", "label": "PRODUK", "href": "/produk/" },
+      { "num": "04", "label": "KATEGORI", "href": "/kategori/" },
+      { "num": "05", "label": "FLASH SALE", "href": "/flash-sale/" },
+      { "num": "06", "label": "CARA ORDER", "href": "/cara-order/" },
+      { "num": "07", "label": "FAQ", "href": "/faq/" },
+      { "num": "08", "label": "KONTAK", "href": "/kontak/" }
     ]
   },
   "hero": {

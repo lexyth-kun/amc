@@ -55,7 +55,7 @@ describe('Single Source of Truth, Official White-Bg Logos, Multi-Page Nav & Anti
 
   it('routes primary navbar links to dedicated multi-page routes instead of hash-only scrolling', () => {
     const hrefs = content.header.navLinks.map((l) => l.href);
-    expect(hrefs).toEqual(['/produk/', '/kategori/', '/flash-sale/', '/cara-order/', '/faq/']);
+    expect(hrefs).toEqual(['/produk/', '/kategori/', '/flash-sale/', '/cara-order/', '/about/', '/faq/']);
     for (const link of content.header.overlayLinks) {
       expect(link.href.startsWith('/')).toBe(true);
     }

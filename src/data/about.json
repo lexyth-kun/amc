@@ -1,0 +1,122 @@
+{
+  "seo": {
+    "title": "Tentang Al Muthi Creative (Adrian Ali Muthi) | AMC",
+    "description": "Kenali Al Muthi Creative dan sang pendiri Adrian Ali Muthi. Dibangun mandiri untuk menghadirkan 41+ layanan akun premium, AI terbaru 2026, hiburan, dan top up game bergaransi penuh."
+  },
+  "hero": {
+    "eyebrow": "TENTANG AL MUTHI CREATIVE",
+    "scrollCue": "SCROLL UNTUK JELAJAHI",
+    "lines": [
+      "TOKO DIGITAL",
+      "AKUN PREMIUM",
+      "PROSES KILAT",
+      "GARANSI PENUH."
+    ],
+    "lead": "Al Muthi Creative (AMC) hadir untuk memudahkan kreator, mahasiswa, developer, dan gamer Indonesia memakai aplikasi AI, desain, hiburan, hingga top up game secara terjangkau, cepat, dan jujur."
+  },
+  "creators": [
+    {
+      "index": "001",
+      "name": "Adrian Ali Muthi",
+      "role": "Founder & Pembuat Tunggal, Al Muthi Creative",
+      "monogram": "AAM",
+      "summary": "Seluruh fondasi Al Muthi Creative, mulai dari desain antarmuka amc.web.id, katalog interaktif, sistem Web Shop otomatis order.amc.web.id, hingga integrasi Bot WhatsApp 24 jam, dirancang dan dijalankan langsung oleh satu orang: Adrian Ali Muthi.",
+      "philosophy": "Bekerja secara mandiri menjaga setiap detail tetap konsisten: harga transparan tanpa biaya tersembunyi, pembaruan katalog mengikuti rilis teknologi terbaru per November 2026, dan tanggapan cepat setiap kali pelanggan butuh bantuan garansi."
+    }
+  ],
+  "platformsSection": {
+    "eyebrow": "PLATFORM YANG KAMI DUKUNG",
+    "headline": "Ekosistem Digital Resmi dalam Satu Atap.",
+    "sub": "Menghubungkan pembeli Indonesia ke 41+ layanan aktif mulai dari mesin AI terbaru, perangkat lunak desain, streaming 4K, VPN, buzzer sosmed, hingga top up game instan."
+  },
+  "milestones": {
+    "eyebrow": "REKAM JEJAK NYATA",
+    "headline": "Angka Asli",
+    "totalDisplay": "4.8",
+    "totalLabel": "Rating Toko di Web Shop Resmi",
+    "groups": [
+      {
+        "title": "Kepercayaan Pembeli",
+        "rows": [
+          { "code": "1.266", "label": "Ulasan Terverifikasi", "note": "Live di order.amc.web.id/#ulasan" },
+          { "code": "1.300+", "label": "Order Selesai", "note": "Transaksi QRIS & Saldo AMC" },
+          { "code": "4.8/5", "label": "Rata-rata Rating", "note": "Ditulis langsung oleh pembeli aktif" },
+          { "code": "100%", "label": "Perlindungan Garansi", "note": "Sesuai masa aktif paket pilihan" }
+        ]
+      },
+      {
+        "title": "Skala Katalog 2026",
+        "rows": [
+          { "code": "41+", "label": "Layanan & Produk Aktif", "note": "AI, Desain, Streaming, VPN, Buzzer, Game" },
+          { "code": "06", "label": "Kategori Utama", "note": "Pembaruan katalog November 2026" },
+          { "code": "1-3m", "label": "Estimasi Top Up Game", "note": "Proses otomatis setelah pembayaran" },
+          { "code": "24 Jam", "label": "Bot Order & Admin CS", "note": "Web Shop & WhatsApp siaga penuh" }
+        ]
+      },
+      {
+        "title": "Kanal Resmi AMC",
+        "rows": [
+          { "code": "001", "label": "amc.web.id", "note": "Halaman utama & detail 41 layanan" },
+          { "code": "002", "label": "order.amc.web.id", "note": "Web Shop resmi, stok live & ulasan" },
+          { "code": "003", "label": "WA Bot +27 74 830 4118", "note": "Pemesanan otomatis 24 jam" },
+          { "code": "004", "label": "WA CS +62 851-1712-0101", "note": "Bantuan langsung & klaim garansi" }
+        ]
+      }
+    ]
+  },
+  "expertiseSection": {
+    "eyebrow": "BIDANG LAYANAN",
+    "headline": "Empat Pilar Utama AMC.",
+    "sub": "Fokus mendalam pada empat kategori digital yang paling dibutuhkan pengguna harian di Indonesia."
+  },
+  "expertise": [
+    {
+      "letter": "A",
+      "title": "AI & Produktivitas",
+      "description": "Akses lini AI terbaru November 2026 lengkap dengan panduan aktivasi jelas dan jaminan masa pakai.",
+      "items": [
+        "ChatGPT Plus (GPT-6.2 Astra & Sol)",
+        "Claude Pro (Opus 5.5, Sonnet 5.5, Fable 5.2)",
+        "Gemini AI Pro (Hydrogen, Neon, Carbon)",
+        "Grok 4.7, Zoom AI Companion & Google One"
+      ],
+      "href": "/produk/"
+    },
+    {
+      "letter": "K",
+      "title": "Kreasi & Desain",
+      "description": "Perangkat lunak kreatif andalan desainer grafis, editor video pendek, dan tim konten media sosial.",
+      "items": [
+        "Adobe Creative Cloud (MAX 2026 & Firefly)",
+        "Adobe Express 1 Tahun",
+        "Canva Pro & Integrasi Affinity Studio",
+        "CapCut Pro Team 4K, Alight Motion, Picsart"
+      ],
+      "href": "/produk/"
+    },
+    {
+      "letter": "H",
+      "title": "Hiburan & Privasi",
+      "description": "Streaming film 4K HDR, musik audio lossless 24-bit, dan jaringan VPN privat untuk kerja maupun santai.",
+      "items": [
+        "Netflix 4K Spatial Audio & HBO Max",
+        "YouTube Premium 1080p Enhanced",
+        "Spotify Lossless 24-bit & Apple Music",
+        "ExpressVPN & Surfshark VPN"
+      ],
+      "href": "/produk/"
+    },
+    {
+      "letter": "G",
+      "title": "Growth & Game",
+      "description": "Top up instan 1 sampai 3 menit dan penguatan interaksi sosial media aman tanpa meminta kata sandi.",
+      "items": [
+        "Mobile Legends, Honor of Kings, Free Fire",
+        "Valorant, Roblox, PUBG & Genshin Impact",
+        "Buzzer Instagram, TikTok, Facebook, Telegram, Shopee",
+        "Checkout QRIS Instan & Bot WA 24 Jam"
+      ],
+      "href": "/kategori/"
+    }
+  ]
+}

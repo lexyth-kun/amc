@@ -1,0 +1,489 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import BlueLine from '@/components/BlueLine.astro';
+import FinalCtaSection from '@/components/FinalCtaSection.astro';
+import FooterSection from '@/components/FooterSection.astro';
+import NextPageScrollGate from '@/components/NextPageScrollGate.astro';
+import aboutData from '@/data/about.json';
+import products from '@/data/products.json';
+import { getProductDetailBySlug } from '@/data/product-details';
+import { withBase } from '@/utils/url';
+
+const soloCreator = aboutData.creators[0];
+
+const supportedBrandSlugs = [
+  'chatgpt',
+  'claude',
+  'gemini',
+  'supergrok',
+  'adobe',
+  'adobe-express',
+  'canva',
+  'capcut',
+  'netflix',
+  'youtube',
+  'spotify',
+  'applemusic',
+  'hbomax',
+  'primevideo',
+  'discord',
+  'zoom',
+  'vpnexpress',
+  'vpnsurfshark',
+];
+
+const supportedBrands = supportedBrandSlugs
+  .map((slug) => products.allServices.find((s) => s.slug === slug))
+  .filter((item): item is (typeof products.allServices)[number] => Boolean(item));
+---
+
+<BaseLayout
+  title={aboutData.seo.title}
+  description={aboutData.seo.description}
+  currentPath="/about/"
+  showPreloader={false}
+>
+  <!-- ======================================================================
+       01. ABOUT HERO: Fluid Sky Blue Particle Cloud + Giant Display Manifesto
+       ====================================================================== -->
+  <section
+    id="about-hero"
+    data-bg-color="#FFFFFF"
+    aria-labelledby="about-hero-heading"
+    class="relative flex min-h-[92dvh] flex-col justify-between overflow-hidden bg-gradient-to-b from-white via-[#F0F9FF]/65 to-white pt-28 pb-12 md:pt-36 md:pb-16"
+  >
+    <canvas
+      id="about-particles-canvas"
+      class="pointer-events-none absolute inset-0 z-0 h-full w-full"
+      aria-hidden="true"
+    ></canvas>
+
+    <div class="relative z-10 mx-auto flex w-full max-w-amc flex-1 flex-col justify-between px-4 sm:px-6">
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3">
+          <a
+            href={withBase('/')}
+            data-page-link
+            class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-line bg-white/95 px-4 py-2 font-display text-xs font-extrabold tracking-[0.06em] text-navy no-underline shadow-sm transition-all duration-300 hover:-translate-x-0.5 hover:border-sky-deep hover:bg-bg-alt hover:text-sky-ink"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M19 12H5M12 19l-7-7 7-7"></path>
+            </svg>
+            <span>Beranda</span>
+          </a>
+          <p class="eyebrow-label m-0">{aboutData.hero.eyebrow}</p>
+        </div>
+
+        <button
+          type="button"
+          id="about-particles-pause"
+          aria-pressed="false"
+          class="min-h-[40px] rounded-full border border-line bg-white/90 px-3.5 py-1.5 font-display text-[11px] font-bold text-body transition-colors hover:border-sky-deep hover:text-navy"
+        >
+          Jeda Latar
+        </button>
+      </div>
+
+      <div class="my-10 md:my-14">
+        <h1
+          id="about-hero-heading"
+          class="m-0 font-display text-[clamp(2.65rem,8.4vw,6.8rem)] font-extrabold leading-[0.94] tracking-[-0.035em] text-navy"
+        >
+          {
+            aboutData.hero.lines.map((line, idx) => (
+              <span data-split-words class="block">
+                {idx === 3 ? <span class="amc-text-gradient">{line}</span> : line}
+              </span>
+            ))
+          }
+        </h1>
+
+        <div class="mt-10 grid grid-cols-1 items-end gap-8 lg:grid-cols-12">
+          <p class="m-0 max-w-2xl text-base leading-relaxed text-body sm:text-xl lg:col-span-7">
+            {aboutData.hero.lead}
+          </p>
+
+          <div class="flex items-center justify-between gap-4 border-t border-line pt-4 text-xs font-extrabold tracking-[0.2em] text-sky-ink lg:col-span-5 lg:justify-end">
+            <span aria-hidden="true">+</span>
+            <span class="font-display uppercase">{aboutData.hero.scrollCue}</span>
+            <span aria-hidden="true">+</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       02. SOLO CREATOR SPOTLIGHT: [[ 001 ]] Adrian Ali Muthi (Hanya 1 Pembuat)
+       ====================================================================== -->
+  <section
+    id="founder"
+    data-bg-color="#F0F9FF"
+    aria-labelledby="founder-heading"
+    class="scroll-mt-24 bg-bg-alt py-20 md:py-32"
+  >
+    <div class="mx-auto max-w-amc px-4 sm:px-6">
+      <BlueLine className="mb-12 md:mb-16" />
+
+      <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
+        <!-- Left Lusion [[ 001 ]] Founder Plate -->
+        <div class="lg:col-span-5" data-fade-up>
+          <div class="relative overflow-hidden rounded-card border border-line bg-white p-5 shadow-amc sm:p-6">
+            <div class="mb-4 flex items-center justify-between gap-3 border-b border-line pb-3 font-display text-xs font-extrabold tracking-[0.16em] text-sky-ink">
+              <span class="shrink-0 whitespace-nowrap">[[ {soloCreator.index} ]]</span>
+              <span class="text-right">PEMBUAT TUNGGAL • 1 / 1</span>
+            </div>
+
+            <div class="relative overflow-hidden rounded-2xl border border-line bg-bg-alt">
+              <img
+                src={withBase('/showcase/amc-ecosystem-gallery.webp')}
+                alt="Visual 3D arsitektur kaca biru langit Al Muthi Creative oleh Adrian Ali Muthi"
+                width="1280"
+                height="800"
+                loading="lazy"
+                decoding="async"
+                class="aspect-[4/3] h-auto w-full object-cover"
+              />
+              <div class="pointer-events-none absolute inset-0 flex flex-col justify-between bg-gradient-to-t from-[#082F49]/90 via-[#082F49]/15 to-transparent p-5">
+                <div class="flex items-center justify-between">
+                  <span class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-white/80 bg-white p-1.5 shadow-md">
+                    <img
+                      src={withBase('/logo-amc.webp')}
+                      alt="Logo Al Muthi Creative"
+                      width="44"
+                      height="44"
+                      loading="lazy"
+                      class="h-full w-full object-cover"
+                    />
+                  </span>
+                  <span class="rounded-lg bg-white/95 px-2.5 py-1 font-display text-xs font-extrabold tracking-[0.14em] text-navy">
+                    {soloCreator.monogram}
+                  </span>
+                </div>
+
+                <div>
+                  <p class="m-0 font-display text-[11px] font-extrabold uppercase tracking-[0.2em] text-sky-light">
+                    FOUNDER & SOLE CREATOR
+                  </p>
+                  <p class="m-0 mt-1 font-display text-2xl font-extrabold tracking-[-0.02em] text-white">
+                    {soloCreator.name}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-4 flex items-center justify-between text-xs font-bold text-body">
+              <span>Al Muthi Creative • Indonesia</span>
+              <a
+                href="https://www.instagram.com/almuthi_creative"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-display font-extrabold text-sky-ink no-underline hover:underline"
+              >
+                @almuthi_creative →
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Editorial Narrative -->
+        <div class="lg:col-span-7">
+          <div class="mb-4 inline-flex items-center gap-3 font-display text-sm font-extrabold tracking-[0.18em] text-sky-ink">
+            <span class="shrink-0 whitespace-nowrap">[[ {soloCreator.index} ]]</span>
+            <span class="h-[1px] w-10 shrink-0 bg-sky-deep" aria-hidden="true"></span>
+            <span class="uppercase">DI BALIK AL MUTHI CREATIVE</span>
+          </div>
+
+          <h2
+            id="founder-heading"
+            data-split-words
+            class="m-0 font-display text-[clamp(2.3rem,5.4vw,4.5rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy"
+          >
+            {soloCreator.name}
+          </h2>
+
+          <p class="mt-3 font-display text-base font-extrabold text-sky-ink sm:text-lg">
+            {soloCreator.role}
+          </p>
+
+          <p data-fade-up class="mt-6 text-base leading-relaxed text-body sm:text-lg">
+            {soloCreator.summary}
+          </p>
+
+          <p data-fade-up class="mt-4 text-base leading-relaxed text-body sm:text-lg">
+            {soloCreator.philosophy}
+          </p>
+
+          <div data-fade-up class="mt-8 flex flex-wrap items-center gap-3.5">
+            <a
+              href="https://wa.me/6285117120101"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-magnetic
+              class="amc-btn-primary"
+            >
+              <span>Hubungi Admin AMC</span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a
+              href={withBase('/produk/')}
+              data-page-link
+              data-magnetic
+              class="amc-btn-ghost"
+            >
+              <span>Jelajahi 41+ Layanan</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       03. PLATFORM ECOSYSTEM GRID (Lusion "BRANDS WE WORK WITH")
+       ====================================================================== -->
+  <section
+    id="ekosistem"
+    data-bg-color="#FFFFFF"
+    aria-labelledby="platforms-heading"
+    class="scroll-mt-24 bg-bg py-20 md:py-28"
+  >
+    <div class="mx-auto max-w-amc px-4 sm:px-6">
+      <BlueLine className="mb-12 md:mb-16" />
+
+      <div class="mb-12 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end">
+        <div class="lg:col-span-7">
+          <p class="eyebrow-label mb-3">{aboutData.platformsSection.eyebrow}</p>
+          <h2
+            id="platforms-heading"
+            data-split-words
+            class="m-0 font-display text-[clamp(2.1rem,5vw,4.1rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy"
+          >
+            {aboutData.platformsSection.headline}
+          </h2>
+        </div>
+        <div class="lg:col-span-5">
+          <p class="m-0 text-base leading-relaxed text-body">
+            {aboutData.platformsSection.sub}
+          </p>
+        </div>
+      </div>
+
+      <div
+        data-stagger-group
+        class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6"
+      >
+        {
+          supportedBrands.map((brand) => {
+            const detail = getProductDetailBySlug(brand.slug);
+            return (
+              <a
+                href={withBase(`/produk/${brand.slug}/`)}
+                data-stagger-card
+                data-product-link
+                data-product-title={detail?.name ?? brand.name}
+                data-product-category={brand.category}
+                data-product-image={withBase(detail?.heroImage ?? '/showcase/amc-ecosystem-gallery.webp')}
+                data-product-logo={withBase(brand.logo)}
+                class="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-line bg-white p-5 text-center text-navy no-underline transition-all duration-300 hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc"
+              >
+                <span class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-line bg-white p-1.5">
+                  <img
+                    src={withBase(brand.logo)}
+                    alt={`Logo resmi ${brand.name}`}
+                    width="48"
+                    height="48"
+                    loading="lazy"
+                    decoding="async"
+                    class="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
+                  />
+                </span>
+                <span class="font-display text-xs font-extrabold tracking-[-0.01em] text-navy group-hover:text-sky-ink">
+                  {brand.name}
+                </span>
+              </a>
+            );
+          })
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       04. REAL MILESTONES LEDGER (Lusion "Awards 58" Architectural Ledger)
+       ====================================================================== -->
+  <section
+    id="rekam-jejak"
+    data-bg-color="#F0F9FF"
+    aria-labelledby="milestones-heading"
+    class="scroll-mt-24 bg-bg-alt py-20 md:py-28"
+  >
+    <div class="mx-auto max-w-amc px-4 sm:px-6">
+      <BlueLine className="mb-12 md:mb-16" />
+
+      <div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
+        <!-- Sticky Left Oversized Counter -->
+        <div class="lg:col-span-4">
+          <div class="lg:sticky lg:top-28">
+            <p class="eyebrow-label mb-3">{aboutData.milestones.eyebrow}</p>
+            <h2
+              id="milestones-heading"
+              data-split-words
+              class="m-0 font-display text-[clamp(2.2rem,4.5vw,3.8rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy"
+            >
+              {aboutData.milestones.headline}
+            </h2>
+
+            <div class="mt-6 flex items-baseline gap-2">
+              <span class="tabular-nums font-display text-[clamp(4.2rem,9vw,7.5rem)] font-extrabold leading-none tracking-[-0.04em] amc-text-gradient">
+                {aboutData.milestones.totalDisplay}
+              </span>
+              <span class="font-display text-2xl font-extrabold text-navy">/5</span>
+            </div>
+            <p class="mt-2 text-sm font-semibold text-body">
+              {aboutData.milestones.totalLabel}
+            </p>
+
+            <a
+              href="https://order.amc.web.id/#ulasan"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="amc-btn-ghost mt-6 !min-h-[44px] !px-5 !py-2.5 !text-xs"
+            >
+              <span>Verifikasi di order.amc.web.id/#ulasan →</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Right Tabular Hairline Ledger Groups -->
+        <div class="space-y-10 lg:col-span-8">
+          {
+            aboutData.milestones.groups.map((group) => (
+              <div data-fade-up>
+                <h3 class="m-0 mb-4 font-display text-lg font-extrabold tracking-[-0.02em] text-navy sm:text-xl">
+                  {group.title}
+                </h3>
+                <ul class="m-0 list-none divide-y divide-line border-y border-line p-0">
+                  {group.rows.map((row) => (
+                    <li class="grid grid-cols-12 items-baseline gap-3 py-4 transition-colors duration-200 hover:bg-white/70 sm:px-3">
+                      <span class="col-span-3 tabular-nums font-display text-base font-extrabold text-sky-ink sm:col-span-2 sm:text-lg">
+                        {row.code}
+                      </span>
+                      <span class="col-span-9 font-display text-sm font-extrabold text-navy sm:col-span-5 sm:text-base">
+                        {row.label}
+                      </span>
+                      <span class="col-span-12 text-xs font-medium text-body sm:col-span-5 sm:text-right sm:text-sm">
+                        {row.note}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================================================================
+       05. AREA OF EXPERTISE (Lusion S / C / T / P -> AMC A / K / H / G)
+       ====================================================================== -->
+  <section
+    id="bidang-layanan"
+    data-bg-color="#FFFFFF"
+    aria-labelledby="expertise-heading"
+    class="scroll-mt-24 bg-bg py-20 md:py-28"
+  >
+    <div class="mx-auto max-w-amc px-4 sm:px-6">
+      <BlueLine className="mb-12 md:mb-16" />
+
+      <div class="mb-12 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+        <div>
+          <p class="eyebrow-label mb-3">{aboutData.expertiseSection.eyebrow}</p>
+          <h2
+            id="expertise-heading"
+            data-split-words
+            class="m-0 font-display text-[clamp(2.2rem,5.4vw,4.5rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy"
+          >
+            {aboutData.expertiseSection.headline}
+          </h2>
+        </div>
+
+        <!-- Signature 4-letter Lusion monogram strip -->
+        <div class="flex items-center gap-2.5" aria-hidden="true">
+          {aboutData.expertise.map((pillar) => (
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl border border-line bg-bg-alt font-display text-lg font-extrabold text-navy">
+              {pillar.letter}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div data-stagger-group class="grid grid-cols-1 gap-6 md:grid-cols-2">
+        {
+          aboutData.expertise.map((pillar) => (
+            <article
+              data-stagger-card
+              class="group relative flex flex-col justify-between overflow-hidden rounded-card border border-line bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc sm:p-8"
+            >
+              <!-- Giant Architectural Monogram Watermark -->
+              <span
+                aria-hidden="true"
+                class="pointer-events-none absolute -right-4 -top-6 select-none font-display text-[9rem] font-extrabold leading-none text-[#E0F2FE] transition-colors duration-500 group-hover:text-[#BAE6FD]"
+              >
+                {pillar.letter}
+              </span>
+
+              <div class="relative z-10">
+                <div class="mb-5 flex items-center gap-3">
+                  <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-sky font-display text-lg font-extrabold text-[#082F49]">
+                    {pillar.letter}
+                  </span>
+                  <h3 class="m-0 font-display text-2xl font-extrabold tracking-[-0.02em] text-navy">
+                    {pillar.title}
+                  </h3>
+                </div>
+
+                <p class="m-0 max-w-md text-sm leading-relaxed text-body sm:text-base">
+                  {pillar.description}
+                </p>
+
+                <ul class="m-0 mt-5 list-none space-y-2 border-t border-line pt-5 p-0 text-sm font-semibold text-navy">
+                  {pillar.items.map((item) => (
+                    <li class="flex items-center gap-2.5">
+                      <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-sky-deep" aria-hidden="true"></span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div class="relative z-10 mt-6 pt-2">
+                <a
+                  href={withBase(pillar.href)}
+                  data-page-link
+                  class="inline-flex min-h-[44px] items-center gap-2 font-display text-sm font-extrabold text-sky-ink no-underline transition-transform duration-300 group-hover:translate-x-1"
+                >
+                  <span>Lihat katalog {pillar.title}</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <FinalCtaSection />
+  <FooterSection />
+
+  <!-- Seamless Lusion Next Page Scroll Gate: /about/ -> /produk/ -->
+  <NextPageScrollGate
+    targetHref="/produk/"
+    eyebrow="TERUS SCROLL UNTUK LANJUT"
+    title="Semua Produk (41+)"
+    nextLabel="Halaman Berikutnya"
+  />
+</BaseLayout>

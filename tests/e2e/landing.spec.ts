@@ -398,4 +398,65 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     expect(mErrors).toEqual([]);
     await mobileCtx.close();
   });
+
+  test('auto-transitions from end of landing page to /about/ on continued scroll and verifies solo creator Adrian Ali Muthi', async ({
+    browser,
+  }) => {
+    const ctx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const page = await ctx.newPage();
+    const errors: string[] = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/', { waitUntil: 'load' });
+    await expect(page.locator('#amc-preloader')).toBeHidden({ timeout: 2200 });
+
+    // Scroll to the very bottom of the landing page
+    await page.evaluate(() => {
+      const maxY = document.documentElement.scrollHeight;
+      const win = window as Window & { __amcScrollTo?: (y: number) => void };
+      if (win.__amcScrollTo) win.__amcScrollTo(maxY);
+      else window.scrollTo(0, maxY);
+    });
+    await expect(page.locator('#next-page-scroll-gate')).toBeVisible();
+    await expect(page.locator('#next-page-scroll-gate')).toContainText('Tentang AMC');
+
+    // Keep scrolling down via real mouse wheel at bottom -> automatically opens /about/
+    await page.mouse.move(720, 450);
+    for (let i = 0; i < 6; i++) {
+      await page.mouse.wheel(0, 180);
+      await page.waitForTimeout(45);
+    }
+
+    await expect(page).toHaveURL(/\/about\/?$/, { timeout: 6000 });
+    await expect(page.locator('#founder-heading')).toContainText('Adrian Ali Muthi');
+
+    const aboutText = await page.evaluate(() => document.body.innerText);
+    expect(aboutText).toContain('[[ 001 ]]');
+    expect(aboutText).toContain('Adrian Ali Muthi');
+    expect(aboutText).toContain('PEMBUAT TUNGGAL');
+    expect(aboutText).toContain('1.266');
+    expect(aboutText).toContain('1.300+');
+    expect(aboutText).not.toContain('—');
+    expect(aboutText).not.toMatch(/\b(project|projects|portofolio|klien studio|case study)\b/i);
+
+    // Pause control on fluid particle background works (R-39)
+    await page.click('#about-particles-pause');
+    await expect(page.locator('#about-particles-pause')).toHaveAttribute('aria-pressed', 'true');
+
+    // NextPageScrollGate on /about/ points to /produk/
+    await expect(page.locator('#next-page-scroll-gate')).toHaveAttribute('data-next-page-href', '/produk/');
+
+    // Mobile 390px zero horizontal overflow on /about/
+    await page.setViewportSize({ width: 390, height: 844 });
+    const mOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - window.innerWidth
+    );
+    expect(mOverflow).toBeLessThanOrEqual(1);
+
+    expect(errors).toEqual([]);
+    await ctx.close();
+  });
 });
