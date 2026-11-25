@@ -1,0 +1,207 @@
+---
+import content from '@/data/content.json';
+import products from '@/data/products.json';
+import BlueLine from './BlueLine.astro';
+---
+
+<footer
+  id="kontak"
+  data-bg-color="#FFFFFF"
+  class="bg-bg pt-14 pb-10 md:pt-20"
+  role="contentinfo"
+>
+  <div data-footer-reveal class="mx-auto max-w-amc px-4 sm:px-6">
+    <BlueLine className="mb-12 md:mb-16" />
+
+    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12">
+      <!-- Col 1: Brand + Newsletter Mini (v1) -->
+      <div class="lg:col-span-4">
+        <a href="#hero" data-scroll-to="#hero" class="inline-flex min-h-[44px] items-center gap-3 text-navy no-underline">
+          <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-logo border border-line bg-white">
+            <img src="/logo-amc.webp" alt="Logo AMC" width="44" height="44" loading="lazy" class="h-full w-full object-cover" />
+          </span>
+          <span class="font-display text-base font-extrabold tracking-[-0.02em] text-navy">
+            AL MUTHI <span class="text-amc">CREATIVE</span>
+          </span>
+        </a>
+
+        <p class="mt-4 max-w-sm text-sm leading-relaxed text-body">
+          {content.footer.tagline}
+        </p>
+
+        <form class="js-newsletter-form mt-6" novalidate>
+          <label
+            for="footer-newsletter-email"
+            class="mb-2 block font-display text-xs font-extrabold uppercase tracking-[0.14em] text-navy"
+          >
+            {content.footer.newsletterLabel}
+          </label>
+          <div class="flex flex-col gap-2.5 sm:flex-row">
+            <input
+              id="footer-newsletter-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder={content.footer.newsletterPlaceholder}
+              class="min-h-[44px] flex-1 rounded-2xl border border-line bg-bg-alt px-4 py-2.5 text-sm text-ink placeholder:text-body/60"
+            />
+            <button
+              type="submit"
+              class="amc-btn-primary !min-h-[44px] shrink-0 !px-5 !py-2.5 !text-sm"
+            >
+              {content.footer.newsletterButton}
+            </button>
+          </div>
+          <p class="js-newsletter-feedback mt-2 text-xs leading-relaxed text-body" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+
+      <!-- Col 2: Produk -->
+      <div class="lg:col-span-2 lg:col-start-6">
+        <h3 class="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
+          Produk
+        </h3>
+        <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
+          {
+            products.categories.map((cat) => (
+              <li>
+                <a
+                  href={cat.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-amc"
+                >
+                  {cat.title}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <!-- Col 3: Bantuan -->
+      <div class="lg:col-span-2">
+        <h3 class="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
+          Bantuan
+        </h3>
+        <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
+          <li>
+            <a
+              href="#cara-order"
+              data-scroll-to="#cara-order"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+            >
+              Cara Order
+            </a>
+          </li>
+          <li>
+            <a
+              href="https://order.amc.web.id"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+            >
+              Lacak Orderan
+            </a>
+          </li>
+          <li>
+            <button
+              type="button"
+              data-open-tnc
+              class="inline-flex min-h-[44px] items-center border-0 bg-transparent p-0 text-sm font-medium text-body hover:text-amc"
+            >
+              Garansi
+            </button>
+          </li>
+          <li>
+            <a
+              href="#faq"
+              data-scroll-to="#faq"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+            >
+              FAQ
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Kontak -->
+      <div class="lg:col-span-3">
+        <h3 class="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
+          Kontak
+        </h3>
+        <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
+          <li>
+            <a
+              href={content.footer.contacts.waAdminHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-[44px] items-center text-sm font-bold text-navy no-underline hover:text-amc"
+            >
+              WA Admin: {content.footer.contacts.waAdminDisplay}
+            </a>
+          </li>
+          <li>
+            <a
+              href={content.footer.contacts.waBotHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+            >
+              WA Bot: {content.footer.contacts.waBotDisplay}
+            </a>
+          </li>
+          <li>
+            <a
+              href={content.footer.contacts.instagramHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+            >
+              Instagram: {content.footer.contacts.instagramDisplay}
+            </a>
+          </li>
+          <li>
+            <a
+              href={content.footer.contacts.emailHref}
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+            >
+              Email: {content.footer.contacts.emailDisplay}
+            </a>
+          </li>
+          <li class="pt-1">
+            <span class="inline-flex items-center rounded-lg border border-line bg-bg-alt px-3 py-1 font-display text-xs font-extrabold text-sky-ink">
+              {content.footer.contacts.hours}
+            </span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-line pt-6 text-xs font-medium text-body sm:flex-row sm:items-center">
+      <div class="flex flex-wrap items-center gap-3">
+        <span>{content.footer.copyright}</span>
+        <span aria-hidden="true">•</span>
+        <span>{content.footer.madeIn}</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-5">
+        <a
+          href="https://order.amc.web.id"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline hover:text-amc"
+        >
+          Lacak Orderan
+        </a>
+        <button
+          type="button"
+          data-open-tnc
+          class="inline-flex min-h-[44px] items-center border-0 bg-transparent p-0 font-bold text-navy hover:text-amc"
+        >
+          Garansi
+        </button>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,89 @@
+---
+import content from '@/data/content.json';
+---
+
+<header
+  id="site-header"
+  class="fixed inset-x-0 top-0 z-[1000] h-[72px] md:h-[88px]"
+>
+  <div
+    id="header-backdrop"
+    class="pointer-events-none absolute inset-0 border-b border-line bg-white/85 opacity-0 shadow-[0_12px_32px_rgba(11,27,77,0.06)] backdrop-blur-md transition-opacity duration-300"
+    aria-hidden="true"
+  ></div>
+
+  <div
+    id="header-inner"
+    class="relative mx-auto flex h-full max-w-amc items-center justify-between gap-4 px-4 transition-transform duration-300 sm:px-6"
+  >
+    <a
+      href="#hero"
+      data-scroll-to="#hero"
+      class="group inline-flex min-h-[44px] items-center gap-3 text-navy no-underline"
+      aria-label="Al Muthi Creative Beranda"
+    >
+      <span
+        id="header-brand-logo"
+        class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-logo border border-line bg-white shadow-sm transition-transform duration-300 group-hover:scale-105"
+      >
+        <img
+          src="/logo-amc.webp"
+          alt="Logo AMC"
+          width="44"
+          height="44"
+          fetchpriority="high"
+          class="h-full w-full object-cover"
+        />
+      </span>
+      <span class="font-display text-sm font-extrabold tracking-[-0.02em] text-navy sm:text-base">
+        AL MUTHI <span class="text-amc">CREATIVE</span>
+      </span>
+    </a>
+
+    <nav aria-label="Navigasi utama" class="hidden lg:block">
+      <ul class="flex items-center gap-8 list-none m-0 p-0">
+        {
+          content.header.navLinks.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                data-scroll-to={item.href}
+                class="inline-flex min-h-[44px] items-center font-display text-sm font-bold text-body no-underline transition-colors hover:text-amc"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2.5 sm:gap-3">
+      <a
+        href={content.header.ctaHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-magnetic
+        class="amc-btn-primary hidden sm:inline-flex !min-h-[44px] !px-5 !py-2.5 !text-sm"
+      >
+        {content.header.ctaLabel}
+      </a>
+
+      <button
+        type="button"
+        id="menu-toggle-btn"
+        aria-haspopup="dialog"
+        aria-expanded="false"
+        aria-controls="menu-overlay"
+        data-magnetic
+        class="inline-flex min-h-[44px] items-center gap-2.5 rounded-full border border-line bg-white px-4 py-2 font-display text-xs font-extrabold tracking-[0.16em] text-navy transition-colors hover:border-sky-deep hover:bg-bg-alt"
+      >
+        <span class="flex flex-col gap-1" aria-hidden="true">
+          <span class="block h-[2px] w-3.5 rounded-full bg-navy"></span>
+          <span class="block h-[2px] w-2.5 rounded-full bg-amc"></span>
+        </span>
+        <span>{content.header.menuButtonLabel}</span>
+      </button>
+    </div>
+  </div>
+</header>

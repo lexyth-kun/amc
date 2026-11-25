@@ -1,0 +1,300 @@
+{
+  "seo": {
+    "title": "Al Muthi Creative: Akun Premium Murah & Terpercaya",
+    "description": "Beli akun premium ChatGPT Plus, Claude Pro, Adobe Creative Cloud, Canva Pro, Netflix 4K, Spotify, Buzzer Sosmed, dan Top Up Game. Proses kilat, bergaransi penuh, admin 24 jam.",
+    "siteUrl": "https://amc.web.id"
+  },
+  "header": {
+    "brandName": "AL MUTHI CREATIVE",
+    "ctaLabel": "Order Sekarang",
+    "ctaHref": "https://order.amc.web.id",
+    "menuButtonLabel": "MENU",
+    "closeButtonLabel": "TUTUP",
+    "navLinks": [
+      { "label": "Produk", "href": "#produk" },
+      { "label": "Kategori", "href": "#kategori" },
+      { "label": "Flash Sale", "href": "#flash-sale" },
+      { "label": "Cara Order", "href": "#cara-order" },
+      { "label": "FAQ", "href": "#faq" }
+    ],
+    "overlayLinks": [
+      { "num": "01", "label": "BERANDA", "href": "#hero" },
+      { "num": "02", "label": "PRODUK", "href": "#produk" },
+      { "num": "03", "label": "KATEGORI", "href": "#kategori" },
+      { "num": "04", "label": "FLASH SALE", "href": "#flash-sale" },
+      { "num": "05", "label": "CARA ORDER", "href": "#cara-order" },
+      { "num": "06", "label": "FAQ", "href": "#faq" },
+      { "num": "07", "label": "KONTAK", "href": "#kontak" }
+    ]
+  },
+  "hero": {
+    "eyebrow": "AL MUTHI CREATIVE : TOKO AKUN PREMIUM",
+    "headlineBefore": "Semua Akun",
+    "headlineHighlight": "Premium,",
+    "headlineAfter": "Satu Tempat.",
+    "subheadline": "ChatGPT, Claude, Adobe, Canva, Netflix, sampai Top Up Game. Proses kilat, bergaransi penuh, admin 24 jam.",
+    "primaryCta": {
+      "label": "Lihat Semua Produk →",
+      "href": "https://order.amc.web.id"
+    },
+    "secondaryCta": {
+      "label": "Cara Order",
+      "href": "#cara-order"
+    },
+    "ratingSummary": "4.8 (1.266 ulasan)",
+    "ordersSummary": "1.300+ order selesai",
+    "scrollHint": "Scroll"
+  },
+  "intro": {
+    "eyebrow": "KENAPA BELANJA DI SINI",
+    "headline": "Ide Besar, Harga Bersahabat.",
+    "body": "Kami gabungkan harga termurah, proses tercepat, dan garansi penuh, supaya kamu bisa fokus pakai aplikasinya, bukan pusing soal akun.",
+    "linkLabel": "Kenapa AMC? →",
+    "linkHref": "#keunggulan"
+  },
+  "showreel": {
+    "eyebrow": "PANDUAN INTERAKTIF",
+    "title": "Lihat Cara Order dalam 8 Detik",
+    "playButtonLabel": "PLAY",
+    "caption": "Klik tombol Play untuk melihat 4 langkah order otomatis sampai akun aktif.",
+    "ctaLabel": "Order Sekarang →",
+    "ctaHref": "https://order.amc.web.id",
+    "steps": [
+      {
+        "step": "01",
+        "title": "Buka Web Shop atau Chat Bot WA",
+        "detail": "Pilih belanja langsung di order.amc.web.id atau ketik menu ke bot WhatsApp 24 jam."
+      },
+      {
+        "step": "02",
+        "title": "Pilih Aplikasi & Durasi",
+        "detail": "Cek stok live dan harga transparan untuk ChatGPT, Claude, Adobe, Canva, Netflix, hingga Top Up Game."
+      },
+      {
+        "step": "03",
+        "title": "Bayar Praktis lewat QRIS",
+        "detail": "Scan satu kode QRIS dari e-wallet atau mobile banking apa pun sesuai nominal invoice."
+      },
+      {
+        "step": "04",
+        "title": "Akun & Garansi Langsung Aktif",
+        "detail": "Detail login atau invite email langsung dikirim beserta jaminan garansi penuh selama masa aktif."
+      }
+    ]
+  },
+  "featuredSection": {
+    "eyebrow": "PRODUK UNGGULAN",
+    "headline": "Featured Products",
+    "description": "Pilihan produk paling laris minggu ini, harga live, stok terbatas.",
+    "allProductsLabel": "Lihat semua produk →",
+    "allProductsHref": "https://order.amc.web.id",
+    "cardCtaLabel": "Beli →"
+  },
+  "categoriesSection": {
+    "eyebrow": "KATEGORI LAYANAN",
+    "headline": "Mau cari apa hari ini?",
+    "description": "Semua kebutuhan aplikasi kreator, AI harian, hiburan, sosial media, dan game ada di satu katalog."
+  },
+  "cinematic": {
+    "phase1Eyebrow": "EKSPLORASI TANPA BATAS",
+    "phase1Headline": "Masuk ke dunia baru.",
+    "phase2Caption": "Puluhan aplikasi kreatif, AI, hiburan, dan game dalam satu ekosistem.",
+    "phase4Headline": "Dan biarkan imajinasimu jalan terus.",
+    "phase4Sub": "Langsung aktif dalam hitungan menit dengan perlindungan garansi penuh AMC.",
+    "ctaLabel": "Order Sekarang →",
+    "ctaHref": "https://order.amc.web.id"
+  },
+  "howToOrder": {
+    "eyebrow": "ALUR PEMESANAN",
+    "headline": "Order semudah chat.",
+    "primaryCtaLabel": "Order lewat Web Shop →",
+    "primaryCtaHref": "https://order.amc.web.id",
+    "botCtaLabel": "Chat Bot WA Otomatis",
+    "botCtaHref": "https://wa.me/27748304118?text=menu",
+    "helperNote": "Atau chat admin WA kalau bingung.",
+    "helperHref": "https://wa.me/6285117120101",
+    "steps": [
+      {
+        "num": "01",
+        "title": "Ketik \"menu\"",
+        "desc": "Bot kirim katalog lengkap beserta panduan singkat grup member resmi.",
+        "chatUser": "menu",
+        "chatBot": "KATALOG AMC AKTIF. Ketik nama aplikasi seperti gemini, chatgpt, canva, adobe, atau netflix."
+      },
+      {
+        "num": "02",
+        "title": "Pilih Aplikasi",
+        "desc": "Ketik nama aplikasi, misalnya gemini, untuk lihat harga dan stok.",
+        "chatUser": "gemini",
+        "chatBot": "GEMINI AI PRO tersedia (Invite Resmi & Head). Ketik: order gemini head 1 untuk lanjut."
+      },
+      {
+        "num": "03",
+        "title": "Order & Bayar QRIS",
+        "desc": "Ketik order gemini head 1, bot kirim QRIS dan total bayar.",
+        "chatUser": "order gemini head 1",
+        "chatBot": "INVOICE AMC SIAP. Silakan scan QRIS sesuai nominal tepat sampai 3 digit terakhir."
+      },
+      {
+        "num": "04",
+        "title": "Kirim Bukti, Terima Akun",
+        "desc": "Data akun langsung dikirim lengkap dengan bukti garansi.",
+        "chatUser": "[Kirim bukti pembayaran QRIS]",
+        "chatBot": "PEMBAYARAN TERVERIFIKASI. Data akun sudah dikirim, simpan pesan ini untuk klaim garansi."
+      }
+    ]
+  },
+  "benefits": {
+    "eyebrow": "STANDAR LAYANAN AMC",
+    "headline": "Kenapa ribuan pembeli langganan di AMC.",
+    "counters": [
+      { "target": 1300, "suffix": "+", "decimals": 0, "label": "Order selesai" },
+      { "target": 4.8, "suffix": "/5", "decimals": 1, "label": "Rating toko (1.266 ulasan)" },
+      { "target": 37, "suffix": "+", "decimals": 0, "label": "Produk digital aktif" },
+      { "target": 24, "suffix": " Jam", "decimals": 0, "label": "Admin & CS siaga" }
+    ],
+    "cards": [
+      {
+        "title": "Proses Kilat",
+        "desc": "Order lewat Web Shop langsung diproses tanpa antre panjang."
+      },
+      {
+        "title": "Garansi Penuh",
+        "desc": "Semua layanan bergaransi sesuai masa aktif yang kamu pilih."
+      },
+      {
+        "title": "Layanan Terlengkap",
+        "desc": "Aplikasi premium, AI, buzzer, dan top up game di satu tempat."
+      },
+      {
+        "title": "Admin 24 Jam",
+        "desc": "Siap bantu soal order, login, dan kendala akun kapan pun dibutuhkan."
+      }
+    ]
+  },
+  "testimonials": {
+    "eyebrow": "ULASAN PEMBELI",
+    "headline": "Rating 4.8/5 dari 1.266 ulasan terverifikasi.",
+    "subnote": "Slot kutipan di bawah memakai penanda jujur sambil menunggu 3 teks ulasan pilihan dari pemilik toko.",
+    "items": [
+      {
+        "id": "review-1",
+        "isPlaceholder": true,
+        "author": "[MENUNGGU INISIAL PEMBELI #1]",
+        "product": "ChatGPT Plus / Claude Pro",
+        "rating": 5,
+        "quote": "[MENUNGGU ULASAN ASLI PELANGGAN #1: kutipan ulasan asli dari order.amc.web.id akan ditampilkan di sini tanpa rekayasa teks]"
+      },
+      {
+        "id": "review-2",
+        "isPlaceholder": true,
+        "author": "[MENUNGGU INISIAL PEMBELI #2]",
+        "product": "Adobe Creative Cloud / Canva Pro",
+        "rating": 5,
+        "quote": "[MENUNGGU ULASAN ASLI PELANGGAN #2: kutipan ulasan asli dari order.amc.web.id akan ditampilkan di sini tanpa rekayasa teks]"
+      },
+      {
+        "id": "review-3",
+        "isPlaceholder": true,
+        "author": "[MENUNGGU INISIAL PEMBELI #3]",
+        "product": "Netflix Premium / Top Up Game",
+        "rating": 5,
+        "quote": "[MENUNGGU ULASAN ASLI PELANGGAN #3: kutipan ulasan asli dari order.amc.web.id akan ditampilkan di sini tanpa rekayasa teks]"
+      }
+    ]
+  },
+  "faq": {
+    "eyebrow": "BANTUAN & PERTANYAAN UMUM",
+    "headline": "Yang paling sering ditanyakan sebelum order.",
+    "tncTriggerLabel": "Baca Ketentuan & Garansi Resmi",
+    "items": [
+      {
+        "q": "Bagaimana cara melakukan pemesanan layanan di Al Muthi Creative?",
+        "a": "Order bisa langsung lewat Web Shop order.amc.web.id, bot WhatsApp otomatis di +27 74 830 4118, atau chat admin CS di +62 851-1712-0101."
+      },
+      {
+        "q": "Apakah seluruh layanan Aplikasi Premium memiliki garansi resmi?",
+        "a": "Ya, 100% layanan Aplikasi Premium dilengkapi garansi penuh sesuai masa aktif yang dipilih. Jika ada kendala akses pada akun, tim CS siap membantu perbaikan atau penggantian unit sesuai ketentuan garansi."
+      },
+      {
+        "q": "Apakah layanan Buzzer Sosial Media membutuhkan password akun saya?",
+        "a": "Sama sekali tidak. Layanan Buzzer Instagram, TikTok, Facebook, dan YouTube hanya membutuhkan username atau link postingan publik sehingga privasi akunmu tetap aman."
+      },
+      {
+        "q": "Berapa lama proses masuknya Top Up Game setelah pembayaran selesai?",
+        "a": "Untuk Mobile Legends, Roblox, Free Fire, PUBG Mobile, Genshin Impact, Honor of Kings, dan Valorant, pesanan diproses kilat sekitar 1 sampai 3 menit setelah pembayaran terkonfirmasi."
+      },
+      {
+        "q": "Apa bedanya akun Sharing dan akun Private?",
+        "a": "Akun Private digunakan khusus oleh kamu sendiri (atau invite langsung ke email pribadimu), sedangkan akun Sharing berbagi langganan dengan aturan tidak mengubah sandi dan pengaturan keamanan agar garansi tetap aktif."
+      },
+      {
+        "q": "Apakah bot WhatsApp melayani pembelian tengah malam?",
+        "a": "Ya. Bot order otomatis aktif 24 jam penuh di WhatsApp +27 74 830 4118 maupun langsung melalui checkout QRIS di order.amc.web.id."
+      }
+    ],
+    "tncItems": [
+      {
+        "num": "01",
+        "title": "Ketentuan Umum Layanan",
+        "desc": "Dengan bertransaksi melalui order.amc.web.id maupun WhatsApp resmi AMC, pelanggan dianggap memahami dan menyetujui aturan penggunaan layanan yang berlaku."
+      },
+      {
+        "num": "02",
+        "title": "Aturan & Garansi Aplikasi Premium",
+        "desc": "Gunakan akun sesuai panduan login yang diberikan. Pada akun tipe Sharing, pelanggan dilarang mengubah kata sandi, profil orang lain, atau pengaturan keamanan agar garansi tetap berlaku penuh."
+      },
+      {
+        "num": "03",
+        "title": "Ketentuan Layanan Buzzer Sosial Media",
+        "desc": "Akun sosial media tujuan wajib diatur publik (tidak diprivat) selama pengerjaan berlangsung dan username tidak diganti hingga pesanan selesai."
+      },
+      {
+        "num": "04",
+        "title": "Ketentuan Top Up Game Instan",
+        "desc": "Pastikan User ID, Zone ID, atau Riot ID tertulis benar sebelum membayar. Kesalahan input ID tujuan berada di luar tanggung jawab toko."
+      },
+      {
+        "num": "05",
+        "title": "Prosedur Klaim Garansi & Bantuan Teknis",
+        "desc": "Klaim garansi dapat diajukan kapan saja selama masa berlangganan aktif melalui WhatsApp CS 24 Jam (+62 851-1712-0101) dengan menyertakan nomor invoice dan tangkapan layar kendala."
+      },
+      {
+        "num": "06",
+        "title": "Kanal Komunikasi Resmi",
+        "desc": "Kami hanya melayani transaksi melalui amc.web.id, order.amc.web.id, Instagram @almuthi_creative, WhatsApp Admin +62 851-1712-0101, dan Bot WA +27 74 830 4118."
+      }
+    ]
+  },
+  "finalCta": {
+    "eyebrow": "LANGSUNG AKTIF HARI INI",
+    "headlineBefore": "Siap",
+    "headlineHighlight": "upgrade",
+    "headlineAfter": "akunmu?",
+    "subheadline": "Stok Flash Sale menipis, order sekarang sebelum kehabisan.",
+    "primaryLabel": "Order di Web Shop →",
+    "primaryHref": "https://order.amc.web.id",
+    "waLabel": "Chat Admin WA",
+    "waHref": "https://wa.me/6285117120101"
+  },
+  "footer": {
+    "tagline": "Proses cepat, bergaransi. Al Muthi Creative.",
+    "newsletterLabel": "Info Promo & Stok Baru (Segera Hadir)",
+    "newsletterPlaceholder": "nama@email.com",
+    "newsletterButton": "Subscribe",
+    "newsletterSuccess": "Email dicatat di perangkat ini (server buletin email segera aktif). Untuk update promo langsung hari ini, ikuti @almuthi_creative atau hubungi WA Admin.",
+    "copyright": "© 2026 Al Muthi Creative",
+    "madeIn": "Dibuat dengan ♥ di Indonesia",
+    "contacts": {
+      "waAdminDisplay": "+62 851-1712-0101",
+      "waAdminHref": "https://wa.me/6285117120101",
+      "waBotDisplay": "+27 74 830 4118",
+      "waBotHref": "https://wa.me/27748304118",
+      "instagramDisplay": "@almuthi_creative",
+      "instagramHref": "https://www.instagram.com/almuthi_creative",
+      "emailDisplay": "info@amc.web.id",
+      "emailHref": "mailto:info@amc.web.id",
+      "hours": "Admin/CS 24 Jam"
+    }
+  }
+}

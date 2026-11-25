@@ -1,0 +1,124 @@
+---
+---
+
+<div
+  id="amc-preloader"
+  role="status"
+  class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-bg px-6"
+  aria-label="Memuat halaman Al Muthi Creative"
+>
+  <div class="flex flex-col items-center gap-6">
+    <div
+      id="preloader-logo-flight"
+      class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-logo border border-line bg-white shadow-amc"
+    >
+      <img
+        src="/logo-amc.webp"
+        alt="Logo Al Muthi Creative"
+        width="56"
+        height="56"
+        fetchpriority="high"
+        decoding="sync"
+        class="h-full w-full object-cover"
+      />
+    </div>
+
+    <div
+      id="preloader-counter"
+      class="tabular-nums font-display text-[clamp(3.75rem,11vw,7.5rem)] font-extrabold leading-none tracking-[-0.04em] text-navy"
+      aria-live="off"
+    >
+      0
+    </div>
+
+    <div class="h-[3px] w-56 overflow-hidden rounded-full bg-line sm:w-64" aria-hidden="true">
+      <div
+        id="preloader-bar"
+        class="h-full w-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-sky via-sky-deep to-amc"
+      ></div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var preloader = document.getElementById('amc-preloader');
+    var counterEl = document.getElementById('preloader-counter');
+    var barEl = document.getElementById('preloader-bar');
+    var flightLogo = document.getElementById('preloader-logo-flight');
+
+    var revealed = false;
+    function emitReveal() {
+      if (revealed) return;
+      revealed = true;
+      window.__amcPreloaderRevealed = true;
+      window.dispatchEvent(new CustomEvent('amc:preloader-reveal'));
+    }
+
+    var done = false;
+    function finishAll() {
+      if (done) return;
+      done = true;
+      emitReveal();
+      window.__amcPreloaderDone = true;
+      if (preloader) {
+        preloader.style.display = 'none';
+        preloader.setAttribute('aria-hidden', 'true');
+      }
+      window.dispatchEvent(new CustomEvent('amc:preloader-complete'));
+    }
+
+    if (
+      !preloader ||
+      !counterEl ||
+      !barEl ||
+      (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+    ) {
+      finishAll();
+      return;
+    }
+
+    var isMobile = window.innerWidth < 768;
+    var countMs = isMobile ? 300 : 480;
+    var wipeMs = isMobile ? 220 : 320;
+    var start = performance.now();
+    var safety = window.setTimeout(finishAll, countMs + wipeMs + 300);
+
+    function step(now) {
+      if (done) return;
+      var t = Math.min(1, (now - start) / countMs);
+      var eased = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      counterEl.textContent = String(Math.round(eased * 100));
+      barEl.style.transform = 'scaleX(' + eased.toFixed(4) + ')';
+
+      if (t < 1) {
+        requestAnimationFrame(step);
+        return;
+      }
+
+      emitReveal();
+      var headerLogo = document.getElementById('header-brand-logo');
+      if (flightLogo && headerLogo) {
+        var fromRect = flightLogo.getBoundingClientRect();
+        var toRect = headerLogo.getBoundingClientRect();
+        if (fromRect.width > 0 && toRect.width > 0) {
+          var dx = toRect.left + toRect.width / 2 - (fromRect.left + fromRect.width / 2);
+          var dy = toRect.top + toRect.height / 2 - (fromRect.top + fromRect.height / 2);
+          var sc = toRect.width / fromRect.width;
+          flightLogo.style.transition = 'transform ' + Math.round(wipeMs * 0.85) + 'ms cubic-bezier(0.65, 0, 0.35, 1)';
+          flightLogo.style.transform = 'translate3d(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px,0) scale(' + sc.toFixed(3) + ')';
+        }
+      }
+
+      preloader.style.transition = 'transform ' + wipeMs + 'ms cubic-bezier(0.76, 0, 0.24, 1)';
+      preloader.style.transform = 'translate3d(0, -100%, 0)';
+
+      window.setTimeout(function () {
+        window.clearTimeout(safety);
+        finishAll();
+      }, wipeMs + 20);
+    }
+
+    requestAnimationFrame(step);
+  })();
+</script>

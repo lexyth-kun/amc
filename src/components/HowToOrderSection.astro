@@ -1,0 +1,124 @@
+---
+import content from '@/data/content.json';
+import BlueLine from './BlueLine.astro';
+---
+
+<section
+  id="cara-order"
+  data-bg-color="#FFFFFF"
+  class="bg-bg py-16 md:py-28"
+  aria-labelledby="howto-heading"
+>
+  <div class="mx-auto max-w-amc px-4 sm:px-6">
+    <BlueLine className="mb-12 md:mb-16" />
+
+    <div class="mb-12 max-w-2xl md:mb-16">
+      <p class="eyebrow-label mb-3">{content.howToOrder.eyebrow}</p>
+      <h2
+        id="howto-heading"
+        data-split-words
+        class="font-display text-[clamp(2.25rem,5.4vw,4.5rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy"
+      >
+        {content.howToOrder.headline}
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
+      <!-- 4 Numbered Step Cards -->
+      <div data-stagger-group class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-7">
+        {
+          content.howToOrder.steps.map((step, idx) => (
+            <button
+              type="button"
+              data-order-step-btn={idx}
+              data-stagger-card
+              aria-pressed={idx === 0 ? 'true' : 'false'}
+              class={`group flex min-h-[44px] flex-col justify-between rounded-card border p-6 text-left transition-all duration-300 ${
+                idx === 0
+                  ? 'border-amc bg-bg-alt shadow-amc'
+                  : 'border-line bg-white hover:border-sky-deep hover:bg-bg-alt/60'
+              }`}
+            >
+              <div class="flex w-full items-center justify-between">
+                <span class="tabular-nums font-display text-3xl font-extrabold tracking-[-0.04em] text-amc">
+                  {step.num}
+                </span>
+                <span class="rounded-full border border-line bg-white px-2.5 py-1 font-display text-[11px] font-bold text-sky-ink">
+                  Klik pratinjau
+                </span>
+              </div>
+
+              <div class="mt-6">
+                <h3 class="font-display text-xl font-extrabold tracking-[-0.02em] text-navy">
+                  {step.title}
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-body">
+                  {step.desc}
+                </p>
+              </div>
+            </button>
+          ))
+        }
+      </div>
+
+      <!-- Interactive WhatsApp Bot Preview Rig -->
+      <div class="rounded-card border border-line bg-bg-alt p-6 shadow-amc lg:col-span-5">
+        <div class="flex items-center gap-3 border-b border-line pb-4">
+          <span class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-line bg-white">
+            <img src="/logo-amc.webp" alt="Logo Bot AMC" width="40" height="40" loading="lazy" class="h-full w-full object-cover" />
+          </span>
+          <div>
+            <p class="m-0 font-display text-sm font-extrabold text-navy">Bot Order AMC 24 Jam</p>
+            <p class="m-0 text-xs font-medium text-sky-ink">Aktif otomatis • {content.footer.contacts.waBotDisplay}</p>
+          </div>
+        </div>
+
+        <div class="mt-5 min-h-[210px] rounded-2xl border border-line bg-white p-4">
+          {
+            content.howToOrder.steps.map((step, idx) => (
+              <div data-order-step-panel={idx} hidden={idx !== 0} class="flex flex-col gap-3">
+                <div class="self-end rounded-2xl rounded-tr-sm bg-amc px-4 py-2.5 text-sm font-semibold text-white">
+                  {step.chatUser}
+                </div>
+                <div class="self-start rounded-2xl rounded-tl-sm border border-line bg-bg-alt px-4 py-3 text-sm leading-relaxed text-navy">
+                  {step.chatBot}
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="mt-6 flex flex-col gap-3">
+          <div class="flex flex-wrap gap-3">
+            <a
+              href={content.howToOrder.primaryCtaHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-magnetic
+              class="amc-btn-primary flex-1 !min-h-[48px] !px-5 !text-sm"
+            >
+              {content.howToOrder.primaryCtaLabel}
+            </a>
+            <a
+              href={content.howToOrder.botCtaHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="amc-btn-ghost !min-h-[48px] !px-4 !text-sm"
+            >
+              {content.howToOrder.botCtaLabel}
+            </a>
+          </div>
+
+          <a
+            href={content.howToOrder.helperHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-[44px] items-center justify-center text-xs font-bold text-sky-ink no-underline hover:text-amc"
+          >
+            {content.howToOrder.helperNote}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,1 @@
+function i(o){const t=o.viewportWidth<768,r=typeof o.deviceMemoryGb=="number"&&o.deviceMemoryGb<=4,e=t||r,c=o.dpr??1;return{isCompactDevice:e,maxDpr:Math.min(c,e?1.75:2),heroCrossCount:e?9:15,heroOrbCount:e?4:6,tunnelParticleCount:e?120:240}}export{i as g};

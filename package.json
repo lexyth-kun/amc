@@ -1,0 +1,30 @@
+{
+  "name": "amc-landing-lusion",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@astrojs/tailwind": "^5.1.5",
+    "astro": "^5.5.0",
+    "gsap": "^3.12.7",
+    "lenis": "^1.2.3",
+    "tailwindcss": "^3.4.17",
+    "three": "^0.174.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.0",
+    "@types/three": "^0.174.0",
+    "jsdom": "^26.0.0",
+    "lighthouse": "^12.4.0",
+    "typescript": "^5.8.2",
+    "vitest": "^3.0.8"
+  }
+}

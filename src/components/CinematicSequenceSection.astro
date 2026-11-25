@@ -1,0 +1,82 @@
+---
+import content from '@/data/content.json';
+---
+
+<section
+  id="dunia-baru"
+  data-bg-color="#061A3A"
+  class="relative bg-bg-space"
+  aria-label="Sekuens cerita interaktif Al Muthi Creative"
+>
+  <div
+    id="cinematic-pin-stage"
+    class="relative flex h-[100dvh] w-full items-center justify-center overflow-hidden bg-bg-space"
+  >
+    <canvas
+      id="cinematic-canvas"
+      class="absolute inset-0 z-0 block h-full w-full"
+      aria-hidden="true"
+    ></canvas>
+
+    <!-- Phase 1 Copy (0% - 25%): Dark Space + Glowing Orb -->
+    <div
+      id="cinematic-phase1"
+      class="dark-surface pointer-events-none relative z-10 mx-auto max-w-4xl rounded-3xl bg-[radial-gradient(ellipse_at_center,rgba(6,26,58,0.78)_0%,rgba(6,26,58,0)_75%)] px-6 py-8 text-center"
+    >
+      <p class="font-display text-xs font-extrabold uppercase tracking-[0.24em] text-sky">
+        {content.cinematic.phase1Eyebrow}
+      </p>
+      <h2
+        id="cinematic-phase1-heading"
+        class="mt-4 font-display text-[clamp(2.5rem,6.5vw,5.5rem)] font-extrabold leading-[1.04] tracking-[-0.03em] text-white"
+      >
+        {
+          content.cinematic.phase1Headline.split(' ').map((word) => (
+            <span class="word-mask mr-[0.22em] last:mr-0">
+              <span class="cinematic-p1-word word-inner">{word}</span>
+            </span>
+          ))
+        }
+      </h2>
+    </div>
+
+    <!-- Phase 2 Caption (25% - 55%): Sky-Blue Product Tunnel -->
+    <div
+      id="cinematic-phase2"
+      style="opacity: 0;"
+      class="pointer-events-none absolute bottom-10 inset-x-0 z-10 flex justify-center px-4"
+    >
+      <div class="rounded-full border border-sky/40 bg-[#061A3A]/90 px-5 py-2.5 text-center text-xs font-bold tracking-[0.04em] text-white sm:text-sm">
+        {content.cinematic.phase2Caption}
+      </div>
+    </div>
+
+    <!-- Phase 3 -> 4 Reverse Black-Hole Whiteout & Final Reveal (80% - 100%) -->
+    <div
+      id="cinematic-whiteout"
+      style="opacity: 0; pointer-events: none;"
+      class="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white px-4 text-center sm:px-6"
+    >
+      <div id="cinematic-phase4-copy" class="mx-auto max-w-4xl">
+        <p class="eyebrow-label mb-4">DUNIA KREATIF AMC</p>
+        <h2 class="font-display text-[clamp(2.4rem,6.4vw,5.4rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy">
+          {content.cinematic.phase4Headline}
+        </h2>
+        <p class="mx-auto mt-5 max-w-xl text-base leading-relaxed text-body sm:text-lg">
+          {content.cinematic.phase4Sub}
+        </p>
+        <div class="mt-8 flex justify-center">
+          <a
+            href={content.cinematic.ctaHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-magnetic
+            class="amc-btn-primary"
+          >
+            {content.cinematic.ctaLabel}
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

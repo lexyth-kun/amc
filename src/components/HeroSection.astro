@@ -1,0 +1,163 @@
+---
+import content from '@/data/content.json';
+import products from '@/data/products.json';
+---
+
+<section
+  id="hero"
+  data-bg-color="#FFFFFF"
+  class="relative flex min-h-[100dvh] flex-col justify-between overflow-hidden bg-bg pt-24 pb-8 md:pt-28 md:pb-10"
+  aria-labelledby="hero-heading"
+>
+  <!-- Interactive 3D WebGL / 2D Fallback Canvas -->
+  <div
+    id="hero-canvas-wrap"
+    class=" absolute inset-0 z-0 overflow-hidden"
+  >
+    <canvas
+      id="hero-canvas"
+      class="block h-full w-full"
+      aria-label="Visual 3D interaktif bentuk plus Al Muthi Creative, klik untuk mengganti warna"
+    ></canvas>
+    <!-- Soft readability veil directly behind central headline -->
+    <div
+      class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_44%,rgba(255,255,255,0.92)_0%,rgba(255,255,255,0.72)_36%,rgba(255,255,255,0)_72%)]"
+      aria-hidden="true"
+    ></div>
+  </div>
+
+  <!-- Foreground Hero Copy -->
+  <div
+    id="hero-copy"
+    class="pointer-events-none relative z-10 mx-auto my-auto flex w-full max-w-amc flex-col items-center px-4 py-8 text-center sm:px-6"
+  >
+    <p class="eyebrow-label mb-4">
+      {content.hero.eyebrow}
+    </p>
+
+    <h1
+      id="hero-heading"
+      data-split-words
+      class="max-w-4xl font-display text-[clamp(2.65rem,7vw,6rem)] font-extrabold leading-[0.98] tracking-[-0.03em] text-navy"
+    >
+      {content.hero.headlineBefore}{' '}
+      <span class="amc-text-gradient">{content.hero.headlineHighlight}</span>{' '}
+      {content.hero.headlineAfter}
+    </h1>
+
+    <p
+      data-hero-fade
+      class="mt-6 max-w-2xl text-base leading-[1.7] text-body sm:text-lg"
+    >
+      {content.hero.subheadline}
+    </p>
+
+    <div
+      data-hero-fade
+      class="pointer-events-auto mt-8 flex flex-wrap items-center justify-center gap-3.5 sm:gap-4"
+    >
+      <a
+        href={content.hero.primaryCta.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-magnetic
+        class="amc-btn-primary"
+      >
+        {content.hero.primaryCta.label}
+      </a>
+
+      <a
+        href={content.hero.secondaryCta.href}
+        data-scroll-to={content.hero.secondaryCta.href}
+        data-magnetic
+        class="amc-btn-ghost"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" class="text-amc" aria-hidden="true">
+          <path d="M8 5v14l11-7z"></path>
+        </svg>
+        <span>{content.hero.secondaryCta.label}</span>
+      </a>
+    </div>
+
+    <p class="mt-4 rounded-full bg-white/90 px-3.5 py-1 text-xs font-medium text-body">
+      Tip interaktif: klik bentuk plus 3D di latar untuk mengganti warna.
+    </p>
+  </div>
+
+  <!-- Bottom Strip: Verified Rating + Product Logo Marquee + Scroll Cue -->
+  <div class="relative z-10 mx-auto w-full max-w-amc px-4 sm:px-6">
+    <div class="rounded-2xl border border-line bg-white/95 p-3.5 shadow-sm sm:px-5 sm:py-4">
+      <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs font-bold text-navy sm:text-sm">
+          <span class="inline-flex items-center gap-1.5">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true">
+              <path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77l-6.18 3.23L7 14.14 2 9.27l7.1-1.01L12 2z"></path>
+            </svg>
+            <span class="tabular-nums">{content.hero.ratingSummary}</span>
+          </span>
+          <span class="text-line" aria-hidden="true">•</span>
+          <span class="tabular-nums text-sky-ink">{content.hero.ordersSummary}</span>
+        </div>
+
+        <div class="flex items-center gap-2 lg:max-w-[58%] overflow-hidden">
+          <div id="hero-logo-marquee" class="marquee-wrap flex-1 overflow-hidden">
+            <div class="marquee-track items-center gap-3">
+              {
+                [...products.marqueeLogos, ...products.marqueeLogos].map((item, idx) => (
+                  <div
+                    class="inline-flex shrink-0 items-center gap-2 rounded-xl border border-line bg-bg-alt px-3 py-1.5"
+                    aria-hidden={idx >= products.marqueeLogos.length ? 'true' : undefined}
+                  >
+                    <img
+                      src={item.logo}
+                      alt={idx >= products.marqueeLogos.length ? '' : `Logo ${item.name}`}
+                      width="24"
+                      height="24"
+                      loading="lazy"
+                      decoding="async"
+                      class="h-6 w-6 rounded-md object-cover"
+                    />
+                    <span class="font-display text-xs font-bold text-navy">{item.name}</span>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+
+          <button
+            type="button"
+            data-marquee-toggle="hero-logo-marquee"
+            aria-label="Jeda animasi hero dan daftar logo produk"
+            aria-pressed="false"
+            class="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-xl border border-line bg-white text-navy transition-colors hover:border-amc hover:text-amc"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <rect x="6" y="5" width="4" height="14" rx="1"></rect>
+              <rect x="14" y="5" width="4" height="14" rx="1"></rect>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3 flex justify-center">
+      <span class="inline-flex items-center gap-2 rounded-full border border-line bg-white/95 px-3.5 py-1 text-xs font-bold uppercase tracking-[0.2em] text-sky-ink">
+        <span>{content.hero.scrollHint}</span>
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="scroll-cue-arrow"
+          aria-hidden="true"
+        >
+          <path d="M12 5v14M5 12l7 7 7-7"></path>
+        </svg>
+      </span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,121 @@
+---
+import content from '@/data/content.json';
+import BlueLine from './BlueLine.astro';
+---
+
+<section
+  id="faq"
+  data-bg-color="#F4F8FF"
+  class="bg-bg-alt py-16 md:py-28"
+  aria-labelledby="faq-heading"
+>
+  <div class="mx-auto max-w-amc px-4 sm:px-6">
+    <BlueLine className="mb-12 md:mb-16" />
+
+    <div class="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+      <div class="max-w-2xl">
+        <p class="eyebrow-label mb-3">{content.faq.eyebrow}</p>
+        <h2
+          id="faq-heading"
+          data-split-words
+          class="font-display text-[clamp(2rem,4.8vw,3.85rem)] font-extrabold leading-[1.04] tracking-[-0.03em] text-navy"
+        >
+          {content.faq.headline}
+        </h2>
+      </div>
+
+      <button
+        type="button"
+        data-open-tnc
+        aria-haspopup="dialog"
+        aria-controls="tnc-modal"
+        class="amc-btn-ghost self-start lg:self-auto"
+      >
+        {content.faq.tncTriggerLabel}
+      </button>
+    </div>
+
+    <div class="mx-auto max-w-4xl space-y-3">
+      {
+        content.faq.items.map((item, idx) => (
+          <div class="rounded-2xl border border-line bg-white">
+            <button
+              type="button"
+              data-faq-btn={idx}
+              aria-expanded={idx === 0 ? 'true' : 'false'}
+              aria-controls={`faq-panel-${idx}`}
+              class="flex min-h-[52px] w-full items-center justify-between gap-4 px-5 py-4 text-left font-display text-base font-extrabold text-navy sm:px-6"
+            >
+              <span>{item.q}</span>
+              <span
+                data-faq-icon={idx}
+                class={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line bg-bg-alt text-amc transition-transform duration-200 ${
+                  idx === 0 ? 'rotate-180' : ''
+                }`}
+                aria-hidden="true"
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M6 9l6 6 6-6"></path>
+                </svg>
+              </span>
+            </button>
+
+            <div
+              id={`faq-panel-${idx}`}
+              hidden={idx !== 0}
+              class="border-t border-line px-5 py-4 text-sm leading-[1.7] text-body sm:px-6"
+            >
+              {item.a}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+
+  <!-- Official Garansi & Syarat Ketentuan Modal -->
+  <div
+    id="tnc-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="tnc-modal-title"
+    hidden
+    class="fixed inset-0 z-[9993] flex items-center justify-center bg-navy/70 p-4"
+  >
+    <div class="max-h-[86vh] w-full max-w-3xl overflow-y-auto rounded-card border border-line bg-white p-6 shadow-2xl sm:p-8">
+      <div class="flex items-center justify-between gap-4 border-b border-line pb-4">
+        <div>
+          <p class="eyebrow-label">ATURAN LAYANAN RESMI</p>
+          <h3 id="tnc-modal-title" class="mt-1 font-display text-xl font-extrabold text-navy">
+            Syarat, Ketentuan &amp; Klaim Garansi AMC
+          </h3>
+        </div>
+
+        <button
+          type="button"
+          id="close-tnc-btn"
+          aria-label="Tutup jendela ketentuan garansi"
+          class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-line bg-bg-alt text-navy hover:border-amc hover:text-amc"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+            <path d="M18 6L6 18M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {
+          content.faq.tncItems.map((tnc) => (
+            <div class="rounded-2xl border border-line bg-bg-alt p-5">
+              <span class="tabular-nums font-display text-xs font-extrabold tracking-[0.16em] text-sky-ink">
+                PASAL {tnc.num}
+              </span>
+              <h4 class="mt-1.5 font-display text-base font-extrabold text-navy">{tnc.title}</h4>
+              <p class="mt-2 mb-0 text-xs leading-relaxed text-body">{tnc.desc}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>

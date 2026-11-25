@@ -1,0 +1,145 @@
+---
+import products from '@/data/products.json';
+import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/utils/format';
+---
+
+<section
+  id="flash-sale"
+  data-bg-color="#1A36FF"
+  data-flash-ends={products.flashSale.endsAt}
+  class="dark-surface relative overflow-hidden py-16 text-white md:py-28"
+  style="background: linear-gradient(150deg, #0B1B4D 0%, #1A36FF 52%, #0369A1 100%);"
+  aria-labelledby="flash-sale-heading"
+>
+  <!-- Ambient Sky Blue Highlight in Bottom Right (outside white header text area for WCAG AA) -->
+  <div
+    class="pointer-events-none absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.42)_0%,rgba(56,189,248,0)_70%)]"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative z-10 mx-auto max-w-amc px-4 sm:px-6">
+    <div class="mb-10 flex flex-col justify-between gap-8 lg:flex-row lg:items-end md:mb-14">
+      <div>
+        <span class="inline-block font-display text-xs font-extrabold uppercase tracking-[0.2em] text-sky">
+          PROMO WAKTU TERBATAS • BERAKHIR 30 NOV 2026 23:59 WIB
+        </span>
+        <h2
+          id="flash-sale-heading"
+          class="mt-3 font-display text-[clamp(2.1rem,5.4vw,4.5rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-white"
+        >
+          {products.flashSale.title}
+        </h2>
+        <p class="mt-3 max-w-xl text-base leading-relaxed text-white/90">
+          {products.flashSale.subtitle}
+        </p>
+      </div>
+
+      <!-- Live Tabular Countdown -->
+      <div
+        id="flash-countdown-box"
+        aria-label="Hitung mundur berakhirnya Flash Sale"
+        class="grid grid-cols-4 gap-2 sm:gap-3"
+      >
+        {
+          [
+            { id: 'cd-days', label: 'Hari', init: '05' },
+            { id: 'cd-hours', label: 'Jam', init: '08' },
+            { id: 'cd-minutes', label: 'Menit', init: '00' },
+            { id: 'cd-seconds', label: 'Detik', init: '00' },
+          ].map((unit) => (
+            <div class="flex min-w-[68px] flex-col items-center justify-center rounded-2xl border border-white/25 bg-[#0B1B4D]/75 px-3 py-3 text-center sm:min-w-[82px]">
+              <span
+                id={unit.id}
+                class="tabular-nums font-display text-2xl font-extrabold leading-none text-white sm:text-3xl"
+              >
+                {unit.init}
+              </span>
+              <span class="mt-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-sky">
+                {unit.label}
+              </span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <p id="flash-expired-banner" hidden class="mb-6 rounded-2xl border border-white/30 bg-[#0B1B4D] px-4 py-3 text-sm font-bold text-white">
+      Periode Flash Sale 11.11 telah berakhir. Cek harga terbaru langsung di Web Shop AMC.
+    </p>
+
+    <!-- 3 cols desktop / 2 cols mobile per section 7 ("Flash Sale 2 kolom") -->
+    <div data-stagger-group class="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+      {
+        products.flashSale.items.map((item) => {
+          const href = buildProductOrderUrl(item.slug, products.storeBaseUrl);
+          const pct = getStockProgressPercent(item.stockLeft, item.stockTotal);
+          return (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-stagger-card
+              class="group flex flex-col justify-between rounded-2xl border border-white/20 bg-white p-3.5 text-ink no-underline shadow-[0_20px_50px_rgba(6,26,58,0.24)] transition-transform duration-300 hover:-translate-y-1.5 sm:rounded-card sm:p-6"
+            >
+              <div>
+                <div class="flex items-start justify-between gap-2">
+                  <div class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white sm:h-12 sm:w-12">
+                    <img
+                      src={item.logo}
+                      alt={`Logo ${item.name}`}
+                      width="48"
+                      height="48"
+                      loading="lazy"
+                      decoding="async"
+                      class="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <span class="low-stock-pulse rounded-md bg-sale-ink px-2 py-0.5 font-display text-[9px] font-extrabold tracking-[0.06em] text-white sm:rounded-lg sm:px-2.5 sm:py-1 sm:text-[11px]">
+                    {products.flashSale.lowStockLabel}
+                  </span>
+                </div>
+
+                <h3 class="mt-3 font-display text-sm font-extrabold leading-snug tracking-[-0.02em] text-navy sm:mt-4 sm:text-xl">
+                  {item.name}
+                </h3>
+                <span class="mt-0.5 block text-xs font-semibold text-body">
+                  {item.duration}
+                </span>
+
+                <div class="mt-3 flex flex-col sm:mt-4 sm:flex-row sm:items-baseline sm:gap-2.5">
+                  <span class="tabular-nums text-xs font-semibold text-body line-through">
+                    {formatRupiah(item.originalPrice)}
+                  </span>
+                  <span class="tabular-nums font-display text-lg font-extrabold tracking-[-0.02em] text-amc sm:text-2xl">
+                    {formatRupiah(item.promoPrice)}
+                  </span>
+                </div>
+              </div>
+
+              <div class="mt-4 border-t border-line pt-3">
+                <div class="mb-1.5 flex items-center justify-between text-[11px] font-bold text-navy sm:text-xs">
+                  <span>Sisa {item.stockLeft} stok</span>
+                  <span class="text-amc group-hover:translate-x-0.5 transition-transform">Ambil →</span>
+                </div>
+                <div
+                  class="h-2 w-full overflow-hidden rounded-full bg-bg-deep"
+                  role="progressbar"
+                  aria-label={`Sisa stok ${item.name}: ${item.stockLeft} dari ${item.stockTotal}`}
+                  aria-valuenow={item.stockLeft}
+                  aria-valuemin={0}
+                  aria-valuemax={item.stockTotal}
+                >
+                  <div
+                    class="h-full rounded-full bg-gradient-to-r from-sale-ink to-amc"
+                    style={`width: ${pct}%;`}
+                  ></div>
+                </div>
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,122 @@
+---
+import products from '@/data/products.json';
+import content from '@/data/content.json';
+import { buildProductOrderUrl, formatRupiah } from '@/utils/format';
+import BlueLine from './BlueLine.astro';
+---
+
+<section
+  id="produk"
+  data-bg-color="#FFFFFF"
+  class="bg-bg py-16 md:py-28"
+  aria-labelledby="featured-heading"
+>
+  <div class="mx-auto max-w-amc px-4 sm:px-6">
+    <BlueLine className="mb-12 md:mb-16" />
+
+    <div class="mb-12 flex flex-col justify-between gap-6 lg:flex-row lg:items-end md:mb-16">
+      <div>
+        <p class="eyebrow-label mb-3">{content.featuredSection.eyebrow}</p>
+        <h2
+          id="featured-heading"
+          data-split-words
+          class="font-display text-[clamp(2.25rem,5.4vw,4.5rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy"
+        >
+          {content.featuredSection.headline}
+        </h2>
+      </div>
+
+      <div class="flex flex-col items-start gap-3 lg:max-w-md lg:items-end lg:text-right">
+        <p class="m-0 text-base leading-relaxed text-body">
+          {content.featuredSection.description}
+        </p>
+        <a
+          href={content.featuredSection.allProductsHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-[44px] items-center font-display text-sm font-extrabold text-amc no-underline transition-transform duration-300 hover:translate-x-1"
+        >
+          {content.featuredSection.allProductsLabel}
+        </a>
+      </div>
+    </div>
+
+    <!-- 3 cols desktop / 2 cols tablet / 1 col mobile -->
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        products.featuredProducts.map((product) => {
+          const href = buildProductOrderUrl(product.slug, products.storeBaseUrl);
+          return (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-product-card
+              class="group relative flex flex-col justify-between rounded-card border border-line bg-white p-6 text-ink no-underline shadow-sm transition-[box-shadow,border-color] duration-300 hover:border-sky-deep hover:shadow-amc-hover"
+              style="transform-style: preserve-3d; will-change: transform;"
+            >
+              <!-- Visual Showcase Top Panel -->
+              <div>
+                <div class="relative mb-6 flex h-40 items-center justify-center overflow-hidden rounded-panel border border-line/80 bg-gradient-to-br from-bg-alt via-white to-bg-deep">
+                  {product.badge && (
+                    <span
+                      class={`absolute left-3.5 top-3.5 z-10 inline-flex items-center rounded-lg px-2.5 py-1 font-display text-[11px] font-extrabold tracking-[0.08em] ${
+                        product.badge === 'PALING LARIS'
+                          ? 'bg-sale-ink text-white'
+                          : 'bg-amc text-white'
+                      }`}
+                    >
+                      {product.badge}
+                    </span>
+                  )}
+
+                  <span class="absolute right-3.5 top-3.5 rounded-lg border border-line bg-white/90 px-2.5 py-1 font-display text-xs font-bold text-navy">
+                    {product.duration}
+                  </span>
+
+                  <div
+                    data-card-media
+                    class="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-line bg-white shadow-amc transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+                  >
+                    <img
+                      src={product.logo}
+                      alt={`Logo ${product.name}`}
+                      width="80"
+                      height="80"
+                      loading="lazy"
+                      decoding="async"
+                      class="h-full w-full object-cover"
+                    />
+                  </div>
+                </div>
+
+                <h3 class="font-display text-xl font-extrabold tracking-[-0.02em] text-navy">
+                  {product.name}
+                </h3>
+                <p class="mt-2 text-sm leading-relaxed text-body">
+                  {product.description}
+                </p>
+              </div>
+
+              <!-- Price + Illuminated CTA Footer -->
+              <div class="mt-6 flex items-center justify-between border-t border-line pt-4">
+                <div>
+                  <span class="block text-[11px] font-bold uppercase tracking-[0.12em] text-body">
+                    Harga {product.duration}
+                  </span>
+                  <span class="tabular-nums font-display text-2xl font-extrabold tracking-[-0.02em] text-navy transition-colors duration-300 group-hover:text-amc">
+                    {formatRupiah(product.price)}
+                  </span>
+                </div>
+
+                <span class="inline-flex min-h-[44px] items-center justify-center rounded-full border border-line bg-bg-alt px-4 py-2 font-display text-sm font-extrabold text-navy transition-all duration-300 group-hover:border-transparent group-hover:bg-gradient-to-r group-hover:from-amc group-hover:to-amc-2 group-hover:text-white group-hover:shadow-[0_10px_24px_rgba(26,54,255,0.28)]">
+                  {content.featuredSection.cardCtaLabel}
+                </span>
+              </div>
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
