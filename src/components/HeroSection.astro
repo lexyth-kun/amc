@@ -113,6 +113,7 @@ import products from '@/data/products.json';
                       alt={idx >= products.marqueeLogos.length ? '' : `Logo ${item.name}`}
                       width="24"
                       height="24"
+                      loading="lazy"
                       decoding="async"
                       class="h-6 w-6 rounded-md object-cover"
                     />
@@ -126,7 +127,7 @@ import products from '@/data/products.json';
           <button
             type="button"
             data-marquee-toggle="hero-logo-marquee"
-            aria-label="Jeda animasi daftar logo produk"
+            aria-label="Jeda animasi hero dan daftar logo produk"
             aria-pressed="false"
             class="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-xl border border-line bg-white text-navy transition-colors hover:border-amc hover:text-amc"
           >

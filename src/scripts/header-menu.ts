@@ -11,7 +11,8 @@ export function initHeaderAndMenu(): void {
 
   let isScrolled = false;
   const syncHeader = () => {
-    const nextScrolled = window.scrollY > 80;
+    const y = Math.max(window.scrollY || 0, document.documentElement.scrollTop || 0);
+    const nextScrolled = y > 80;
     if (nextScrolled === isScrolled) return;
     isScrolled = nextScrolled;
     if (backdrop) {
@@ -23,6 +24,7 @@ export function initHeaderAndMenu(): void {
   };
 
   window.addEventListener('scroll', syncHeader, { passive: true });
+  window.addEventListener('amc:scroll-sync', syncHeader);
   syncHeader();
 
   if (!toggleBtn || !closeBtn || !overlay) return;

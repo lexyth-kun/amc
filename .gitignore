@@ -12,3 +12,5 @@ playwright/.cache/
 *.pem
 *.key
 firebase-debug.log*
+*.zip
+

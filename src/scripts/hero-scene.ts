@@ -1,11 +1,11 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { detectRenderMode, getAdaptiveObjectBudget } from '@/utils/webgl-support';
+import { getAdaptiveObjectBudget } from '@/utils/webgl-support';
 import { mountHeroCanvas2DFallback } from './hero-fallback-2d';
 
 const COLOR_CYCLE = [0xffffff, 0x38bdf8, 0x1a36ff] as const;
 
-function createBeveledCrossGeometry(): THREE.ExtrudeGeometry {
+function createBeveledCrossGeometry(compact: boolean): THREE.ExtrudeGeometry {
   const armHalf = 0.24;
   const armLen = 0.78;
   const shape = new THREE.Shape();
@@ -27,7 +27,7 @@ function createBeveledCrossGeometry(): THREE.ExtrudeGeometry {
   const geom = new THREE.ExtrudeGeometry(shape, {
     depth: 0.34,
     bevelEnabled: true,
-    bevelSegments: 4,
+    bevelSegments: compact ? 2 : 4,
     steps: 1,
     bevelSize: 0.08,
     bevelThickness: 0.08,
@@ -44,9 +44,25 @@ function pseudoCurlOffset(x: number, y: number, t: number): { dx: number; dy: nu
   };
 }
 
+function isSoftwareContext(gl: WebGLRenderingContext | WebGL2RenderingContext): boolean {
+  try {
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    if (!dbg) return false;
+    const rendererStr = String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '').toLowerCase();
+    return rendererStr.includes('swiftshader') || rendererStr.includes('llvmpipe') || rendererStr.includes('software');
+  } catch {
+    return false;
+  }
+}
+
 export function initHeroScene(): () => void {
   const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
   if (!canvas) return () => {};
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    canvas.dataset.renderMode = 'static';
+    return () => {};
+  }
 
   const navWithMemory = navigator as Navigator & { deviceMemory?: number };
   const budget = getAdaptiveObjectBudget({
@@ -55,25 +71,11 @@ export function initHeroScene(): () => void {
     dpr: window.devicePixelRatio || 1,
   });
 
-  const mode = detectRenderMode({
-    prefersReducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
-  });
-
-  canvas.dataset.renderMode = mode;
-
-  if (mode === 'static') {
-    return () => {};
-  }
-
-  if (mode === 'canvas2d') {
-    return mountHeroCanvas2DFallback(canvas, budget.heroCrossCount);
-  }
-
   let renderer: THREE.WebGLRenderer;
   try {
     renderer = new THREE.WebGLRenderer({
       canvas,
-      antialias: true,
+      antialias: !budget.isCompactDevice,
       alpha: true,
       powerPreference: 'high-performance',
     });
@@ -82,15 +84,24 @@ export function initHeroScene(): () => void {
     return mountHeroCanvas2DFallback(canvas, budget.heroCrossCount);
   }
 
-  renderer.setPixelRatio(budget.maxDpr);
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.08;
+  const softwareGl = isSoftwareContext(renderer.getContext());
+  if (budget.isCompactDevice && softwareGl) {
+    renderer.dispose();
+    canvas.dataset.renderMode = 'canvas2d';
+    return mountHeroCanvas2DFallback(canvas, budget.heroCrossCount);
+  }
+
+  canvas.dataset.renderMode = 'webgl';
+  renderer.setPixelRatio(softwareGl || budget.isCompactDevice ? 1 : budget.maxDpr);
+  if (!softwareGl) {
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.08;
+  }
 
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 60);
   camera.position.set(0, 0, 11.5);
 
-  // Studio bright lighting for glossy crosses on white stage
   const hemiLight = new THREE.HemisphereLight(0xffffff, 0xdbeafe, 1.85);
   scene.add(hemiLight);
 
@@ -109,11 +120,16 @@ export function initHeroScene(): () => void {
   const worldGroup = new THREE.Group();
   scene.add(worldGroup);
 
-  const crossGeom = createBeveledCrossGeometry();
-  const orbGeom = new THREE.SphereGeometry(0.42, 24, 24);
+  const crossGeom = createBeveledCrossGeometry(budget.isCompactDevice || softwareGl);
+  const orbGeom = new THREE.SphereGeometry(
+    0.42,
+    budget.isCompactDevice || softwareGl ? 14 : 24,
+    budget.isCompactDevice || softwareGl ? 14 : 24
+  );
 
+  type CrossMat = THREE.MeshPhysicalMaterial | THREE.MeshPhongMaterial;
   interface CrossNode {
-    mesh: THREE.Mesh<THREE.ExtrudeGeometry, THREE.MeshPhysicalMaterial>;
+    mesh: THREE.Mesh<THREE.ExtrudeGeometry, CrossMat>;
     basePos: THREE.Vector3;
     rotVel: THREE.Vector3;
     phase: number;
@@ -123,19 +139,27 @@ export function initHeroScene(): () => void {
   const crossNodes: CrossNode[] = [];
 
   for (let i = 0; i < budget.heroCrossCount; i++) {
-    // 50% white, 30% sky, 20% AMC blue per section 5.2
     const ratioRoll = i / budget.heroCrossCount;
     const colorIndex = ratioRoll < 0.5 ? 0 : ratioRoll < 0.8 ? 1 : 2;
 
-    const material = new THREE.MeshPhysicalMaterial({
-      color: COLOR_CYCLE[colorIndex],
-      roughness: 0.15,
-      metalness: 0.1,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.08,
-      emissive: colorIndex === 0 ? 0xeaf3ff : 0x000000,
-      emissiveIntensity: colorIndex === 0 ? 0.18 : 0,
-    });
+    const material: CrossMat =
+      budget.isCompactDevice || softwareGl
+        ? new THREE.MeshPhongMaterial({
+            color: COLOR_CYCLE[colorIndex],
+            specular: 0xffffff,
+            shininess: 105,
+            emissive: colorIndex === 0 ? 0xeaf3ff : 0x000000,
+            emissiveIntensity: colorIndex === 0 ? 0.22 : 0,
+          })
+        : new THREE.MeshPhysicalMaterial({
+            color: COLOR_CYCLE[colorIndex],
+            roughness: 0.15,
+            metalness: 0.1,
+            clearcoat: 1.0,
+            clearcoatRoughness: 0.08,
+            emissive: colorIndex === 0 ? 0xeaf3ff : 0x000000,
+            emissiveIntensity: colorIndex === 0 ? 0.18 : 0,
+          });
 
     const mesh = new THREE.Mesh(crossGeom, material);
     const angle = (i / budget.heroCrossCount) * Math.PI * 2 + 0.25;
@@ -167,14 +191,22 @@ export function initHeroScene(): () => void {
     });
   }
 
-  const orbMaterial = new THREE.MeshPhysicalMaterial({
-    color: 0xbae6fd,
-    roughness: 0.1,
-    metalness: 0.02,
-    transparent: true,
-    opacity: 0.52,
-    clearcoat: 1.0,
-  });
+  const orbMaterial =
+    budget.isCompactDevice || softwareGl
+      ? new THREE.MeshPhongMaterial({
+          color: 0xbae6fd,
+          specular: 0xffffff,
+          shininess: 90,
+          transparent: true,
+          opacity: 0.52,
+        })
+      : new THREE.MeshStandardMaterial({
+          color: 0xbae6fd,
+          roughness: 0.12,
+          metalness: 0.02,
+          transparent: true,
+          opacity: 0.52,
+        });
 
   const orbs: { mesh: THREE.Mesh; basePos: THREE.Vector3; phase: number }[] = [];
   for (let j = 0; j < budget.heroOrbCount; j++) {
@@ -195,22 +227,30 @@ export function initHeroScene(): () => void {
   let targetPointerY = 0;
   let smoothPointerX = 0;
   let smoothPointerY = 0;
+  let activeUntil = performance.now() + 1200;
+
+  const markActive = () => {
+    activeUntil = performance.now() + 1400;
+  };
 
   const onPointerMove = (e: PointerEvent) => {
     targetPointerX = (e.clientX / Math.max(1, window.innerWidth) - 0.5) * 2;
     targetPointerY = (e.clientY / Math.max(1, window.innerHeight) - 0.5) * 2;
+    markActive();
   };
 
   const onDeviceOrientation = (e: DeviceOrientationEvent) => {
     if (e.gamma == null || e.beta == null) return;
     targetPointerX = Math.max(-1, Math.min(1, e.gamma / 30));
     targetPointerY = Math.max(-1, Math.min(1, (e.beta - 45) / 30));
+    markActive();
   };
 
   const raycaster = new THREE.Raycaster();
   const pointerNdc = new THREE.Vector2();
 
   const onCanvasClick = (e: MouseEvent) => {
+    markActive();
     const rect = canvas.getBoundingClientRect();
     pointerNdc.x = ((e.clientX - rect.left) / Math.max(1, rect.width)) * 2 - 1;
     pointerNdc.y = -((e.clientY - rect.top) / Math.max(1, rect.height)) * 2 + 1;
@@ -222,7 +262,7 @@ export function initHeroScene(): () => void {
     );
     if (!hits.length) return;
 
-    const hitMesh = hits[0].object as THREE.Mesh<THREE.ExtrudeGeometry, THREE.MeshPhysicalMaterial>;
+    const hitMesh = hits[0].object as THREE.Mesh<THREE.ExtrudeGeometry, CrossMat>;
     const idx = hitMesh.userData.crossIndex as number | undefined;
     const node = idx !== undefined ? crossNodes[idx] : undefined;
     if (!node) return;
@@ -259,7 +299,7 @@ export function initHeroScene(): () => void {
   let inViewport = true;
   let tabHidden = document.hidden;
   let rafId = 0;
-  let prevTime = performance.now();
+  let lastRenderTime = 0;
 
   const io = new IntersectionObserver(
     (entries) => {
@@ -274,44 +314,50 @@ export function initHeroScene(): () => void {
   };
 
   const tick = (now: number) => {
-    const dt = Math.min(0.05, (now - prevTime) * 0.001);
-    prevTime = now;
+    rafId = requestAnimationFrame(tick);
+    const userPaused = Boolean((window as Window & { __amcHeroPaused?: boolean }).__amcHeroPaused);
+    if (!inViewport || tabHidden || userPaused) return;
 
-    if (inViewport && !tabHidden) {
-      const t = now * 0.001;
-      smoothPointerX += (targetPointerX - smoothPointerX) * 0.05;
-      smoothPointerY += (targetPointerY - smoothPointerY) * 0.05;
+    // 60fps during interaction on GPU, 24fps idle, or ~11fps on CPU software rasterizers to avoid main-thread stalls
+    const minInterval = softwareGl ? 90 : now < activeUntil ? 15 : 42;
+    const elapsed = now - lastRenderTime;
+    if (elapsed < minInterval) return;
+    const dt = Math.min(0.06, elapsed * 0.001);
+    lastRenderTime = now;
 
-      const mobileScrollTilt = budget.isCompactDevice ? window.scrollY * 0.0004 : 0;
-      worldGroup.rotation.y = smoothPointerX * 0.28;
-      worldGroup.rotation.x = -smoothPointerY * 0.2 + mobileScrollTilt;
+    const t = now * 0.001;
+    smoothPointerX += (targetPointerX - smoothPointerX) * 0.07;
+    smoothPointerY += (targetPointerY - smoothPointerY) * 0.07;
 
-      for (const node of crossNodes) {
-        const drift = pseudoCurlOffset(node.basePos.x, node.basePos.y, t + node.phase);
-        node.mesh.position.set(
-          node.basePos.x + drift.dx,
-          node.basePos.y + drift.dy,
-          node.basePos.z + drift.dz
-        );
-        node.mesh.rotation.x += node.rotVel.x * dt;
-        node.mesh.rotation.y += node.rotVel.y * dt;
-        node.mesh.rotation.z += node.rotVel.z * dt;
-      }
+    const mobileScrollTilt = budget.isCompactDevice ? window.scrollY * 0.0004 : 0;
+    worldGroup.rotation.y = smoothPointerX * 0.28;
+    worldGroup.rotation.x = -smoothPointerY * 0.2 + mobileScrollTilt;
 
-      for (const orb of orbs) {
-        orb.mesh.position.y = orb.basePos.y + Math.sin(t * 0.9 + orb.phase) * 0.26;
-        orb.mesh.position.x = orb.basePos.x + Math.cos(t * 0.7 + orb.phase) * 0.18;
-      }
-
-      renderer.render(scene, camera);
+    for (const node of crossNodes) {
+      const drift = pseudoCurlOffset(node.basePos.x, node.basePos.y, t + node.phase);
+      node.mesh.position.set(
+        node.basePos.x + drift.dx,
+        node.basePos.y + drift.dy,
+        node.basePos.z + drift.dz
+      );
+      node.mesh.rotation.x += node.rotVel.x * dt;
+      node.mesh.rotation.y += node.rotVel.y * dt;
+      node.mesh.rotation.z += node.rotVel.z * dt;
     }
 
-    rafId = requestAnimationFrame(tick);
+    for (const orb of orbs) {
+      orb.mesh.position.y = orb.basePos.y + Math.sin(t * 0.9 + orb.phase) * 0.26;
+      orb.mesh.position.x = orb.basePos.x + Math.cos(t * 0.7 + orb.phase) * 0.18;
+    }
+
+    renderer.render(scene, camera);
   };
 
   resize();
+  renderer.render(scene, camera);
   window.addEventListener('resize', resize);
   window.addEventListener('pointermove', onPointerMove, { passive: true });
+  window.addEventListener('scroll', markActive, { passive: true });
   window.addEventListener('deviceorientation', onDeviceOrientation, { passive: true });
   canvas.addEventListener('click', onCanvasClick);
   document.addEventListener('visibilitychange', onVis);
@@ -322,6 +368,7 @@ export function initHeroScene(): () => void {
     io.disconnect();
     window.removeEventListener('resize', resize);
     window.removeEventListener('pointermove', onPointerMove);
+    window.removeEventListener('scroll', markActive);
     window.removeEventListener('deviceorientation', onDeviceOrientation);
     canvas.removeEventListener('click', onCanvasClick);
     document.removeEventListener('visibilitychange', onVis);

@@ -104,10 +104,21 @@ export function initMotionCore(): void {
       if (!wrap) return;
       const paused = wrap.classList.toggle('is-paused');
       btn.setAttribute('aria-pressed', paused ? 'true' : 'false');
-      btn.setAttribute(
-        'aria-label',
-        paused ? 'Putar animasi daftar logo produk' : 'Jeda animasi daftar logo produk'
-      );
+      if (id === 'hero-logo-marquee') {
+        (window as Window & { __amcHeroPaused?: boolean }).__amcHeroPaused = paused;
+        window.dispatchEvent(new CustomEvent('amc:hero-pause', { detail: { paused } }));
+        btn.setAttribute(
+          'aria-label',
+          paused
+            ? 'Putar animasi hero dan daftar logo produk'
+            : 'Jeda animasi hero dan daftar logo produk'
+        );
+      } else {
+        btn.setAttribute(
+          'aria-label',
+          paused ? 'Putar animasi teks produk' : 'Jeda animasi teks produk'
+        );
+      }
     });
   });
 
@@ -115,121 +126,145 @@ export function initMotionCore(): void {
     return;
   }
 
-  lenisInstance = new Lenis({
-    lerp: 0.09,
-    smoothWheel: true,
-    wheelMultiplier: 1,
-  });
+  const isFinePointerDesktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (isFinePointerDesktop) {
+    lenisInstance = new Lenis({
+      lerp: 0.09,
+      smoothWheel: true,
+      wheelMultiplier: 1,
+    });
 
-  lenisInstance.on('scroll', ScrollTrigger.update);
-  gsap.ticker.add((time) => {
-    lenisInstance?.raf(time * 1000);
-  });
-  gsap.ticker.lagSmoothing(0);
-
-  // Split-text preparation for Hero and scrolled headings
-  const heroHeading = document.getElementById('hero-heading');
-  const heroFadeEls = gsap.utils.toArray<HTMLElement>('[data-hero-fade]');
-  let heroWords: HTMLElement[] = [];
-
-  if (heroHeading) {
-    heroWords = splitElementIntoWords(heroHeading);
-    gsap.set(heroWords, { yPercent: 110, rotate: 4 });
-    gsap.set(heroFadeEls, { y: 28, opacity: 0 });
+    lenisInstance.on('scroll', () => {
+      ScrollTrigger.update();
+      window.dispatchEvent(new Event('amc:scroll-sync'));
+    });
+    gsap.ticker.add((time) => {
+      lenisInstance?.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
   }
 
-  const revealHeroCopy = () => {
-    if (heroWords.length) {
-      gsap.to(heroWords, {
+  (window as Window & { __amcScrollTo?: (y: number) => void }).__amcScrollTo = (y: number) => {
+    if (lenisInstance) {
+      lenisInstance.scrollTo(y, { immediate: true });
+    } else {
+      window.scrollTo(0, y);
+    }
+    ScrollTrigger.update();
+    window.dispatchEvent(new Event('amc:scroll-sync'));
+  };
+
+  // Hero split-text on desktop; on mobile keep H1 immediately painted for < 2.0s LCP
+  const heroHeading = document.getElementById('hero-heading');
+  const heroFadeEls = gsap.utils.toArray<HTMLElement>('[data-hero-fade]');
+
+  if (heroHeading && isFinePointerDesktop) {
+    const heroWords = splitElementIntoWords(heroHeading);
+    const runReveal = () => {
+      gsap.fromTo(
+        heroWords,
+        { yPercent: 110, rotate: 4 },
+        {
+          yPercent: 0,
+          rotate: 0,
+          duration: 0.85,
+          stagger: 0.045,
+          ease: 'power4.out',
+        }
+      );
+      gsap.fromTo(
+        heroFadeEls,
+        { y: 24, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.75,
+          stagger: 0.12,
+          delay: 0.14,
+          ease: 'power3.out',
+        }
+      );
+    };
+
+    const win = window as Window & { __amcPreloaderRevealed?: boolean; __amcPreloaderDone?: boolean };
+    if (win.__amcPreloaderRevealed || win.__amcPreloaderDone) {
+      runReveal();
+    } else {
+      gsap.set(heroWords, { yPercent: 110, rotate: 4 });
+      gsap.set(heroFadeEls, { y: 24, opacity: 0 });
+      window.addEventListener('amc:preloader-reveal', runReveal, { once: true });
+    }
+  }
+
+  // Defer below-the-fold ScrollTrigger registration to next idle frame to avoid a single boot long-task
+  window.setTimeout(() => {
+    const heroSection = document.getElementById('hero');
+    const heroCanvasWrap = document.getElementById('hero-canvas-wrap');
+    const heroCopy = document.getElementById('hero-copy');
+
+    if (heroSection && heroCanvasWrap && heroCopy) {
+      gsap
+        .timeline({
+          scrollTrigger: {
+            trigger: heroSection,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1.1,
+          },
+        })
+        .to(heroCanvasWrap, { scale: 0.96, opacity: 0.35, ease: 'none' }, 0)
+        .to(heroCopy, { y: -60, opacity: 0.18, ease: 'none' }, 0);
+    }
+
+    document.querySelectorAll<HTMLElement>('[data-split-words]:not(#hero-heading)').forEach((el) => {
+      const words = splitElementIntoWords(el);
+      if (!words.length) return;
+      gsap.set(words, { yPercent: 110, rotate: 4 });
+      gsap.to(words, {
         yPercent: 0,
         rotate: 0,
         duration: 0.9,
-        stagger: 0.048,
+        stagger: 0.045,
         ease: 'power4.out',
-      });
-    }
-    if (heroFadeEls.length) {
-      gsap.to(heroFadeEls, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.14,
-        delay: 0.25,
-        ease: 'power3.out',
-      });
-    }
-  };
-
-  window.addEventListener('amc:preloader-complete', revealHeroCopy, { once: true });
-
-  // Scroll-out recession on Hero (world receding effect)
-  const heroSection = document.getElementById('hero');
-  const heroCanvasWrap = document.getElementById('hero-canvas-wrap');
-  const heroCopy = document.getElementById('hero-copy');
-
-  if (heroSection && heroCanvasWrap && heroCopy) {
-    gsap
-      .timeline({
         scrollTrigger: {
-          trigger: heroSection,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1.1,
+          trigger: el,
+          start: 'top 86%',
+          once: true,
         },
-      })
-      .to(heroCanvasWrap, { scale: 0.96, opacity: 0.35, ease: 'none' }, 0)
-      .to(heroCopy, { y: -60, opacity: 0.18, ease: 'none' }, 0);
-  }
-
-  // Split-text reveals for non-hero headings
-  document.querySelectorAll<HTMLElement>('[data-split-words]:not(#hero-heading)').forEach((el) => {
-    const words = splitElementIntoWords(el);
-    if (!words.length) return;
-    gsap.set(words, { yPercent: 110, rotate: 4 });
-    gsap.to(words, {
-      yPercent: 0,
-      rotate: 0,
-      duration: 0.9,
-      stagger: 0.045,
-      ease: 'power4.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 84%',
-        once: true,
-      },
+      });
     });
-  });
 
-  // Growing blue motif lines (scrub: 1)
-  document.querySelectorAll<HTMLElement>('[data-blue-line]').forEach((line) => {
-    gsap.fromTo(
-      line,
-      { scaleX: 0 },
-      {
-        scaleX: 1,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: line,
-          start: 'top 88%',
-          end: 'top 48%',
-          scrub: 1,
-        },
-      }
-    );
-  });
-
-  // Sharp choreographed world background shifts
-  document.querySelectorAll<HTMLElement>('[data-bg-color]').forEach((section) => {
-    const color = section.dataset.bgColor;
-    if (!color) return;
-    ScrollTrigger.create({
-      trigger: section,
-      start: 'top 58%',
-      end: 'bottom 58%',
-      onEnter: () => gsap.to(document.body, { backgroundColor: color, duration: 0.28, overwrite: 'auto' }),
-      onEnterBack: () => gsap.to(document.body, { backgroundColor: color, duration: 0.28, overwrite: 'auto' }),
+    document.querySelectorAll<HTMLElement>('[data-blue-line]').forEach((line) => {
+      gsap.fromTo(
+        line,
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: line,
+            start: 'top 88%',
+            end: 'top 48%',
+            scrub: 1,
+          },
+        }
+      );
     });
-  });
+
+    document.querySelectorAll<HTMLElement>('[data-bg-color]').forEach((section) => {
+      const color = section.dataset.bgColor;
+      if (!color) return;
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top 58%',
+        end: 'bottom 58%',
+        onEnter: () =>
+          gsap.to(document.body, { backgroundColor: color, duration: 0.28, overwrite: 'auto' }),
+        onEnterBack: () =>
+          gsap.to(document.body, { backgroundColor: color, duration: 0.28, overwrite: 'auto' }),
+      });
+    });
+  }, 60);
 
   initCustomCursor();
   initMagneticButtons();

@@ -402,7 +402,6 @@ function initTestimonialCarousel(): void {
     else startTimer();
   });
 
-  // Pointer drag / swipe support
   let dragStartX: number | null = null;
   viewport.addEventListener('pointerdown', (e) => {
     dragStartX = e.clientX;

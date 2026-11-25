@@ -13,8 +13,6 @@ export default defineConfig({
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
-        '--use-gl=angle',
-        '--use-angle=swiftshader',
         '--enable-webgl',
         '--ignore-gpu-blocklist',
       ],

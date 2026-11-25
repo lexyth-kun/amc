@@ -286,7 +286,7 @@
 }
 
 .scroll-cue-arrow {
-  animation: subtleBounce 1.2s ease-in-out infinite;
+  animation: subtleBounce 1.2s ease-in-out 3;
 }
 
 @keyframes softPulseOpacity {
@@ -300,7 +300,7 @@
 }
 
 .low-stock-pulse {
-  animation: softPulseOpacity 1.6s ease-in-out infinite;
+  animation: softPulseOpacity 1.6s ease-in-out 2;
 }
 
 @media (prefers-reduced-motion: reduce) {

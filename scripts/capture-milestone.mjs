@@ -33,7 +33,7 @@ async function triggerScrollReveals(page) {
   });
 }
 
-const server = spawn('npx', ['astro', 'preview', '--host', '127.0.0.1', '--port', '4322'], {
+const server = spawn('./node_modules/.bin/astro', ['preview', '--host', '127.0.0.1', '--port', '4322'], {
   stdio: 'ignore',
 });
 
