@@ -4,6 +4,7 @@ import { initMotionCore } from './motion-core';
 import { initHeaderAndMenu } from './header-menu';
 import { initPreloader } from './preloader';
 import { initMilestoneBInteractions } from './ui-interactions';
+import { finishProductPortalEntry } from './page-transition';
 import { computeTunnelPhaseState } from '@/utils/tunnel-phases';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -153,6 +154,15 @@ function setupDeferredCinematicTunnel(): void {
 function boot(): void {
   initMotionCore();
   initHeaderAndMenu();
+
+  const hasDetailStage = Boolean(document.getElementById('product-detail-stage'));
+  if (hasDetailStage) {
+    void import('./product-detail').then(({ initProductDetailExperience }) => {
+      initProductDetailExperience();
+    });
+  } else {
+    finishProductPortalEntry();
+  }
 
   window.setTimeout(() => {
     initMilestoneBInteractions();

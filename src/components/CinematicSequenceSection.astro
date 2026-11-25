@@ -1,6 +1,7 @@
 ---
 import content from '@/data/content.json';
 import products from '@/data/products.json';
+import { getProductDetailBySlug } from '@/data/product-details';
 import { withBase } from '@/utils/url';
 
 const categoryOrder = [
@@ -99,29 +100,35 @@ const serviceGroups = categoryOrder.map((cat) => ({
                 hidden={gIdx !== 0}
                 class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
               >
-                {group.items.map((service) => (
-                  <a
-                    href={service.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group flex items-center gap-2.5 rounded-2xl border border-[#38BDF8]/30 bg-white/10 p-2.5 text-white no-underline transition-all duration-200 hover:border-sky-light hover:bg-white/20"
-                  >
-                    <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#BAE6FD] bg-white shadow-sm">
-                      <img
-                        src={withBase(service.logo)}
-                        alt={`Logo ${service.name}`}
-                        width="40"
-                        height="40"
-                        loading="lazy"
-                        decoding="async"
-                        class="h-full w-full object-contain"
-                      />
-                    </span>
-                    <span class="min-w-0 truncate font-display text-xs font-bold text-white sm:text-[13px]">
-                      {service.name}
-                    </span>
-                  </a>
-                ))}
+                {group.items.map((service) => {
+                  const detail = getProductDetailBySlug(service.slug);
+                  return (
+                    <a
+                      href={withBase(`/produk/${service.slug}/`)}
+                      data-product-link
+                      data-product-title={detail?.name ?? service.name}
+                      data-product-category={service.category}
+                      data-product-image={withBase(detail?.heroImage ?? '/showcase/amc-ecosystem-gallery.webp')}
+                      data-product-logo={withBase(service.logo)}
+                      class="group flex items-center gap-2.5 rounded-2xl border border-[#38BDF8]/30 bg-white/10 p-2.5 text-white no-underline transition-all duration-200 hover:border-sky-light hover:bg-white/20"
+                    >
+                      <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#BAE6FD] bg-white shadow-sm">
+                        <img
+                          src={withBase(service.logo)}
+                          alt={`Logo ${service.name}`}
+                          width="40"
+                          height="40"
+                          loading="lazy"
+                          decoding="async"
+                          class="h-full w-full object-contain"
+                        />
+                      </span>
+                      <span class="min-w-0 truncate font-display text-xs font-bold text-white sm:text-[13px]">
+                        {service.name}
+                      </span>
+                    </a>
+                  );
+                })}
               </div>
             ))
           }

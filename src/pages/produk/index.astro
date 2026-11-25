@@ -5,6 +5,7 @@ import FinalCtaSection from '@/components/FinalCtaSection.astro';
 import FooterSection from '@/components/FooterSection.astro';
 import BlueLine from '@/components/BlueLine.astro';
 import products from '@/data/products.json';
+import { getProductDetailBySlug } from '@/data/product-details';
 import { withBase } from '@/utils/url';
 
 const filterTabs = [
@@ -20,7 +21,7 @@ const filterTabs = [
 
 <BaseLayout
   title="Semua Produk & Aplikasi Premium – Al Muthi Creative"
-  description="Daftar lengkap 41+ layanan aplikasi premium, AI, desain, hiburan, VPN, buzzer sosmed, dan top up game di Al Muthi Creative."
+  description="Daftar lengkap 41+ layanan aplikasi premium, AI terbaru November 2026, desain, hiburan, VPN, buzzer sosmed, dan top up game di Al Muthi Creative."
   currentPath="/produk/"
   showPreloader={false}
 >
@@ -31,7 +32,7 @@ const filterTabs = [
         Semua <span class="amc-text-gradient">41+ Layanan</span> Aplikasi Premium.
       </h1>
       <p class="mt-5 max-w-2xl text-base leading-relaxed text-body sm:text-lg">
-        Pilih kategori atau langsung klik logo aplikasi di bawah untuk melihat paket aktif, stok live, dan harga terbaru di Web Shop AMC.
+        Klik aplikasi mana saja di bawah untuk membuka halaman detail interaktif lengkap dengan pembaruan mesin November 2026, visual 3D, garansi, dan tautan order resmi.
       </p>
     </div>
   </section>
@@ -47,7 +48,7 @@ const filterTabs = [
             Direktori Lengkap Aplikasi & Layanan
           </h2>
           <p class="mt-1.5 text-sm text-body">
-            Klik salah satu aplikasi untuk langsung order di order.amc.web.id.
+            Setiap produk membuka halaman detail interaktif (geser kanan di desktop, scroll ke bawah di mobile).
           </p>
         </div>
 
@@ -73,36 +74,42 @@ const filterTabs = [
 
       <div class="grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {
-          products.allServices.map((service) => (
-            <a
-              href={service.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              data-catalog-item
-              data-catalog-category={service.category}
-              class="group flex items-center gap-3 rounded-2xl border border-line bg-white p-3.5 text-ink no-underline shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc"
-            >
-              <span class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white">
-                <img
-                  src={withBase(service.logo)}
-                  alt={`Logo ${service.name}`}
-                  width="48"
-                  height="48"
-                  loading="lazy"
-                  decoding="async"
-                  class="h-full w-full object-contain"
-                />
-              </span>
-              <div class="min-w-0">
-                <p class="m-0 truncate font-display text-sm font-extrabold text-navy group-hover:text-sky-ink">
-                  {service.name}
-                </p>
-                <p class="m-0 mt-0.5 truncate text-[11px] font-semibold text-body">
-                  {service.category}
-                </p>
-              </div>
-            </a>
-          ))
+          products.allServices.map((service) => {
+            const detail = getProductDetailBySlug(service.slug);
+            return (
+              <a
+                href={withBase(`/produk/${service.slug}/`)}
+                data-catalog-item
+                data-catalog-category={service.category}
+                data-product-link
+                data-product-title={detail?.name ?? service.name}
+                data-product-category={service.category}
+                data-product-image={withBase(detail?.heroImage ?? '/showcase/amc-ecosystem-gallery.webp')}
+                data-product-logo={withBase(service.logo)}
+                class="group flex items-center gap-3 rounded-2xl border border-line bg-white p-3.5 text-ink no-underline shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc"
+              >
+                <span class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white">
+                  <img
+                    src={withBase(service.logo)}
+                    alt={`Logo ${service.name}`}
+                    width="48"
+                    height="48"
+                    loading="lazy"
+                    decoding="async"
+                    class="h-full w-full object-contain"
+                  />
+                </span>
+                <div class="min-w-0">
+                  <p class="m-0 truncate font-display text-sm font-extrabold text-navy group-hover:text-sky-ink">
+                    {service.name}
+                  </p>
+                  <p class="m-0 mt-0.5 truncate text-[11px] font-semibold text-body">
+                    {service.category}
+                  </p>
+                </div>
+              </a>
+            );
+          })
         }
       </div>
 

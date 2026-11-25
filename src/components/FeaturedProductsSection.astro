@@ -1,7 +1,8 @@
 ---
 import products from '@/data/products.json';
 import content from '@/data/content.json';
-import { buildProductOrderUrl, formatRupiah } from '@/utils/format';
+import { getProductDetailBySlug } from '@/data/product-details';
+import { formatRupiah } from '@/utils/format';
 import { withBase } from '@/utils/url';
 import BlueLine from './BlueLine.astro';
 ---
@@ -41,25 +42,45 @@ import BlueLine from './BlueLine.astro';
       </div>
     </div>
 
-    <!-- 3 cols desktop / 2 cols tablet / 1 col mobile -->
+    <!-- 3 cols desktop / 2 cols tablet / 1 col mobile (Lusion showcase card rhythm) -->
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {
         products.featuredProducts.map((product) => {
-          const href = buildProductOrderUrl(product.slug, products.storeBaseUrl);
+          const detail = getProductDetailBySlug(product.slug);
+          const heroImage = withBase(detail?.heroImage ?? '/showcase/amc-ecosystem-gallery.webp');
+          const logoUrl = withBase(product.logo);
+          const detailHref = withBase(`/produk/${product.slug}/`);
           return (
             <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={detailHref}
               data-product-card
-              class="group relative flex flex-col justify-between rounded-card border border-line bg-white p-6 text-ink no-underline shadow-sm transition-[box-shadow,border-color] duration-300 hover:border-sky-deep hover:shadow-amc-hover"
+              data-product-link
+              data-product-title={product.name}
+              data-product-category={detail?.category ?? 'LAYANAN UNGGULAN AMC'}
+              data-product-image={heroImage}
+              data-product-logo={logoUrl}
+              class="group relative flex flex-col justify-between rounded-card border border-line bg-white p-4 text-ink no-underline shadow-sm transition-[box-shadow,border-color] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-sky-deep hover:shadow-amc-hover sm:p-5"
               style="transform-style: preserve-3d; will-change: transform;"
             >
               <div>
-                <div class="relative mb-6 flex h-40 items-center justify-center overflow-hidden rounded-panel border border-line/80 bg-gradient-to-br from-bg-alt via-white to-bg-deep">
+                <!-- Lusion-style 16:10 3D Showcase Media Frame -->
+                <div
+                  data-card-visual
+                  class="relative mb-5 overflow-hidden rounded-[18px] border border-line/90 bg-bg-alt"
+                >
+                  <img
+                    src={heroImage}
+                    alt={detail?.heroImageAlt ?? `Visual 3D ${product.name}`}
+                    width="1280"
+                    height="800"
+                    loading="lazy"
+                    decoding="async"
+                    class="aspect-[16/10] h-auto w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.07]"
+                  />
+
                   {product.badge && (
                     <span
-                      class={`absolute left-3.5 top-3.5 z-10 inline-flex items-center rounded-lg px-2.5 py-1 font-display text-[11px] font-extrabold tracking-[0.08em] ${
+                      class={`absolute left-3 top-3 z-10 inline-flex items-center rounded-lg px-2.5 py-1 font-display text-[10px] font-extrabold tracking-[0.08em] shadow-sm ${
                         product.badge === 'PALING LARIS'
                           ? 'bg-sale-ink text-white'
                           : 'bg-sky text-[#082F49]'
@@ -69,19 +90,20 @@ import BlueLine from './BlueLine.astro';
                     </span>
                   )}
 
-                  <span class="absolute right-3.5 top-3.5 rounded-lg border border-line bg-white/95 px-2.5 py-1 font-display text-xs font-bold text-navy">
+                  <span class="absolute right-3 top-3 z-10 rounded-lg border border-line bg-white/95 px-2.5 py-1 font-display text-[11px] font-bold text-navy shadow-sm">
                     {product.duration}
                   </span>
 
+                  <!-- Official pure-white platform logo badge floating bottom-left -->
                   <div
                     data-card-media
-                    class="flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-line bg-white shadow-amc transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+                    class="absolute bottom-3 left-3 z-10 flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-line bg-white p-1.5 shadow-md transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-105"
                   >
                     <img
-                      src={withBase(product.logo)}
+                      src={logoUrl}
                       alt={`Logo ${product.name}`}
-                      width="80"
-                      height="80"
+                      width="48"
+                      height="48"
                       loading="lazy"
                       decoding="async"
                       class="h-full w-full object-contain"
@@ -89,15 +111,27 @@ import BlueLine from './BlueLine.astro';
                   </div>
                 </div>
 
-                <h3 class="font-display text-xl font-extrabold tracking-[-0.02em] text-navy">
-                  {product.name}
-                </h3>
+                <p class="m-0 font-display text-[11px] font-extrabold uppercase tracking-[0.14em] text-sky-ink">
+                  {detail?.category ?? 'LAYANAN PREMIUM'}
+                </p>
+
+                <!-- Lusion dot-to-arrow horizontal title shift on hover -->
+                <div class="mt-1.5 flex items-center gap-2">
+                  <span
+                    aria-hidden="true"
+                    class="inline-flex h-2 w-2 shrink-0 rounded-full bg-sky transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:w-5 group-hover:bg-sky-deep"
+                  ></span>
+                  <h3 class="m-0 font-display text-xl font-extrabold tracking-[-0.02em] text-navy transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-1">
+                    {product.name}
+                  </h3>
+                </div>
+
                 <p class="mt-2 text-sm leading-relaxed text-body">
                   {product.description}
                 </p>
               </div>
 
-              <div class="mt-6 flex items-center justify-between border-t border-line pt-4">
+              <div class="mt-5 flex items-center justify-between border-t border-line pt-4">
                 <div>
                   <span class="block text-[11px] font-bold uppercase tracking-[0.12em] text-body">
                     Harga {product.duration}
@@ -107,8 +141,9 @@ import BlueLine from './BlueLine.astro';
                   </span>
                 </div>
 
-                <span class="inline-flex min-h-[44px] items-center justify-center rounded-full border border-line bg-bg-alt px-4 py-2 font-display text-sm font-extrabold text-navy transition-all duration-300 group-hover:border-transparent group-hover:bg-gradient-to-r group-hover:from-sky-light group-hover:to-sky group-hover:text-[#082F49] group-hover:shadow-[0_10px_24px_rgba(2,132,199,0.28)]">
-                  {content.featuredSection.cardCtaLabel}
+                <span class="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-full border border-line bg-bg-alt px-4 py-2 font-display text-sm font-extrabold text-navy transition-all duration-300 group-hover:border-transparent group-hover:bg-gradient-to-r group-hover:from-sky-light group-hover:to-sky group-hover:text-[#082F49] group-hover:shadow-[0_10px_24px_rgba(2,132,199,0.28)]">
+                  <span>Detail</span>
+                  <span aria-hidden="true" class="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
                 </span>
               </div>
             </a>

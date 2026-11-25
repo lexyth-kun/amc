@@ -53,7 +53,10 @@ const active = norm(currentPath);
       <ul class="flex items-center gap-7 list-none m-0 p-0">
         {
           content.header.navLinks.map((item) => {
-            const isCurrent = norm(item.href) === active;
+            const targetNorm = norm(item.href);
+            const isCurrent =
+              targetNorm === active ||
+              (targetNorm === '/produk' && active.startsWith('/produk/'));
             return (
               <li>
                 <a

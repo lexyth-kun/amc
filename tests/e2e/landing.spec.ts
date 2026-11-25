@@ -91,22 +91,25 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     await page.keyboard.press('Escape');
     await expect(page.locator('#showreel-modal')).toBeHidden();
 
-    // All 9 Featured Product cards link to order.amc.web.id/#aplikasi/<slug> with official /logos/*.svg
+    // All 9 Featured Product cards link to dedicated /produk/<slug>/ detail pages with 3D showcase + official white-bg logo
     const productCards = page.locator('[data-product-card]');
     await expect(productCards).toHaveCount(9);
-    expect(await productCards.first().getAttribute('href')).toBe(
-      'https://order.amc.web.id/#aplikasi/chatgpt'
+    expect(await productCards.first().getAttribute('href')).toBe('/produk/chatgpt/');
+    expect(await productCards.first().locator('[data-card-visual] > img').getAttribute('src')).toBe(
+      '/showcase/chatgpt.webp'
     );
-    expect(await productCards.first().locator('img').getAttribute('src')).toBe('/logos/chatgpt.svg');
+    expect(await productCards.first().locator('[data-card-media] img').getAttribute('src')).toBe(
+      '/logos/chatgpt.svg'
+    );
 
-    // Flash Sale live countdown & 6 cards
+    // Flash Sale live countdown & 6 cards pointing to dedicated detail pages
     const secText = await page.locator('#cd-seconds').textContent();
     expect(secText?.trim()).toMatch(/^\d{2}$/);
-    await expect(page.locator('#flash-sale a[href^="https://order.amc.web.id/#aplikasi/"]')).toHaveCount(6);
+    await expect(page.locator('#flash-sale a[href^="/produk/"]')).toHaveCount(6);
 
-    // Extended 620vh Cinematic Tunnel scrubs across ALL 6 categories / 41 services and rewinds cleanly
-    const tunnelLinksCount = await page.locator('#cinematic-phase2 a[href^="https://order.amc.web.id"]').count();
-    expect(tunnelLinksCount).toBeGreaterThanOrEqual(40);
+    // Extended 620vh Cinematic Tunnel scrubs across ALL 6 categories / 41 services pointing to detail pages
+    const tunnelLinksCount = await page.locator('#cinematic-phase2 a[href^="/produk/"]').count();
+    expect(tunnelLinksCount).toBeGreaterThanOrEqual(41);
 
     await page.evaluate(() => {
       const sec = document.getElementById('dunia-baru');
@@ -299,5 +302,100 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
       'https://order.amc.web.id/#aplikasi/chatgpt'
     );
     expect(redirectedUrl).toContain('https://order.amc.web.id/');
+  });
+
+  test('transitions from product card into Lusion-style detail page with desktop horizontal scroll, mobile vertical scroll, and Nov 2026 specs', async ({
+    browser,
+  }) => {
+    // 1) Desktop 1440x900: Card click morph -> /produk/gemini/ -> horizontal rightward scroll -> Next Product
+    const desktopCtx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const page = await desktopCtx.newPage();
+    const errors: string[] = [];
+    page.on('pageerror', (err) => errors.push(err.message));
+    page.on('console', (msg) => {
+      if (msg.type() === 'error') errors.push(msg.text());
+    });
+
+    await page.goto('/produk/', { waitUntil: 'load' });
+    await page.locator('[data-product-card][href="/produk/gemini/"]').click();
+    await expect(page).toHaveURL(/\/produk\/gemini\/?$/, { timeout: 6000 });
+    await expect(page.locator('#product-detail-heading')).toContainText('Gemini AI Pro');
+
+    // Verify Nov 2026 Gemini 4 lineup (Hydrogen, Neon, Carbon) & official order CTA
+    const geminiBody = await page.evaluate(() => document.body.innerText);
+    expect(geminiBody).toContain('Hydrogen');
+    expect(geminiBody).toContain('Neon');
+    expect(geminiBody).toContain('Carbon');
+    expect(geminiBody).not.toContain('—');
+    expect(geminiBody).not.toMatch(/\b(project|projects|portofolio|klien studio|case study)\b/i);
+    await expect(
+      page.locator('#product-detail-stage a[href="https://order.amc.web.id/#aplikasi/gemini"]').first()
+    ).toBeVisible();
+
+    // Verify desktop horizontal scroll translates #product-detail-track horizontally to the left (scrolling rightward)
+    await page.waitForTimeout(350);
+    await page.evaluate(() => {
+      const win = window as Window & { __amcDetailScrollToProgress?: (p: number) => void };
+      win.__amcDetailScrollToProgress?.(0.5);
+    });
+    await expect
+      .poll(
+        async () =>
+          page.locator('#product-detail-track').evaluate((el) => {
+            const m = new DOMMatrixReadOnly(getComputedStyle(el).transform);
+            return m.m41;
+          }),
+        { timeout: 4000 }
+      )
+      .toBeLessThan(-1000);
+    await expect(page.locator('#detail-panel-counter')).toHaveText(/0[34] \/ 06/);
+
+    // Scroll all the way right to Panel 06 (PRODUK BERIKUTNYA) & open next product
+    await page.evaluate(() => {
+      const win = window as Window & { __amcDetailScrollToProgress?: (p: number) => void };
+      win.__amcDetailScrollToProgress?.(1);
+    });
+    await expect(page.locator('#detail-panel-counter')).toHaveText('06 / 06');
+    await page.locator('[data-detail-panel="5"] a[data-product-link]').first().click();
+    await expect(page).toHaveURL(/\/produk\/supergrok\/?$/, { timeout: 6000 });
+    await expect(page.locator('main')).toContainText('Grok 4.7');
+
+    // Check ChatGPT GPT-6.2 Astra & Sol directly
+    await page.goto('/produk/chatgpt/', { waitUntil: 'load' });
+    const chatgptText = await page.evaluate(() => document.body.innerText);
+    expect(chatgptText).toContain('GPT-6.2 Astra');
+    expect(chatgptText).toContain('GPT-6.2 Sol');
+
+    expect(errors).toEqual([]);
+    await desktopCtx.close();
+
+    // 2) Mobile 390x844: Vertical scroll downward on /produk/claude/ with zero horizontal overflow
+    const mobileCtx = await browser.newContext({
+      viewport: { width: 390, height: 844 },
+      isMobile: true,
+      hasTouch: true,
+    });
+    const mPage = await mobileCtx.newPage();
+    const mErrors: string[] = [];
+    mPage.on('pageerror', (err) => mErrors.push(err.message));
+
+    await mPage.goto('/produk/claude/', { waitUntil: 'load' });
+    await expect(mPage.locator('#product-detail-heading')).toContainText('Claude Pro');
+    const claudeText = await mPage.evaluate(() => document.body.innerText);
+    expect(claudeText).toContain('Opus 5.5');
+    expect(claudeText).toContain('Sonnet 5.5');
+    expect(claudeText).toContain('Fable 5.2');
+
+    // Verify vertical stack (height > viewport) and ZERO horizontal overflow
+    const metrics = await mPage.evaluate(() => ({
+      overflow: document.documentElement.scrollWidth - window.innerWidth,
+      docHeight: document.documentElement.scrollHeight,
+      flexDir: getComputedStyle(document.getElementById('product-detail-track')!).flexDirection,
+    }));
+    expect(metrics.flexDir).toBe('column');
+    expect(metrics.docHeight).toBeGreaterThan(2200);
+    expect(metrics.overflow).toBeLessThanOrEqual(1);
+    expect(mErrors).toEqual([]);
+    await mobileCtx.close();
   });
 });

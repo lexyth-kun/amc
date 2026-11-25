@@ -1,6 +1,6 @@
 import gsap from 'gsap';
 import { getLenis, prefersReducedMotion, scrollToAnchor } from './motion-core';
-import { runPageTransition } from './page-transition';
+import { runPageTransition, runProductCardTransition } from './page-transition';
 
 function normalizePath(p: string): string {
   return p.replace(/\/+$/, '') || '/';
@@ -46,6 +46,32 @@ export function initHeaderAndMenu(): void {
       void runPageTransition(() => {
         window.location.href = href;
       });
+    });
+  });
+
+  // Lusion shared-element spatial morph transition for every product detail card
+  document.querySelectorAll<HTMLAnchorElement>('[data-product-link]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#')) return;
+      if (normalizePath(href) === normalizePath(window.location.pathname)) {
+        e.preventDefault();
+        return;
+      }
+      e.preventDefault();
+      void runProductCardTransition(
+        link,
+        {
+          title: link.dataset.productTitle || link.textContent?.trim() || 'Detail Layanan AMC',
+          category: link.dataset.productCategory || 'AL MUTHI CREATIVE',
+          image: link.dataset.productImage || '',
+          logo: link.dataset.productLogo || '',
+        },
+        () => {
+          window.location.href = href;
+        }
+      );
     });
   });
 

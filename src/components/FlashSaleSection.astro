@@ -1,6 +1,7 @@
 ---
 import products from '@/data/products.json';
-import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/utils/format';
+import { getProductDetailBySlug } from '@/data/product-details';
+import { formatRupiah, getStockProgressPercent } from '@/utils/format';
 import { withBase } from '@/utils/url';
 ---
 
@@ -69,21 +70,27 @@ import { withBase } from '@/utils/url';
     <div data-stagger-group class="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
       {
         products.flashSale.items.map((item) => {
-          const href = buildProductOrderUrl(item.slug, products.storeBaseUrl);
+          const detail = getProductDetailBySlug(item.slug);
+          const detailHref = withBase(`/produk/${item.slug}/`);
+          const heroImage = withBase(detail?.heroImage ?? '/showcase/amc-ecosystem-gallery.webp');
+          const logoUrl = withBase(item.logo);
           const pct = getStockProgressPercent(item.stockLeft, item.stockTotal);
           return (
             <a
-              href={href}
-              target="_blank"
-              rel="noopener noreferrer"
+              href={detailHref}
               data-stagger-card
+              data-product-link
+              data-product-title={detail?.name ?? item.name}
+              data-product-category="⚡ FLASH SALE 11.11"
+              data-product-image={heroImage}
+              data-product-logo={logoUrl}
               class="group flex flex-col justify-between rounded-2xl border border-white/20 bg-white p-3.5 text-ink no-underline shadow-[0_20px_50px_rgba(8,47,73,0.28)] transition-transform duration-300 hover:-translate-y-1.5 sm:rounded-card sm:p-6"
             >
               <div>
                 <div class="flex items-start justify-between gap-2">
                   <div class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white sm:h-12 sm:w-12">
                     <img
-                      src={withBase(item.logo)}
+                      src={logoUrl}
                       alt={`Logo ${item.name}`}
                       width="48"
                       height="48"

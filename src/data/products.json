@@ -7,7 +7,7 @@
       "duration": "1 Bulan",
       "price": 190000,
       "badge": "BARU",
-      "description": "Akun sendiri, bukan sharing.",
+      "description": "GPT-6.2 Astra & Sol, akun pribadi bukan sharing.",
       "logo": "/logos/chatgpt.svg"
     },
     {
@@ -16,7 +16,7 @@
       "duration": "1 Bulan",
       "price": 120000,
       "badge": "PALING LARIS",
-      "description": "Opus, Sonnet, Haiku, Full Garansi.",
+      "description": "Opus 5.5, Sonnet 5.5, Fable 5.2, Full Garansi.",
       "logo": "/logos/claude.svg"
     },
     {
@@ -25,7 +25,7 @@
       "duration": "1 Bulan",
       "price": 125000,
       "badge": null,
-      "description": "Photoshop, Illustrator, Premiere Pro, After Effects.",
+      "description": "MAX 2026: Creative Agent, Firefly, Photoshop, Premiere.",
       "logo": "/logos/adobe.svg"
     },
     {
@@ -34,7 +34,7 @@
       "duration": "1 Tahun",
       "price": 60000,
       "badge": "BARU",
-      "description": "Desain grafis dan konten sosmed setahun penuh.",
+      "description": "Firefly Quick Actions & desain sosmed setahun penuh.",
       "logo": "/logos/adobe-express.svg"
     },
     {
@@ -43,7 +43,7 @@
       "duration": "1 Bulan",
       "price": 30000,
       "badge": null,
-      "description": "Template premium, tim dan brand kit.",
+      "description": "Canva AI Studio, Affinity Studio & Brand Kit.",
       "logo": "/logos/canva.svg"
     },
     {
@@ -52,7 +52,7 @@
       "duration": "30 Hari",
       "price": 60000,
       "badge": null,
-      "description": "Edit video tanpa watermark.",
+      "description": "CapCut World 2026: 4K multitrack & AI Captions.",
       "logo": "/logos/capcut.svg"
     },
     {
@@ -61,7 +61,7 @@
       "duration": "3 Bulan",
       "price": 25000,
       "badge": null,
-      "description": "Invite resmi, Full Garansi.",
+      "description": "Gemini 4 Hydrogen, Neon, Carbon. Invite resmi.",
       "logo": "/logos/gemini.svg"
     },
     {
@@ -70,7 +70,7 @@
       "duration": "1 Bulan",
       "price": 120000,
       "badge": null,
-      "description": "4K UHD, profil sendiri.",
+      "description": "4K UHD HDR, Dolby Atmos & Spatial Audio, profil sendiri.",
       "logo": "/logos/netflix.svg"
     },
     {
@@ -79,7 +79,7 @@
       "duration": "30 Hari",
       "price": 15000,
       "badge": null,
-      "description": "Tanpa iklan, bisa background play.",
+      "description": "Bebas iklan, 1080p Enhanced Bitrate & background play.",
       "logo": "/logos/youtube.svg"
     }
   ],

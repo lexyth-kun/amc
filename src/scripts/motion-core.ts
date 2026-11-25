@@ -316,14 +316,19 @@ function initCustomCursor(): void {
       dot.style.opacity = '1';
       ring.style.opacity = '1';
     }
+    const productEl = Boolean(target.closest('[data-product-link], [data-product-card]'));
     const interactive = Boolean(target.closest('a, button, [role="button"], summary'));
-    targetScale = interactive ? 1.6 : 1;
+    ring.classList.toggle('is-product-hover', productEl);
+    dot.classList.toggle('is-product-hover', productEl);
+    targetScale = productEl ? 1.05 : interactive ? 1.6 : 1;
   });
 
   window.addEventListener('mouseout', (e) => {
     if (!e.relatedTarget) {
       dot.style.opacity = '0';
       ring.style.opacity = '0';
+      ring.classList.remove('is-product-hover');
+      dot.classList.remove('is-product-hover');
       active = false;
     }
   });

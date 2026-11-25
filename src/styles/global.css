@@ -260,6 +260,11 @@
   height: 8px;
   margin: -4px 0 0 -4px;
   background: var(--amc);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+#amc-cursor-dot.is-product-hover {
+  opacity: 0 !important;
 }
 
 #amc-cursor-ring {
@@ -267,6 +272,49 @@
   height: 36px;
   margin: -18px 0 0 -18px;
   border: 1.5px solid rgba(2, 132, 199, 0.48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity 0.2s ease,
+    width 0.35s var(--ease-out-expo),
+    height 0.35s var(--ease-out-expo),
+    margin 0.35s var(--ease-out-expo),
+    background-color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+#amc-cursor-label {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #082F49;
+  opacity: 0;
+  transform: scale(0.75);
+  transition: opacity 0.22s ease, transform 0.3s var(--ease-out-expo);
+}
+
+#amc-cursor-ring.is-product-hover {
+  width: 72px;
+  height: 72px;
+  margin: -36px 0 0 -36px;
+  background: rgba(56, 189, 248, 0.94);
+  border-color: #FFFFFF;
+  box-shadow: 0 12px 32px rgba(2, 132, 199, 0.35);
+}
+
+#amc-cursor-ring.is-product-hover #amc-cursor-label {
+  opacity: 1;
+  transform: scale(1);
+}
+
+html.amc-portal-entering body {
+  overflow: hidden;
+}
+
+html.amc-portal-entering #main-content {
+  opacity: 0;
 }
 
 @media (hover: none), (pointer: coarse) {

@@ -1,0 +1,789 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { getAllProductDetails, getProductDetailBySlug, type ProductDetail } from '@/data/product-details';
+import { formatRupiah, getStockProgressPercent } from '@/utils/format';
+import { withBase } from '@/utils/url';
+
+export function getStaticPaths() {
+  return getAllProductDetails().map((detail) => ({
+    params: { slug: detail.slug },
+    props: { detail },
+  }));
+}
+
+interface Props {
+  detail: ProductDetail;
+}
+
+const { detail } = Astro.props;
+const nextProduct = getProductDetailBySlug(detail.nextSlug)!;
+const prevProduct = getProductDetailBySlug(detail.prevSlug)!;
+
+const chapters = [
+  { num: '01', label: 'Ringkasan' },
+  { num: '02', label: 'Visual' },
+  { num: '03', label: 'Update 2026' },
+  { num: '04', label: 'Skenario' },
+  { num: '05', label: 'Order & Garansi' },
+  { num: '06', label: 'Berikutnya' },
+];
+
+const flashStockPct = detail.flashSale
+  ? getStockProgressPercent(detail.flashSale.stockLeft, detail.flashSale.stockTotal)
+  : 0;
+---
+
+<BaseLayout
+  title={`${detail.name} (Update Nov 2026) | Al Muthi Creative`}
+  description={`${detail.tagline} Proses cepat, pembayaran QRIS, garansi penuh AMC.`}
+  currentPath={`/produk/${detail.slug}/`}
+  showPreloader={false}
+>
+  <!-- Mobile top scroll progress hairline -->
+  <div
+    class="fixed inset-x-0 top-[72px] z-[990] h-[3px] bg-bg-deep lg:hidden"
+    aria-hidden="true"
+  >
+    <div
+      data-detail-progress-fill
+      class="h-full w-full origin-left scale-x-[0.02] bg-gradient-to-r from-sky-light via-sky to-amc"
+    ></div>
+  </div>
+
+  <!-- Main Spatial Stage: Horizontal Scroll on Desktop (>=1024px) | Vertical Scroll on Mobile (<1024px) -->
+  <div
+    id="product-detail-stage"
+    data-product-slug={detail.slug}
+    class="relative w-full bg-bg lg:h-[100dvh] lg:overflow-hidden"
+  >
+    <div
+      id="product-detail-track"
+      class="flex w-full flex-col lg:h-full lg:w-max lg:flex-row lg:flex-nowrap lg:items-stretch"
+    >
+      <!-- ================================================================
+           PANEL 01: OPENING SPLIT HERO (Lusion Devin AI Opening Structure)
+           ================================================================ -->
+      <section
+        data-detail-panel="0"
+        aria-labelledby="product-detail-heading"
+        class="relative flex w-full shrink-0 flex-col justify-center bg-gradient-to-br from-white via-bg-alt/60 to-white px-4 pt-28 pb-12 sm:px-6 lg:h-full lg:w-[100vw] lg:min-w-[100vw] lg:px-12 lg:pt-24 lg:pb-24"
+      >
+        <div class="mx-auto grid w-full max-w-amc grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
+          <!-- Left Editorial Column -->
+          <div class="flex flex-col justify-between lg:col-span-6">
+            <div data-detail-hero-item class="mb-5 flex flex-wrap items-center gap-3">
+              <a
+                href={withBase('/produk/')}
+                data-page-link
+                class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-line bg-white px-4 py-2 font-display text-xs font-extrabold tracking-[0.06em] text-navy no-underline shadow-sm transition-all duration-300 hover:-translate-x-0.5 hover:border-sky-deep hover:bg-bg-alt hover:text-sky-ink"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M19 12H5M12 19l-7-7 7-7"></path>
+                </svg>
+                <span>Kembali</span>
+              </a>
+
+              <span class="rounded-lg border border-line bg-bg-alt px-3 py-1.5 font-display text-[11px] font-extrabold tracking-[0.14em] text-sky-ink">
+                {detail.category.toUpperCase()}
+              </span>
+
+              {detail.badge && (
+                <span
+                  class={`rounded-lg px-2.5 py-1.5 font-display text-[11px] font-extrabold tracking-[0.08em] ${
+                    detail.badge === 'PALING LARIS'
+                      ? 'bg-sale-ink text-white'
+                      : 'bg-sky text-[#082F49]'
+                  }`}
+                >
+                  {detail.badge}
+                </span>
+              )}
+            </div>
+
+            <div data-detail-hero-item class="mb-3 flex items-center gap-3.5">
+              <span class="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-line bg-white p-1.5 shadow-sm">
+                <img
+                  src={withBase(detail.logo)}
+                  alt={`Logo resmi ${detail.name}`}
+                  width="56"
+                  height="56"
+                  fetchpriority="high"
+                  class="h-full w-full object-contain"
+                />
+              </span>
+              <p class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.16em] text-sky-ink">
+                {detail.updateTag}
+              </p>
+            </div>
+
+            <h1
+              id="product-detail-heading"
+              data-detail-hero-title
+              class="m-0 font-display text-[clamp(2.2rem,4.6vw,4.15rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy"
+            >
+              {detail.name}
+            </h1>
+
+            <p data-detail-hero-item class="mt-4 max-w-xl text-sm leading-relaxed text-body sm:text-base">
+              {detail.overview[0]}
+            </p>
+
+            <!-- Price & Direct Action Row -->
+            <div data-detail-hero-item class="mt-5 flex flex-wrap items-center gap-3">
+              <a
+                href={detail.orderHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-magnetic
+                class="amc-btn-primary"
+              >
+                <span>Order di Web Shop</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M13 5l7 7-7 7"></path>
+                </svg>
+              </a>
+
+              <a
+                href={detail.waOrderHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-magnetic
+                class="amc-btn-ghost"
+              >
+                <span>Tanya Admin WA</span>
+              </a>
+            </div>
+
+            <!-- Lusion-style Metadata Columns (Services / Harga & Info) -->
+            <div
+              data-detail-hero-item
+              class="mt-6 grid grid-cols-1 gap-5 border-t border-line pt-5 sm:grid-cols-2"
+            >
+              <div>
+                <p class="m-0 mb-2 font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-sky-ink">
+                  FITUR & MESIN UTAMA
+                </p>
+                <ul class="m-0 list-none space-y-1 p-0 text-xs font-semibold text-navy sm:text-sm">
+                  {detail.metadataServices.slice(0, 4).map((feat) => <li>{feat}</li>)}
+                </ul>
+              </div>
+
+              <div>
+                <p class="m-0 mb-2 font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-sky-ink">
+                  HARGA & JAMINAN AMC
+                </p>
+                {detail.flashSale ? (
+                  <div>
+                    <p class="m-0 flex items-baseline gap-2">
+                      <span class="tabular-nums text-xs font-semibold text-body line-through">
+                        {formatRupiah(detail.flashSale.originalPrice)}
+                      </span>
+                      <span class="tabular-nums font-display text-2xl font-extrabold text-sky-ink">
+                        {formatRupiah(detail.flashSale.promoPrice)}
+                      </span>
+                    </p>
+                    <p class="m-0 mt-1 text-xs font-bold text-sale-ink">
+                      Flash Sale 11.11 ({detail.flashSale.duration}) • Sisa {detail.flashSale.stockLeft} stok
+                    </p>
+                  </div>
+                ) : detail.price !== null ? (
+                  <div>
+                    <p class="m-0 tabular-nums font-display text-2xl font-extrabold text-navy">
+                      {formatRupiah(detail.price)}
+                    </p>
+                    <p class="m-0 mt-1 text-xs font-semibold text-body">
+                      Durasi {detail.duration} • Full Garansi AMC
+                    </p>
+                  </div>
+                ) : (
+                  <div>
+                    <p class="m-0 font-display text-base font-extrabold text-navy">
+                      Harga Live di Web Shop
+                    </p>
+                    <p class="m-0 mt-1 text-xs font-semibold text-body">
+                      Pilih varian & durasi aktif di order.amc.web.id
+                    </p>
+                  </div>
+                )}
+
+                <p class="m-0 mt-3 hidden items-center gap-2 font-display text-xs font-extrabold uppercase tracking-[0.14em] text-sky-ink lg:inline-flex">
+                  <span>Scroll ke kanan untuk jelajahi</span>
+                  <span aria-hidden="true">→</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Hero 3D Showcase Visual -->
+          <div class="lg:col-span-6">
+            <div
+              data-detail-hero-clip
+              class="relative overflow-hidden rounded-[20px] border border-line bg-bg-alt shadow-[0_24px_70px_rgba(2,132,199,0.14)] lg:rounded-card"
+            >
+              <img
+                src={withBase(detail.heroImage)}
+                alt={detail.heroImageAlt}
+                width="1280"
+                height="800"
+                fetchpriority="high"
+                decoding="async"
+                class="aspect-[16/10] h-auto w-full object-cover"
+              />
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#082F49]/95 via-[#082F49]/68 to-transparent px-4 pt-12 pb-4 sm:px-5 sm:pb-5">
+                <p class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.18em] text-sky-light">
+                  {detail.shortName} • EDISI NOVEMBER 2026
+                </p>
+                <p class="m-0 mt-1 text-xs font-medium text-white sm:text-sm">
+                  {detail.tagline}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           PANEL 02: EDITORIAL WIDE VISUAL + SPECS MATRIX
+           ================================================================ -->
+      <section
+        data-detail-panel="1"
+        aria-label="Sorotan visual dan spesifikasi layanan"
+        class="relative flex w-full shrink-0 flex-col justify-center border-t border-line bg-white px-4 py-14 sm:px-6 lg:h-full lg:w-[82vw] lg:min-w-[920px] lg:border-l lg:border-t-0 lg:px-14 lg:py-24"
+      >
+        <div class="mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
+          <div class="lg:col-span-7">
+            <div
+              data-detail-clip
+              class="relative overflow-hidden rounded-[20px] border border-line bg-bg-alt shadow-amc lg:rounded-card"
+            >
+              <img
+                data-detail-parallax
+                src={withBase(detail.heroImage)}
+                alt={detail.heroImageAlt}
+                width="1280"
+                height="800"
+                loading="lazy"
+                decoding="async"
+                class="aspect-[16/10] h-auto w-full object-cover"
+              />
+            </div>
+          </div>
+
+          <div class="flex flex-col justify-between gap-6 lg:col-span-5">
+            <div>
+              <p class="eyebrow-label mb-3">02 / GAMBARAN PRODUK</p>
+              <h2
+                data-detail-heading
+                class="m-0 font-display text-[clamp(1.8rem,3.2vw,2.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-navy"
+              >
+                Dirancang untuk pemakaian nyata sehari-hari.
+              </h2>
+              <div
+                data-detail-line
+                class="my-5 h-[2px] w-full origin-left bg-gradient-to-r from-sky via-sky-deep to-transparent"
+              ></div>
+              <p class="m-0 text-sm leading-relaxed text-body sm:text-base">
+                {detail.overview[1]}
+              </p>
+            </div>
+
+            <dl
+              data-detail-stagger-group
+              class="m-0 grid grid-cols-2 gap-3"
+            >
+              {detail.specs.map((spec) => (
+                <div
+                  data-detail-stagger
+                  class="rounded-2xl border border-line bg-bg-alt p-3.5"
+                >
+                  <dt class="font-display text-[10px] font-extrabold uppercase tracking-[0.16em] text-sky-ink">
+                    {spec.label}
+                  </dt>
+                  <dd class="m-0 mt-1.5 font-display text-sm font-extrabold leading-snug text-navy">
+                    {spec.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           PANEL 03: PEMBARUAN NOVEMBER 2026 (MODEL & PLATFORM ENGINES)
+           ================================================================ -->
+      <section
+        data-detail-panel="2"
+        aria-labelledby="updates-2026-heading"
+        class="relative flex w-full shrink-0 flex-col justify-center border-t border-line bg-bg-alt px-4 py-14 sm:px-6 lg:h-full lg:w-[86vw] lg:min-w-[960px] lg:border-l lg:border-t-0 lg:px-14 lg:py-24"
+      >
+        <div class="mx-auto w-full max-w-5xl">
+          <div class="mb-7 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
+            <div>
+              <p class="eyebrow-label mb-2.5">03 / PEMBARUAN NOVEMBER 2026</p>
+              <h2
+                id="updates-2026-heading"
+                data-detail-heading
+                class="m-0 font-display text-[clamp(1.9rem,3.6vw,3.1rem)] font-extrabold leading-[1.04] tracking-[-0.03em] text-navy"
+              >
+                Apa yang baru di {detail.shortName}.
+              </h2>
+            </div>
+            <p class="m-0 max-w-sm text-sm leading-relaxed text-body">
+              Ringkasan kemampuan dan mesin terbaru per November 2026 yang relevan saat kamu aktifkan layanan ini.
+            </p>
+          </div>
+
+          <!-- Asymmetric layout (RHYTHM 3): Featured flagship highlight + stacked rows -->
+          <div
+            data-detail-stagger-group
+            class="grid grid-cols-1 gap-4 lg:grid-cols-12"
+          >
+            {detail.highlights2026[0] && (
+              <article
+                data-detail-stagger
+                class="flex flex-col justify-between rounded-card border border-sky-deep/40 bg-gradient-to-br from-[#082F49] via-[#0C4A6E] to-[#0369A1] p-6 text-white shadow-[0_20px_54px_rgba(8,47,73,0.18)] lg:col-span-5 lg:p-7"
+              >
+                <div>
+                  <span class="inline-block rounded-lg border border-sky-light/35 bg-white/10 px-2.5 py-1 font-display text-[11px] font-extrabold tracking-[0.12em] text-sky-light">
+                    {detail.highlights2026[0].tier}
+                  </span>
+                  <h3 class="mt-4 font-display text-2xl font-extrabold leading-tight tracking-[-0.02em] text-white sm:text-3xl">
+                    {detail.highlights2026[0].name}
+                  </h3>
+                  <p class="mt-3 text-sm leading-relaxed text-white/90 sm:text-base">
+                    {detail.highlights2026[0].detail}
+                  </p>
+                </div>
+
+                <div class="mt-6 flex items-center gap-3 border-t border-white/15 pt-4">
+                  <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1.5">
+                    <img
+                      src={withBase(detail.logo)}
+                      alt=""
+                      width="36"
+                      height="36"
+                      loading="lazy"
+                      class="h-full w-full object-contain"
+                    />
+                  </span>
+                  <span class="font-display text-xs font-bold text-sky-light">
+                    Sorotan utama pembaruan 2026
+                  </span>
+                </div>
+              </article>
+            )}
+
+            <div class="flex flex-col gap-3.5 lg:col-span-7">
+              {detail.highlights2026.slice(1).map((item, idx) => (
+                <article
+                  data-detail-stagger
+                  class="flex flex-col justify-between gap-2 rounded-2xl border border-line bg-white p-5 shadow-sm transition-colors duration-300 hover:border-sky-deep"
+                >
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-3">
+                      <span class="font-display text-xs font-extrabold tabular-nums text-sky-ink">
+                        0{idx + 2}
+                      </span>
+                      <h3 class="m-0 font-display text-lg font-extrabold tracking-[-0.02em] text-navy">
+                        {item.name}
+                      </h3>
+                    </div>
+                    <span class="rounded-lg border border-line bg-bg-alt px-2.5 py-1 font-display text-[11px] font-bold text-sky-ink">
+                      {item.tier}
+                    </span>
+                  </div>
+                  <p class="m-0 text-sm leading-relaxed text-body">
+                    {item.detail}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           PANEL 04: GALLERY VISUAL #2 + REAL USE CASES
+           ================================================================ -->
+      <section
+        data-detail-panel="3"
+        aria-labelledby="usecases-heading"
+        class="relative flex w-full shrink-0 flex-col justify-center border-t border-line bg-white px-4 py-14 sm:px-6 lg:h-full lg:w-[82vw] lg:min-w-[920px] lg:border-l lg:border-t-0 lg:px-14 lg:py-24"
+      >
+        <div class="mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-10">
+          <div class="order-2 lg:order-1 lg:col-span-5">
+            <p class="eyebrow-label mb-3">04 / SKENARIO PEMAKAIAN</p>
+            <h2
+              id="usecases-heading"
+              data-detail-heading
+              class="m-0 font-display text-[clamp(1.8rem,3.2vw,2.75rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-navy"
+            >
+              Cocok dipakai untuk kebutuhan ini.
+            </h2>
+
+            <ol
+              data-detail-stagger-group
+              class="m-0 mt-6 list-none space-y-4 p-0"
+            >
+              {detail.useCases.map((useCase, idx) => (
+                <li
+                  data-detail-stagger
+                  class="flex items-start gap-3.5 rounded-2xl border border-line bg-bg-alt/75 p-4"
+                >
+                  <span class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-sky font-display text-xs font-extrabold tabular-nums text-[#082F49]">
+                    0{idx + 1}
+                  </span>
+                  <p class="m-0 text-sm leading-relaxed text-navy">
+                    {useCase}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div class="order-1 lg:order-2 lg:col-span-7">
+            <div
+              data-detail-clip
+              class="relative overflow-hidden rounded-[20px] border border-line bg-bg-alt shadow-amc lg:rounded-card"
+            >
+              <img
+                data-detail-parallax
+                src={withBase(detail.galleryImage)}
+                alt={detail.galleryImageAlt}
+                width="1280"
+                height="800"
+                loading="lazy"
+                decoding="async"
+                class="aspect-[16/10] h-auto w-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           PANEL 05: PAKET, GARANSI & ORDER LANGSUNG DI AMC
+           ================================================================ -->
+      <section
+        data-detail-panel="4"
+        aria-labelledby="order-panel-heading"
+        class="relative flex w-full shrink-0 flex-col justify-center border-t border-line bg-gradient-to-br from-bg-alt via-white to-bg-deep/60 px-4 py-14 sm:px-6 lg:h-full lg:w-[76vw] lg:min-w-[820px] lg:border-l lg:border-t-0 lg:px-14 lg:py-24"
+      >
+        <div class="mx-auto w-full max-w-3xl rounded-card border border-line bg-white p-6 shadow-amc sm:p-8 lg:p-10">
+          <div class="flex flex-wrap items-start justify-between gap-4 border-b border-line pb-6">
+            <div>
+              <p class="eyebrow-label mb-2">05 / ORDER & GARANSI RESMI AMC</p>
+              <h2
+                id="order-panel-heading"
+                data-detail-heading
+                class="m-0 font-display text-[clamp(1.75rem,3vw,2.6rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-navy"
+              >
+                Aktifkan {detail.shortName} sekarang.
+              </h2>
+            </div>
+
+            <div class="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-line bg-white p-2 shadow-sm">
+              <img
+                src={withBase(detail.logo)}
+                alt={`Logo ${detail.name}`}
+                width="48"
+                height="48"
+                loading="lazy"
+                class="h-full w-full object-contain"
+              />
+            </div>
+          </div>
+
+          <!-- Pricing Box (100% Real Data from products.json, Zero Fabricated Prices) -->
+          <div class="mt-6 rounded-2xl border border-line bg-bg-alt p-5">
+            {detail.flashSale ? (
+              <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <span class="inline-block rounded-md bg-sale-ink px-2.5 py-1 font-display text-[11px] font-extrabold tracking-[0.08em] text-white">
+                    ⚡ FLASH SALE 11.11 • SISA {detail.flashSale.stockLeft} STOK
+                  </span>
+                  <div class="mt-2.5 flex items-baseline gap-3">
+                    <span class="tabular-nums text-sm font-semibold text-body line-through">
+                      {formatRupiah(detail.flashSale.originalPrice)}
+                    </span>
+                    <span class="tabular-nums font-display text-3xl font-extrabold text-sky-ink">
+                      {formatRupiah(detail.flashSale.promoPrice)}
+                    </span>
+                    <span class="text-xs font-bold text-navy">/ {detail.flashSale.duration}</span>
+                  </div>
+                </div>
+
+                <div class="w-full sm:w-44">
+                  <div class="mb-1 flex justify-between text-[11px] font-bold text-navy">
+                    <span>Kuota promo</span>
+                    <span>{detail.flashSale.stockLeft}/{detail.flashSale.stockTotal}</span>
+                  </div>
+                  <div class="h-2 w-full overflow-hidden rounded-full bg-bg-deep">
+                    <div
+                      class="h-full rounded-full bg-gradient-to-r from-sale-ink to-sky-deep"
+                      style={`width: ${flashStockPct}%;`}
+                    ></div>
+                  </div>
+                </div>
+              </div>
+            ) : detail.price !== null ? (
+              <div class="flex flex-wrap items-baseline justify-between gap-3">
+                <div>
+                  <span class="block text-xs font-bold uppercase tracking-[0.14em] text-sky-ink">
+                    Harga Katalog Resmi ({detail.duration})
+                  </span>
+                  <span class="mt-1 block tabular-nums font-display text-3xl font-extrabold text-navy">
+                    {formatRupiah(detail.price)}
+                  </span>
+                </div>
+                <span class="rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-navy">
+                  Pembayaran QRIS • Garansi Penuh
+                </span>
+              </div>
+            ) : (
+              <div class="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                  <span class="block text-xs font-bold uppercase tracking-[0.14em] text-sky-ink">
+                    Varian & Harga Live
+                  </span>
+                  <p class="m-0 mt-1 font-display text-lg font-extrabold text-navy">
+                    Cek pilihan paket terbaru langsung di order.amc.web.id
+                  </p>
+                </div>
+                <span class="rounded-lg border border-line bg-white px-3 py-1.5 text-xs font-bold text-navy">
+                  Stok Real-Time • QRIS
+                </span>
+              </div>
+            )}
+          </div>
+
+          <!-- Guarantee & Activation Checklist -->
+          <ul
+            data-detail-stagger-group
+            class="m-0 mt-5 list-none space-y-2.5 p-0"
+          >
+            {detail.activationNotes.map((note) => (
+              <li
+                data-detail-stagger
+                class="flex items-start gap-2.5 text-sm leading-relaxed text-body"
+              >
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="mt-0.5 shrink-0 text-sky-ink"
+                  aria-hidden="true"
+                >
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span>{note}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div class="mt-7 flex flex-wrap items-center gap-3">
+            <a
+              href={detail.orderHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-magnetic
+              class="amc-btn-primary"
+            >
+              <span>Order di order.amc.web.id</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M13 5l7 7-7 7"></path>
+              </svg>
+            </a>
+
+            <a
+              href="https://wa.me/27748304118?text=menu"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="amc-btn-ghost"
+            >
+              <span>Bot WA 24 Jam</span>
+            </a>
+
+            <a
+              href={detail.waOrderHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="amc-btn-wa"
+            >
+              <span>Chat Admin WA</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================================================================
+           PANEL 06: NEXT PRODUCT PORTAL (Lusion "Of The Oak / NEXT" Style)
+           ================================================================ -->
+      <section
+        data-detail-panel="5"
+        aria-label="Navigasi ke produk berikutnya"
+        class="dark-surface relative flex w-full shrink-0 flex-col justify-between overflow-hidden bg-[#082F49] px-4 py-16 text-white sm:px-6 lg:h-full lg:w-[82vw] lg:min-w-[860px] lg:px-14 lg:pt-28 lg:pb-24"
+      >
+        <div
+          class="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.34)_0%,rgba(56,189,248,0)_72%)]"
+          aria-hidden="true"
+        ></div>
+
+        <div class="relative z-10 mx-auto flex w-full max-w-4xl flex-1 flex-col justify-center">
+          <p class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.24em] text-sky-light">
+            PRODUK BERIKUTNYA
+          </p>
+
+          <a
+            href={withBase(`/produk/${nextProduct.slug}/`)}
+            data-product-link
+            data-product-title={nextProduct.name}
+            data-product-category={nextProduct.category}
+            data-product-image={withBase(nextProduct.heroImage)}
+            data-product-logo={withBase(nextProduct.logo)}
+            class="group mt-5 block rounded-card border border-[#38BDF8]/35 bg-white/5 p-5 text-white no-underline transition-all duration-500 hover:border-sky-light hover:bg-white/10 sm:p-7"
+          >
+            <div class="grid grid-cols-1 items-center gap-6 md:grid-cols-12">
+              <div
+                data-card-visual
+                class="overflow-hidden rounded-2xl border border-white/20 bg-white md:col-span-5"
+              >
+                <img
+                  src={withBase(nextProduct.heroImage)}
+                  alt={nextProduct.heroImageAlt}
+                  width="1280"
+                  height="800"
+                  loading="lazy"
+                  decoding="async"
+                  class="aspect-[16/10] h-auto w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.06]"
+                />
+              </div>
+
+              <div class="md:col-span-7">
+                <div class="flex items-center gap-3">
+                  <span class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white p-1.5 shadow-sm">
+                    <img
+                      src={withBase(nextProduct.logo)}
+                      alt={`Logo ${nextProduct.name}`}
+                      width="40"
+                      height="40"
+                      loading="lazy"
+                      class="h-full w-full object-contain"
+                    />
+                  </span>
+                  <span class="font-display text-[11px] font-extrabold uppercase tracking-[0.18em] text-sky-light">
+                    {nextProduct.category}
+                  </span>
+                </div>
+
+                <h2 class="mt-4 font-display text-[clamp(1.9rem,4vw,3.5rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-white transition-transform duration-300 group-hover:translate-x-1.5">
+                  {nextProduct.name}
+                </h2>
+                <p class="mt-2.5 text-sm leading-relaxed text-white/85">
+                  {nextProduct.tagline}
+                </p>
+
+                <span class="mt-5 inline-flex min-h-[44px] items-center gap-2 rounded-full bg-sky px-5 py-2.5 font-display text-sm font-extrabold text-[#082F49] transition-transform duration-300 group-hover:translate-x-1">
+                  <span>Buka Detail Produk</span>
+                  <span aria-hidden="true">→</span>
+                </span>
+              </div>
+            </div>
+          </a>
+
+          <div class="mt-7 flex flex-wrap items-center justify-between gap-4">
+            <a
+              href={withBase(`/produk/${prevProduct.slug}/`)}
+              data-product-link
+              data-product-title={prevProduct.name}
+              data-product-category={prevProduct.category}
+              data-product-image={withBase(prevProduct.heroImage)}
+              data-product-logo={withBase(prevProduct.logo)}
+              class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/25 px-4 py-2 font-display text-xs font-extrabold text-white no-underline transition-colors hover:border-sky-light hover:text-sky-light"
+            >
+              <span aria-hidden="true">←</span>
+              <span>Sebelumnya: {prevProduct.shortName}</span>
+            </a>
+
+            <a
+              href={withBase('/produk/')}
+              data-page-link
+              class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-[#38BDF8]/40 bg-white/10 px-5 py-2 font-display text-xs font-extrabold text-white no-underline transition-colors hover:bg-sky hover:text-[#082F49]"
+            >
+              <span>Lihat Semua 41 Layanan</span>
+            </a>
+          </div>
+        </div>
+
+        <footer class="relative z-10 mx-auto mt-10 flex w-full max-w-4xl flex-wrap items-center justify-between gap-3 border-t border-white/15 pt-5 text-xs text-white/75">
+          <span>© 2026 Al Muthi Creative • Rating 4.8/5 (1.266 ulasan)</span>
+          <span>Admin 24 Jam: +62 851-1712-0101 • Dibuat dengan ♥ di Indonesia</span>
+        </footer>
+      </section>
+    </div>
+  </div>
+
+  <!-- Fixed Desktop Horizontal Progress & Chapter Rail (>= 1024px) -->
+  <aside
+    aria-label="Navigasi panel horizontal detail produk"
+    class="pointer-events-none fixed inset-x-0 bottom-5 z-[980] hidden px-8 lg:flex lg:justify-center"
+  >
+    <div class="pointer-events-auto flex items-center gap-3 rounded-full border border-line bg-white/95 px-4 py-2 shadow-[0_14px_40px_rgba(8,47,73,0.14)] backdrop-blur-md">
+      <span
+        id="detail-panel-counter"
+        class="tabular-nums font-display text-xs font-extrabold text-sky-ink"
+      >
+        01 / 06
+      </span>
+
+      <div class="h-1.5 w-24 overflow-hidden rounded-full bg-bg-deep" aria-hidden="true">
+        <div
+          data-detail-progress-fill
+          class="h-full w-full origin-left scale-x-[0.02] rounded-full bg-gradient-to-r from-sky-light via-sky to-amc"
+        ></div>
+      </div>
+
+      <div class="flex items-center gap-1.5" role="group" aria-label="Pilih bagian detail produk">
+        {chapters.map((ch, idx) => (
+          <button
+            type="button"
+            data-chapter-btn={idx}
+            aria-current={idx === 0 ? 'step' : 'false'}
+            class={`min-h-[34px] rounded-full border px-3 py-1 font-display text-[11px] font-extrabold transition-colors ${
+              idx === 0
+                ? 'border-sky-deep bg-sky text-[#082F49]'
+                : 'border-line bg-white/90 text-navy hover:border-sky-deep hover:bg-bg-alt'
+            }`}
+          >
+            {ch.label}
+          </button>
+        ))}
+      </div>
+
+      <div class="flex items-center gap-1 border-l border-line pl-2">
+        <button
+          type="button"
+          id="detail-prev-btn"
+          aria-label="Geser ke bagian sebelumnya"
+          class="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white font-display text-xs font-extrabold text-navy transition-colors hover:border-sky-deep hover:bg-bg-alt"
+        >
+          ←
+        </button>
+        <button
+          type="button"
+          id="detail-next-btn"
+          aria-label="Geser ke bagian berikutnya"
+          class="flex h-8 w-8 items-center justify-center rounded-full border border-line bg-white font-display text-xs font-extrabold text-navy transition-colors hover:border-sky-deep hover:bg-bg-alt"
+        >
+          →
+        </button>
+      </div>
+    </div>
+  </aside>
+</BaseLayout>

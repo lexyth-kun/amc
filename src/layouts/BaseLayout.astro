@@ -82,6 +82,15 @@ const jsonLd = {
             'https://order.amc.web.id/' + rest + window.location.search + window.location.hash
           );
         }
+        try {
+          var raw = window.sessionStorage.getItem('amc_product_portal_v1');
+          if (raw && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            var parsed = JSON.parse(raw);
+            if (parsed && Date.now() - parsed.ts < 5000) {
+              document.documentElement.classList.add('amc-portal-entering');
+            }
+          }
+        } catch (e) {}
       })();
     </script>
     <meta charset="UTF-8" />
@@ -131,7 +140,9 @@ const jsonLd = {
     </a>
 
     <div id="amc-cursor-dot" aria-hidden="true"></div>
-    <div id="amc-cursor-ring" aria-hidden="true"></div>
+    <div id="amc-cursor-ring" aria-hidden="true">
+      <span id="amc-cursor-label">LIHAT</span>
+    </div>
 
     {showPreloader && <Preloader />}
     <PageTransition />
