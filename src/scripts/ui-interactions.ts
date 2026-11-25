@@ -1,14 +1,81 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { computeCardTilt, lerpNumber, nextReelStepIndex } from '@/utils/interaction-math';
+import { computeCountdownParts } from '@/utils/countdown';
 import { getLenis, prefersReducedMotion } from './motion-core';
 
 gsap.registerPlugin(ScrollTrigger);
 
 export function initMilestoneBInteractions(): void {
   initFadeUpBlocks();
+  initStaggerGroups();
   initProductCardStaggerAndTilt();
   initShowreelModal();
+  initFlashSaleCountdown();
+}
+
+function initStaggerGroups(): void {
+  if (prefersReducedMotion()) return;
+
+  document.querySelectorAll<HTMLElement>('[data-stagger-group]').forEach((group) => {
+    const items = Array.from(group.querySelectorAll<HTMLElement>('[data-stagger-card]'));
+    if (!items.length) return;
+    gsap.fromTo(
+      items,
+      { y: 40, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.08,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: group,
+          start: 'top 85%',
+          once: true,
+        },
+      }
+    );
+  });
+}
+
+function initFlashSaleCountdown(): void {
+  const section = document.getElementById('flash-sale');
+  const endsAt = section?.dataset.flashEnds;
+  if (!section || !endsAt) return;
+
+  const daysEl = document.getElementById('cd-days');
+  const hoursEl = document.getElementById('cd-hours');
+  const minsEl = document.getElementById('cd-minutes');
+  const secsEl = document.getElementById('cd-seconds');
+  const expiredBanner = document.getElementById('flash-expired-banner');
+  if (!daysEl || !hoursEl || !minsEl || !secsEl) return;
+
+  let lastSec = '';
+
+  const update = () => {
+    const parts = computeCountdownParts(endsAt, Date.now());
+    daysEl.textContent = parts.days;
+    hoursEl.textContent = parts.hours;
+    minsEl.textContent = parts.minutes;
+    secsEl.textContent = parts.seconds;
+
+    if (parts.isExpired && expiredBanner) {
+      expiredBanner.hidden = false;
+    }
+
+    if (parts.seconds !== lastSec && lastSec !== '' && !prefersReducedMotion()) {
+      gsap.fromTo(
+        secsEl,
+        { scale: 1.05 },
+        { scale: 1, duration: 0.15, ease: 'power2.out' }
+      );
+    }
+    lastSec = parts.seconds;
+  };
+
+  update();
+  window.setInterval(update, 1000);
 }
 
 function initFadeUpBlocks(): void {

@@ -1,0 +1,113 @@
+---
+import products from '@/data/products.json';
+import content from '@/data/content.json';
+import BlueLine from './BlueLine.astro';
+---
+
+<section
+  id="kategori"
+  data-bg-color="#F4F8FF"
+  class="bg-bg-alt py-16 md:py-28"
+  aria-labelledby="categories-heading"
+>
+  <div class="mx-auto max-w-amc px-4 sm:px-6">
+    <BlueLine className="mb-12 md:mb-16" />
+
+    <div class="mb-12 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end md:mb-16">
+      <div class="lg:col-span-7">
+        <p class="eyebrow-label mb-3">{content.categoriesSection.eyebrow}</p>
+        <h2
+          id="categories-heading"
+          data-split-words
+          class="font-display text-[clamp(2.25rem,5.4vw,4.5rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy"
+        >
+          {content.categoriesSection.headline}
+        </h2>
+      </div>
+      <div class="lg:col-span-5">
+        <p class="m-0 text-base leading-relaxed text-body">
+          {content.categoriesSection.description}
+        </p>
+      </div>
+    </div>
+
+    <!-- Asymmetric 12-col hierarchy: 2 flagship 6-col cards on top, 3 focused 4-col cards below -->
+    <div data-stagger-group class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-12">
+      {
+        products.categories.map((cat) => (
+          <a
+            href={cat.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-stagger-card
+            class={`group flex flex-col justify-between rounded-card border border-line bg-white p-6 text-ink no-underline transition-all duration-300 hover:-translate-y-1.5 hover:border-amc hover:shadow-amc sm:p-7 ${
+              cat.featured ? 'lg:col-span-6' : 'lg:col-span-4'
+            }`}
+          >
+            <div>
+              <div class="mb-6 flex items-center justify-between gap-3">
+                <span class="flex h-12 w-12 items-center justify-center rounded-2xl border border-line bg-bg-alt text-amc transition-colors duration-300 group-hover:border-amc group-hover:bg-amc group-hover:text-white">
+                  {cat.id === 'ai-premium' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="4" y="4" width="16" height="16" rx="3"></rect>
+                      <rect x="9" y="9" width="6" height="6" rx="1"></rect>
+                      <path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"></path>
+                    </svg>
+                  )}
+                  {cat.id === 'desain-editing' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M12 19l7-7 3 3-7 7-3-3z"></path>
+                      <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path>
+                      <circle cx="11" cy="11" r="2"></circle>
+                    </svg>
+                  )}
+                  {cat.id === 'streaming-hiburan' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="2" y="4" width="20" height="15" rx="3"></rect>
+                      <polygon points="10 8.5 15.5 11.5 10 14.5 10 8.5" fill="currentColor"></polygon>
+                    </svg>
+                  )}
+                  {cat.id === 'buzzer-sosmed' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M3 17l6-6 4 4 8-8"></path>
+                      <path d="M15 7h6v6"></path>
+                    </svg>
+                  )}
+                  {cat.id === 'topup-game' && (
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <rect x="2" y="6" width="20" height="12" rx="5"></rect>
+                      <path d="M6 12h4M8 10v4"></path>
+                      <circle cx="15.5" cy="11" r="1" fill="currentColor"></circle>
+                      <circle cx="18" cy="13" r="1" fill="currentColor"></circle>
+                    </svg>
+                  )}
+                </span>
+
+                <span class="rounded-lg border border-line bg-bg-alt px-2.5 py-1 font-display text-xs font-bold text-sky-ink">
+                  {cat.serviceCountLabel}
+                </span>
+              </div>
+
+              <h3 class="font-display text-2xl font-extrabold tracking-[-0.02em] text-navy">
+                {cat.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-body">
+                {cat.examples}
+              </p>
+            </div>
+
+            <div class="mt-6 flex items-center justify-between border-t border-line pt-4 font-display text-sm font-extrabold text-navy group-hover:text-amc">
+              <span>Lihat kategori</span>
+              <span
+                class="-translate-x-2 opacity-60 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                aria-hidden="true"
+              >
+                →
+              </span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -4,6 +4,7 @@ import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
 
 const milestone = process.argv[2] || 'a';
+const targetSelector = process.argv[3] || '';
 const outDir = resolve(process.cwd(), 'screenshots');
 mkdirSync(outDir, { recursive: true });
 
@@ -25,10 +26,10 @@ async function triggerScrollReveals(page) {
     const max = document.documentElement.scrollHeight;
     for (let y = 0; y <= max; y += step) {
       window.scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 90));
+      await new Promise((r) => setTimeout(r, 80));
     }
     window.scrollTo(0, 0);
-    await new Promise((r) => setTimeout(r, 250));
+    await new Promise((r) => setTimeout(r, 200));
   });
 }
 
@@ -61,13 +62,19 @@ try {
 
   await desktopPage.goto('http://127.0.0.1:4322/', { waitUntil: 'load' });
   await desktopPage.waitForTimeout(1950);
-  if (milestone !== 'a') {
-    await triggerScrollReveals(desktopPage);
+  await triggerScrollReveals(desktopPage);
+
+  if (targetSelector) {
+    const loc = desktopPage.locator(targetSelector);
+    await loc.scrollIntoViewIfNeeded();
+    await desktopPage.waitForTimeout(350);
+    await loc.screenshot({ path: resolve(outDir, `milestone-${milestone}-desktop.png`) });
+  } else {
+    await desktopPage.screenshot({
+      path: resolve(outDir, `milestone-${milestone}-desktop.png`),
+      fullPage: true,
+    });
   }
-  await desktopPage.screenshot({
-    path: resolve(outDir, `milestone-${milestone}-desktop.png`),
-    fullPage: milestone !== 'a',
-  });
 
   const mobilePage = await browser.newPage({
     viewport: { width: 390, height: 844 },
@@ -81,18 +88,23 @@ try {
 
   await mobilePage.goto('http://127.0.0.1:4322/', { waitUntil: 'load' });
   await mobilePage.waitForTimeout(1950);
-  if (milestone !== 'a') {
-    await triggerScrollReveals(mobilePage);
-  }
+  await triggerScrollReveals(mobilePage);
 
   const overflow = await mobilePage.evaluate(() => {
     return document.documentElement.scrollWidth - window.innerWidth;
   });
 
-  await mobilePage.screenshot({
-    path: resolve(outDir, `milestone-${milestone}-mobile.png`),
-    fullPage: milestone !== 'a',
-  });
+  if (targetSelector) {
+    const loc = mobilePage.locator(targetSelector);
+    await loc.scrollIntoViewIfNeeded();
+    await mobilePage.waitForTimeout(350);
+    await loc.screenshot({ path: resolve(outDir, `milestone-${milestone}-mobile.png`) });
+  } else {
+    await mobilePage.screenshot({
+      path: resolve(outDir, `milestone-${milestone}-mobile.png`),
+      fullPage: true,
+    });
+  }
 
   await browser.close();
 
