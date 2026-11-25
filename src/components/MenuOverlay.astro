@@ -1,5 +1,6 @@
 ---
 import content from '@/data/content.json';
+import { withBase } from '@/utils/url';
 
 interface Props {
   currentPath?: string;
@@ -25,9 +26,9 @@ const active = norm(currentPath);
 
   <div class="relative mx-auto flex min-h-full max-w-amc flex-col justify-between px-4 py-6 sm:px-6 md:py-8">
     <div class="flex items-center justify-between">
-      <a href="/" data-overlay-link="/" class="inline-flex items-center gap-3 text-navy no-underline">
+      <a href={withBase('/')} data-overlay-link={withBase('/')} class="inline-flex items-center gap-3 text-navy no-underline">
         <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-logo border border-line bg-white">
-          <img src="/logo-amc.webp" alt="Logo AMC" width="44" height="44" loading="lazy" class="h-full w-full object-cover" />
+          <img src={withBase('/logo-amc.webp')} alt="Logo AMC" width="44" height="44" loading="lazy" class="h-full w-full object-cover" />
         </span>
         <span class="font-display text-sm font-extrabold tracking-[-0.02em] text-navy sm:text-base">
           AL MUTHI <span class="text-sky-ink">CREATIVE</span>
@@ -53,11 +54,12 @@ const active = norm(currentPath);
           {
             content.header.overlayLinks.map((item) => {
               const isCurrent = norm(item.href) === active;
+              const resolvedHref = withBase(item.href);
               return (
                 <li class="overflow-hidden">
                   <a
-                    href={item.href}
-                    data-overlay-link={item.href}
+                    href={resolvedHref}
+                    data-overlay-link={resolvedHref}
                     aria-current={isCurrent ? 'page' : undefined}
                     class={`menu-stagger-item group inline-flex min-h-[48px] items-baseline gap-4 py-1 font-display text-[clamp(2rem,5vw,3.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] no-underline transition-colors ${
                       isCurrent ? 'text-sky-ink' : 'text-navy hover:text-sky-ink'

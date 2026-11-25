@@ -3,10 +3,11 @@ import products from '@/data/products.json';
 import { computeTunnelPhaseState, type TunnelPhaseState } from '@/utils/tunnel-phases';
 import { getAdaptiveObjectBudget } from '@/utils/webgl-support';
 import { createCinematicCanvas2DRenderer } from './cinematic-fallback-2d';
+import { withBase } from '@/utils/url';
 
 const TUNNEL_LOGOS = products.allServices.map((s) => ({
   name: s.name,
-  src: s.logo,
+  src: withBase(s.logo),
 }));
 
 export function mountCinematicVisualRenderer(): (progress: number) => void {

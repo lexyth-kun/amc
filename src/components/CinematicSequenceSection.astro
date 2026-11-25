@@ -1,6 +1,7 @@
 ---
 import content from '@/data/content.json';
 import products from '@/data/products.json';
+import { withBase } from '@/utils/url';
 
 const categoryOrder = [
   'AI & Produktivitas',
@@ -107,7 +108,7 @@ const serviceGroups = categoryOrder.map((cat) => ({
                   >
                     <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#BAE6FD] bg-white shadow-sm">
                       <img
-                        src={service.logo}
+                        src={withBase(service.logo)}
                         alt={`Logo ${service.name}`}
                         width="40"
                         height="40"
@@ -165,7 +166,7 @@ const serviceGroups = categoryOrder.map((cat) => ({
             {content.cinematic.ctaLabel}
           </a>
           <a
-            href={content.cinematic.catalogCtaHref}
+            href={withBase(content.cinematic.catalogCtaHref)}
             data-page-link
             data-magnetic
             class="amc-btn-ghost"

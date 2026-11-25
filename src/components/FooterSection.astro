@@ -2,6 +2,7 @@
 import content from '@/data/content.json';
 import products from '@/data/products.json';
 import BlueLine from './BlueLine.astro';
+import { withBase } from '@/utils/url';
 ---
 
 <footer
@@ -16,9 +17,9 @@ import BlueLine from './BlueLine.astro';
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12">
       <!-- Col 1: Brand + WhatsApp Promo Opt-In -->
       <div class="lg:col-span-4">
-        <a href="/" data-page-link class="inline-flex min-h-[44px] items-center gap-3 text-navy no-underline">
+        <a href={withBase('/')} data-page-link class="inline-flex min-h-[44px] items-center gap-3 text-navy no-underline">
           <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-logo border border-line bg-white">
-            <img src="/logo-amc.webp" alt="Logo AMC" width="44" height="44" loading="lazy" class="h-full w-full object-cover" />
+            <img src={withBase('/logo-amc.webp')} alt="Logo AMC" width="44" height="44" loading="lazy" class="h-full w-full object-cover" />
           </span>
           <span class="font-display text-base font-extrabold tracking-[-0.02em] text-navy">
             AL MUTHI <span class="text-sky-ink">CREATIVE</span>
@@ -74,7 +75,7 @@ import BlueLine from './BlueLine.astro';
         <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
           <li>
             <a
-              href="/produk/"
+              href={withBase('/produk/')}
               data-page-link
               class="inline-flex min-h-[44px] items-center text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
             >
@@ -106,7 +107,7 @@ import BlueLine from './BlueLine.astro';
         <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
           <li>
             <a
-              href="/cara-order/"
+              href={withBase('/cara-order/')}
               data-page-link
               class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
@@ -115,7 +116,7 @@ import BlueLine from './BlueLine.astro';
           </li>
           <li>
             <a
-              href="/flash-sale/"
+              href={withBase('/flash-sale/')}
               data-page-link
               class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
@@ -134,7 +135,7 @@ import BlueLine from './BlueLine.astro';
           </li>
           <li>
             <a
-              href="/faq/"
+              href={withBase('/faq/')}
               data-page-link
               class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
@@ -143,7 +144,7 @@ import BlueLine from './BlueLine.astro';
           </li>
           <li>
             <a
-              href="/kontak/"
+              href={withBase('/kontak/')}
               data-page-link
               class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
@@ -231,7 +232,7 @@ import BlueLine from './BlueLine.astro';
           Ulasan Resmi
         </a>
         <a
-          href="/faq/"
+          href={withBase('/faq/')}
           data-page-link
           class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline hover:text-sky-ink"
         >

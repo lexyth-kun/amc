@@ -6,6 +6,7 @@ import Preloader from '@/components/Preloader.astro';
 import PageTransition from '@/components/PageTransition.astro';
 import Header from '@/components/Header.astro';
 import MenuOverlay from '@/components/MenuOverlay.astro';
+import { withBase } from '@/utils/url';
 
 interface Props {
   title?: string;
@@ -90,8 +91,8 @@ const jsonLd = {
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#38BDF8" />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="icon" type="image/webp" href="/logo-amc.webp" />
-    <link rel="apple-touch-icon" href="/logo-amc.png" />
+    <link rel="icon" type="image/webp" href={withBase('/logo-amc.webp')} />
+    <link rel="apple-touch-icon" href={withBase('/logo-amc.png')} />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Al Muthi Creative" />

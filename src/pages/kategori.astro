@@ -4,6 +4,7 @@ import CategoriesSection from '@/components/CategoriesSection.astro';
 import FinalCtaSection from '@/components/FinalCtaSection.astro';
 import FooterSection from '@/components/FooterSection.astro';
 import products from '@/data/products.json';
+import { withBase } from '@/utils/url';
 
 const groups = [
   'AI & Produktivitas',
@@ -57,7 +58,7 @@ const groups = [
                       rel="noopener noreferrer"
                       class="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-line bg-white px-3 py-1.5 text-xs font-bold text-navy no-underline transition-colors hover:border-sky-deep hover:text-sky-ink"
                     >
-                      <img src={svc.logo} alt="" width="24" height="24" loading="lazy" class="h-6 w-6 rounded-md bg-white object-contain" />
+                      <img src={withBase(svc.logo)} alt="" width="24" height="24" loading="lazy" class="h-6 w-6 rounded-md bg-white object-contain" />
                       <span>{svc.name}</span>
                     </a>
                   ))}

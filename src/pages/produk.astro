@@ -5,6 +5,7 @@ import FinalCtaSection from '@/components/FinalCtaSection.astro';
 import FooterSection from '@/components/FooterSection.astro';
 import BlueLine from '@/components/BlueLine.astro';
 import products from '@/data/products.json';
+import { withBase } from '@/utils/url';
 
 const filterTabs = [
   'Semua',
@@ -83,7 +84,7 @@ const filterTabs = [
             >
               <span class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white">
                 <img
-                  src={service.logo}
+                  src={withBase(service.logo)}
                   alt={`Logo ${service.name}`}
                   width="48"
                   height="48"

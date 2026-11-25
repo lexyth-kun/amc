@@ -2,7 +2,8 @@ import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  site: 'https://amc.web.id',
+  site: process.env.ASTRO_SITE || 'https://amc.web.id',
+  base: process.env.ASTRO_BASE || '/',
   output: 'static',
   integrations: [
     tailwind({
