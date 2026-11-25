@@ -1,0 +1,132 @@
+---
+import content from '@/data/content.json';
+---
+
+<div
+  id="menu-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Menu Navigasi Al Muthi Creative"
+  hidden
+  class="fixed inset-0 z-[9990] overflow-y-auto bg-white"
+>
+  <div
+    class="pointer-events-none absolute right-0 top-0 h-[420px] w-[420px] rounded-full bg-gradient-to-bl from-bg-deep via-bg-alt to-transparent opacity-90"
+    aria-hidden="true"
+  ></div>
+
+  <div class="relative mx-auto flex min-h-full max-w-amc flex-col justify-between px-4 py-6 sm:px-6 md:py-8">
+    <div class="flex items-center justify-between">
+      <div class="inline-flex items-center gap-3">
+        <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-logo border border-line bg-white">
+          <img src="/logo-amc.webp" alt="Logo AMC" width="44" height="44" class="h-full w-full object-cover" />
+        </span>
+        <span class="font-display text-sm font-extrabold tracking-[-0.02em] text-navy sm:text-base">
+          AL MUTHI <span class="text-amc">CREATIVE</span>
+        </span>
+      </div>
+
+      <button
+        type="button"
+        id="menu-close-btn"
+        aria-label="Tutup menu navigasi"
+        class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-line bg-bg-alt px-4 py-2 font-display text-xs font-extrabold tracking-[0.16em] text-navy transition-colors hover:border-amc hover:text-amc"
+      >
+        <span>{content.header.closeButtonLabel}</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+
+    <div class="my-8 grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-end">
+      <nav aria-label="Menu layar penuh" class="lg:col-span-7">
+        <ul class="m-0 flex flex-col gap-2 p-0 list-none">
+          {
+            content.header.overlayLinks.map((item) => (
+              <li class="overflow-hidden">
+                <a
+                  href={item.href}
+                  data-overlay-link={item.href}
+                  class="menu-stagger-item group inline-flex min-h-[48px] items-baseline gap-4 py-1 font-display text-[clamp(2rem,5vw,3.75rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy no-underline transition-colors hover:text-amc"
+                >
+                  <span class="tabular-nums text-xs font-bold tracking-[0.18em] text-sky-ink">
+                    {item.num}
+                  </span>
+                  <span class="transition-transform duration-300 group-hover:translate-x-2">
+                    {item.label}
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="menu-stagger-item flex flex-col gap-6 rounded-card border border-line bg-bg-alt p-6 lg:col-span-5">
+        <div>
+          <p class="eyebrow-label mb-2">ORDER LANGSUNG</p>
+          <p class="m-0 text-sm leading-relaxed text-body">
+            Buka katalog lengkap di Web Shop atau chat Admin WhatsApp 24 jam kalau butuh rekomendasi paket.
+          </p>
+          <div class="mt-4 flex flex-wrap gap-3">
+            <a
+              href="https://order.amc.web.id"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="amc-btn-primary !min-h-[44px] !px-5 !py-2.5 !text-sm"
+            >
+              Buka Web Shop →
+            </a>
+            <a
+              href={content.footer.contacts.waAdminHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="amc-btn-wa !min-h-[44px] !px-5 !py-2.5 !text-sm"
+            >
+              WA Admin {content.footer.contacts.waAdminDisplay}
+            </a>
+          </div>
+        </div>
+
+        <form class="js-newsletter-form border-t border-line pt-5" novalidate>
+          <label
+            for="menu-newsletter-email"
+            class="mb-2 block font-display text-xs font-extrabold uppercase tracking-[0.14em] text-navy"
+          >
+            {content.footer.newsletterLabel}
+          </label>
+          <div class="flex flex-col gap-2.5 sm:flex-row">
+            <input
+              id="menu-newsletter-email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder={content.footer.newsletterPlaceholder}
+              class="min-h-[44px] flex-1 rounded-2xl border border-line bg-white px-4 py-2.5 text-sm text-ink placeholder:text-body/60"
+            />
+            <button
+              type="submit"
+              class="amc-btn-primary !min-h-[44px] shrink-0 !px-5 !py-2.5 !text-sm"
+            >
+              {content.footer.newsletterButton}
+            </button>
+          </div>
+          <p class="js-newsletter-feedback mt-2 text-xs leading-relaxed text-body" role="status" aria-live="polite"></p>
+        </form>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-line pt-4 text-xs font-medium text-body">
+      <span>{content.footer.copyright}</span>
+      <div class="flex flex-wrap gap-4">
+        <a href={content.footer.contacts.instagramHref} target="_blank" rel="noopener noreferrer" class="font-bold text-navy no-underline hover:text-amc">
+          Instagram {content.footer.contacts.instagramDisplay}
+        </a>
+        <a href={content.footer.contacts.emailHref} class="font-bold text-navy no-underline hover:text-amc">
+          {content.footer.contacts.emailDisplay}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

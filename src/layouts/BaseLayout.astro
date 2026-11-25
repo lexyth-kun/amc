@@ -1,0 +1,127 @@
+---
+import '@/styles/global.css';
+import content from '@/data/content.json';
+import products from '@/data/products.json';
+import Preloader from '@/components/Preloader.astro';
+import PageTransition from '@/components/PageTransition.astro';
+import Header from '@/components/Header.astro';
+import MenuOverlay from '@/components/MenuOverlay.astro';
+
+const topThreeProducts = products.featuredProducts.slice(0, 3);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://amc.web.id/#organization',
+      name: 'Al Muthi Creative',
+      url: 'https://amc.web.id',
+      logo: 'https://amc.web.id/logo-amc.png',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: '+62-851-1712-0101',
+        contactType: 'customer service',
+        availableLanguage: ['Indonesian'],
+      },
+      sameAs: ['https://www.instagram.com/almuthi_creative', 'https://order.amc.web.id'],
+    },
+    ...topThreeProducts.map((item) => ({
+      '@type': 'Product',
+      name: `${item.name} (${item.duration})`,
+      description: item.description,
+      image: `https://amc.web.id${item.logo}`,
+      brand: {
+        '@type': 'Brand',
+        name: 'Al Muthi Creative',
+      },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '4.8',
+        reviewCount: '1266',
+      },
+      offers: {
+        '@type': 'Offer',
+        url: `https://order.amc.web.id/#aplikasi/${item.slug}`,
+        priceCurrency: 'IDR',
+        price: String(item.price),
+        availability: 'https://schema.org/InStock',
+      },
+    })),
+  ],
+};
+---
+
+<!doctype html>
+<html lang="id">
+  <head>
+    <script is:inline>
+      (function () {
+        var p = window.location.pathname.toLowerCase();
+        if (p === '/order' || p === '/order/' || p.indexOf('/order/') === 0) {
+          var rest = window.location.pathname.replace(/^\/order\/?/i, '');
+          window.location.replace(
+            'https://order.amc.web.id/' + rest + window.location.search + window.location.hash
+          );
+        }
+      })();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Al Muthi Creative – Akun Premium Murah &amp; Terpercaya</title>
+    <meta name="description" content={content.seo.description} />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#FFFFFF" />
+    <link rel="canonical" href="https://amc.web.id/" />
+    <link rel="icon" type="image/webp" href="/logo-amc.webp" />
+    <link rel="apple-touch-icon" href="/logo-amc.png" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Al Muthi Creative" />
+    <meta property="og:title" content="Al Muthi Creative – Akun Premium Murah & Terpercaya" />
+    <meta property="og:description" content={content.seo.description} />
+    <meta property="og:url" content="https://amc.web.id/" />
+    <meta property="og:image" content="https://amc.web.id/logo-amc.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Al Muthi Creative – Akun Premium Murah & Terpercaya" />
+    <meta name="twitter:description" content={content.seo.description} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap"
+      />
+    </noscript>
+
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="bg-bg text-ink antialiased selection:bg-sky/30 selection:text-navy">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[10002] focus:rounded-full focus:bg-amc focus:px-5 focus:py-3 focus:font-display focus:font-bold focus:text-white"
+    >
+      Langsung ke konten utama
+    </a>
+
+    <div id="amc-cursor-dot" aria-hidden="true"></div>
+    <div id="amc-cursor-ring" aria-hidden="true"></div>
+
+    <Preloader />
+    <PageTransition />
+    <Header />
+    <MenuOverlay />
+
+    <main id="main-content">
+      <slot />
+    </main>
+  </body>
+</html>

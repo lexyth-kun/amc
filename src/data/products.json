@@ -1,0 +1,221 @@
+{
+  "storeBaseUrl": "https://order.amc.web.id",
+  "featuredProducts": [
+    {
+      "slug": "chatgpt",
+      "name": "ChatGPT Plus Private",
+      "duration": "1 Bulan",
+      "price": 190000,
+      "badge": "BARU",
+      "description": "Akun sendiri, bukan sharing.",
+      "logo": "/logo-chatgpt.webp"
+    },
+    {
+      "slug": "claude",
+      "name": "Claude Pro Sharing",
+      "duration": "1 Bulan",
+      "price": 120000,
+      "badge": "PALING LARIS",
+      "description": "Opus, Sonnet, Haiku, Full Garansi.",
+      "logo": "/logo-claude.svg"
+    },
+    {
+      "slug": "adobe",
+      "name": "Adobe Creative Cloud",
+      "duration": "1 Bulan",
+      "price": 125000,
+      "badge": null,
+      "description": "Photoshop, Illustrator, Premiere Pro, After Effects.",
+      "logo": "/logo-adobe.webp"
+    },
+    {
+      "slug": "adobe-express",
+      "name": "Adobe Express",
+      "duration": "1 Tahun",
+      "price": 60000,
+      "badge": "BARU",
+      "description": "Desain grafis dan konten sosmed setahun penuh.",
+      "logo": "/logo-adobe-express.svg"
+    },
+    {
+      "slug": "canva",
+      "name": "Canva Pro",
+      "duration": "1 Bulan",
+      "price": 30000,
+      "badge": null,
+      "description": "Template premium, tim dan brand kit.",
+      "logo": "/logo-canva.webp"
+    },
+    {
+      "slug": "capcut",
+      "name": "CapCut Pro Team",
+      "duration": "30 Hari",
+      "price": 60000,
+      "badge": null,
+      "description": "Edit video tanpa watermark.",
+      "logo": "/logo-capcut.webp"
+    },
+    {
+      "slug": "gemini",
+      "name": "Gemini AI Pro",
+      "duration": "3 Bulan",
+      "price": 25000,
+      "badge": null,
+      "description": "Invite resmi, Full Garansi.",
+      "logo": "/logo-gemini.webp"
+    },
+    {
+      "slug": "netflix",
+      "name": "Netflix Premium",
+      "duration": "1 Bulan",
+      "price": 120000,
+      "badge": null,
+      "description": "4K UHD, profil sendiri.",
+      "logo": "/logo-netflix.webp"
+    },
+    {
+      "slug": "youtube",
+      "name": "YouTube Premium",
+      "duration": "30 Hari",
+      "price": 15000,
+      "badge": null,
+      "description": "Tanpa iklan, bisa background play.",
+      "logo": "/logo-youtube.webp"
+    }
+  ],
+  "flashSale": {
+    "title": "⚡ FLASH SALE 11.11",
+    "subtitle": "Stok makin menipis, yang kehabisan jangan nyesel.",
+    "endsAt": "2026-11-30T23:59:00+07:00",
+    "lowStockLabel": "SISA SEDIKIT",
+    "items": [
+      {
+        "slug": "adobe",
+        "name": "Adobe CC",
+        "duration": "1 Bulan",
+        "originalPrice": 125000,
+        "promoPrice": 100000,
+        "stockLeft": 4,
+        "stockTotal": 20,
+        "logo": "/logo-adobe.webp"
+      },
+      {
+        "slug": "capcut",
+        "name": "CapCut Pro Team",
+        "duration": "30 Hari",
+        "originalPrice": 40000,
+        "promoPrice": 30000,
+        "stockLeft": 6,
+        "stockTotal": 20,
+        "logo": "/logo-capcut.webp"
+      },
+      {
+        "slug": "canva",
+        "name": "Canva Pro",
+        "duration": "1 Bulan",
+        "originalPrice": 20000,
+        "promoPrice": 15000,
+        "stockLeft": 5,
+        "stockTotal": 20,
+        "logo": "/logo-canva.webp"
+      },
+      {
+        "slug": "youtube",
+        "name": "YouTube Premium",
+        "duration": "30 Hari",
+        "originalPrice": 25000,
+        "promoPrice": 15000,
+        "stockLeft": 3,
+        "stockTotal": 15,
+        "logo": "/logo-youtube.webp"
+      },
+      {
+        "slug": "gemini",
+        "name": "Gemini AI Pro",
+        "duration": "1 Tahun",
+        "originalPrice": 75000,
+        "promoPrice": 50000,
+        "stockLeft": 3,
+        "stockTotal": 15,
+        "logo": "/logo-gemini.webp"
+      },
+      {
+        "slug": "spotify",
+        "name": "Spotify Premium",
+        "duration": "1 Bulan",
+        "originalPrice": 25000,
+        "promoPrice": 15000,
+        "stockLeft": 6,
+        "stockTotal": 20,
+        "logo": "/logo-spotify.webp"
+      }
+    ]
+  },
+  "categories": [
+    {
+      "id": "ai-premium",
+      "title": "AI Premium",
+      "examples": "ChatGPT, Claude, Gemini, Kiro AI",
+      "serviceCountLabel": "5 layanan aktif",
+      "href": "https://order.amc.web.id/#aplikasi",
+      "featured": true
+    },
+    {
+      "id": "desain-editing",
+      "title": "Desain & Editing",
+      "examples": "Adobe CC, Canva, CapCut, Alight Motion",
+      "serviceCountLabel": "7 layanan aktif",
+      "href": "https://order.amc.web.id/#aplikasi",
+      "featured": true
+    },
+    {
+      "id": "streaming-hiburan",
+      "title": "Streaming & Hiburan",
+      "examples": "Netflix, YouTube, Spotify, Vidio",
+      "serviceCountLabel": "13 layanan aktif",
+      "href": "https://order.amc.web.id/#aplikasi",
+      "featured": false
+    },
+    {
+      "id": "buzzer-sosmed",
+      "title": "Buzzer Sosmed",
+      "examples": "Followers, likes, views IG / TikTok / YouTube",
+      "serviceCountLabel": "6 layanan aktif",
+      "href": "https://order.amc.web.id/#buzzer",
+      "featured": false
+    },
+    {
+      "id": "topup-game",
+      "title": "Top Up Game",
+      "examples": "MLBB, Roblox, Free Fire, PUBG, Valorant",
+      "serviceCountLabel": "7 layanan aktif",
+      "href": "https://order.amc.web.id/#game",
+      "featured": false
+    }
+  ],
+  "marqueeLogos": [
+    { "name": "ChatGPT", "logo": "/logo-chatgpt.webp" },
+    { "name": "Claude", "logo": "/logo-claude.svg" },
+    { "name": "Adobe CC", "logo": "/logo-adobe.webp" },
+    { "name": "Canva", "logo": "/logo-canva.webp" },
+    { "name": "CapCut", "logo": "/logo-capcut.webp" },
+    { "name": "Gemini AI", "logo": "/logo-gemini.webp" },
+    { "name": "Netflix", "logo": "/logo-netflix.webp" },
+    { "name": "Spotify", "logo": "/logo-spotify.webp" },
+    { "name": "YouTube", "logo": "/logo-youtube.webp" },
+    { "name": "Instagram", "logo": "/logo-ig.webp" },
+    { "name": "TikTok", "logo": "/logo-tiktok.webp" },
+    { "name": "Mobile Legends", "logo": "/logo-mlbb.webp" },
+    { "name": "Roblox", "logo": "/logo-roblox.webp" }
+  ],
+  "reelTickerItems": [
+    "CHATGPT",
+    "CLAUDE",
+    "ADOBE",
+    "CANVA",
+    "NETFLIX",
+    "SPOTIFY",
+    "MLBB",
+    "ROBLOX"
+  ]
+}

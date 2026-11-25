@@ -1,0 +1,40 @@
+---
+---
+
+<div
+  id="amc-preloader"
+  class="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-bg px-6"
+  aria-label="Memuat halaman Al Muthi Creative"
+>
+  <div class="flex flex-col items-center gap-6">
+    <div
+      id="preloader-logo-flight"
+      class="flex h-14 w-14 items-center justify-center overflow-hidden rounded-logo border border-line bg-white shadow-amc"
+    >
+      <img
+        src="/logo-amc.webp"
+        alt="Logo Al Muthi Creative"
+        width="56"
+        height="56"
+        fetchpriority="high"
+        decoding="sync"
+        class="h-full w-full object-cover"
+      />
+    </div>
+
+    <div
+      id="preloader-counter"
+      class="tabular-nums font-display text-[clamp(3.75rem,11vw,7.5rem)] font-extrabold leading-none tracking-[-0.04em] text-navy"
+      aria-live="off"
+    >
+      0
+    </div>
+
+    <div class="h-[3px] w-56 overflow-hidden rounded-full bg-line sm:w-64" aria-hidden="true">
+      <div
+        id="preloader-bar"
+        class="h-full w-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-sky via-sky-deep to-amc"
+      ></div>
+    </div>
+  </div>
+</div>
