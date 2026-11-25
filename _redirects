@@ -1,0 +1,2 @@
+/order       https://order.amc.web.id   301
+/order/*     https://order.amc.web.id/:splat   301
