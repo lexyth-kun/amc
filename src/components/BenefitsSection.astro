@@ -1,0 +1,95 @@
+---
+import content from '@/data/content.json';
+import BlueLine from './BlueLine.astro';
+---
+
+<section
+  id="keunggulan"
+  data-bg-color="#F4F8FF"
+  class="bg-bg-alt py-16 md:py-28"
+  aria-labelledby="benefits-heading"
+>
+  <div class="mx-auto max-w-amc px-4 sm:px-6">
+    <BlueLine className="mb-12 md:mb-16" />
+
+    <div class="mb-12 max-w-3xl md:mb-16">
+      <p class="eyebrow-label mb-3">{content.benefits.eyebrow}</p>
+      <h2
+        id="benefits-heading"
+        data-split-words
+        class="font-display text-[clamp(2.25rem,5.2vw,4.25rem)] font-extrabold leading-[1.02] tracking-[-0.03em] text-navy"
+      >
+        {content.benefits.headline}
+      </h2>
+    </div>
+
+    <!-- Animated Tabular Counters -->
+    <div class="mb-10 grid grid-cols-2 gap-4 lg:grid-cols-4 md:mb-14">
+      {
+        content.benefits.counters.map((counter) => (
+          <div class="rounded-card border border-line bg-white p-5 sm:p-7">
+            <div
+              data-counter-target={counter.target}
+              data-counter-decimals={counter.decimals}
+              data-counter-suffix={counter.suffix}
+              class="tabular-nums font-display text-3xl font-extrabold tracking-[-0.03em] text-amc sm:text-5xl"
+            >
+              0{counter.suffix}
+            </div>
+            <p class="mt-2 mb-0 text-xs font-bold uppercase tracking-[0.12em] text-navy sm:text-sm">
+              {counter.label}
+            </p>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- 4 Specific AMC Benefit Blocks -->
+    <div data-stagger-group class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        content.benefits.cards.map((card, idx) => (
+          <article
+            data-stagger-card
+            class="flex flex-col justify-between rounded-card border border-line bg-white p-6"
+          >
+            <div>
+              <span class="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-bg-alt text-amc">
+                {idx === 0 && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                )}
+                {idx === 1 && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    <path d="M9 12l2 2 4-4"></path>
+                  </svg>
+                )}
+                {idx === 2 && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+                    <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+                    <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+                    <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+                  </svg>
+                )}
+                {idx === 3 && (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                )}
+              </span>
+
+              <h3 class="font-display text-xl font-extrabold tracking-[-0.02em] text-navy">
+                {card.title}
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-body">
+                {card.desc}
+              </p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

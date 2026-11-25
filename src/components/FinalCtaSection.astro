@@ -1,0 +1,76 @@
+---
+import content from '@/data/content.json';
+---
+
+<section
+  id="cta-akhir"
+  data-bg-color="#EAF3FF"
+  class="relative overflow-hidden bg-gradient-to-b from-white via-bg-alt to-bg-deep py-20 md:py-32"
+  aria-labelledby="final-cta-heading"
+>
+  <!-- Decorative Floating 3D-Shaded Plus Echoes from Hero -->
+  <svg
+    class="pointer-events-none absolute -left-8 top-10 h-28 w-28 -rotate-12 opacity-65 sm:left-12 sm:h-36 sm:w-36"
+    viewBox="0 0 120 120"
+    fill="none"
+    aria-hidden="true"
+  >
+    <rect x="44" y="12" width="32" height="96" rx="12" fill="#DBEAFE"></rect>
+    <rect x="12" y="44" width="96" height="32" rx="12" fill="#BAE6FD"></rect>
+  </svg>
+
+  <svg
+    class="pointer-events-none absolute -right-8 bottom-10 h-28 w-28 rotate-12 opacity-65 sm:right-14 sm:h-40 sm:w-40"
+    viewBox="0 0 120 120"
+    fill="none"
+    aria-hidden="true"
+  >
+    <rect x="44" y="12" width="32" height="96" rx="12" fill="#BAE6FD"></rect>
+    <rect x="12" y="44" width="96" height="32" rx="12" fill="#DBEAFE"></rect>
+  </svg>
+
+  <div class="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6">
+    <p class="eyebrow-label mb-4">{content.finalCta.eyebrow}</p>
+
+    <h2
+      id="final-cta-heading"
+      data-split-words
+      class="font-display text-[clamp(2.6rem,7vw,5.8rem)] font-extrabold leading-[0.98] tracking-[-0.03em] text-navy"
+    >
+      {content.finalCta.headlineBefore}{' '}
+      <span class="amc-text-gradient">{content.finalCta.headlineHighlight}</span>{' '}
+      {content.finalCta.headlineAfter}
+    </h2>
+
+    <p class="mx-auto mt-6 max-w-xl text-base leading-[1.7] text-body sm:text-lg">
+      {content.finalCta.subheadline}
+    </p>
+
+    <div data-stagger-group class="mt-9 flex flex-wrap items-center justify-center gap-4">
+      <a
+        href={content.finalCta.primaryHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-stagger-card
+        data-magnetic
+        class="amc-btn-primary"
+      >
+        {content.finalCta.primaryLabel}
+      </a>
+
+      <a
+        href={content.finalCta.waHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        data-stagger-card
+        data-magnetic
+        class="amc-btn-wa"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+        </svg>
+        <span>{content.finalCta.waLabel}</span>
+      </a>
+    </div>
+  </div>
+</section>

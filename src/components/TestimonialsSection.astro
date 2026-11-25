@@ -1,0 +1,111 @@
+---
+import content from '@/data/content.json';
+import BlueLine from './BlueLine.astro';
+---
+
+<section
+  id="testimoni"
+  data-bg-color="#FFFFFF"
+  class="bg-bg py-16 md:py-28"
+  aria-labelledby="testimonials-heading"
+>
+  <div class="mx-auto max-w-amc px-4 sm:px-6">
+    <BlueLine className="mb-12 md:mb-16" />
+
+    <div class="mb-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+      <div>
+        <p class="eyebrow-label mb-3">{content.testimonials.eyebrow}</p>
+        <h2
+          id="testimonials-heading"
+          data-split-words
+          class="font-display text-[clamp(2rem,4.8vw,3.85rem)] font-extrabold leading-[1.04] tracking-[-0.03em] text-navy"
+        >
+          {content.testimonials.headline}
+        </h2>
+        <p class="mt-3 max-w-2xl text-sm leading-relaxed text-body">
+          {content.testimonials.subnote}
+        </p>
+      </div>
+
+      <!-- Accessible Carousel Controls + Pause Button (R-39) -->
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          id="testi-prev-btn"
+          aria-label="Ulasan sebelumnya"
+          class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-line bg-bg-alt text-navy hover:border-amc hover:text-amc"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          id="testi-pause-btn"
+          aria-label="Jeda putar otomatis ulasan"
+          aria-pressed="false"
+          class="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-line bg-bg-alt px-4 py-2 font-display text-xs font-extrabold text-navy hover:border-amc hover:text-amc"
+        >
+          <span id="testi-pause-label">Jeda</span>
+        </button>
+
+        <button
+          type="button"
+          id="testi-next-btn"
+          aria-label="Ulasan berikutnya"
+          class="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-line bg-bg-alt text-navy hover:border-amc hover:text-amc"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M9 18l6-6-6-6"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Draggable / Swipeable 3-Card Carousel Viewport -->
+    <div
+      id="testi-viewport"
+      class="overflow-hidden rounded-card border border-line bg-bg-alt p-5 select-none sm:p-8"
+      aria-roledescription="carousel"
+      aria-label="Daftar ulasan pembeli"
+    >
+      <div id="testi-track" class="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        {
+          content.testimonials.items.map((item, idx) => (
+            <article
+              data-testi-slide={idx}
+              class={`flex flex-col justify-between rounded-2xl border bg-white p-6 transition-all duration-300 ${
+                idx === 0 ? 'border-amc shadow-amc' : 'border-line opacity-90'
+              }`}
+            >
+              <div>
+                <div class="flex items-center justify-between gap-2">
+                  <div class="flex items-center gap-1 text-amber-500" aria-label={`Rating ${item.rating} dari 5 bintang`}>
+                    {Array.from({ length: item.rating }).map(() => (
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                        <path d="M12 2l2.9 6.26L22 9.27l-5 4.87 1.18 6.86L12 17.77l-6.18 3.23L7 14.14 2 9.27l7.1-1.01L12 2z"></path>
+                      </svg>
+                    ))}
+                  </div>
+                  <span class="rounded-md border border-line bg-bg-alt px-2 py-0.5 font-display text-[11px] font-bold text-sky-ink">
+                    Slot Jujur #{idx + 1}
+                  </span>
+                </div>
+
+                <p class="mt-4 text-sm leading-relaxed text-body">
+                  {item.quote}
+                </p>
+              </div>
+
+              <div class="mt-6 border-t border-line pt-4">
+                <p class="m-0 font-display text-sm font-extrabold text-navy">{item.author}</p>
+                <p class="m-0 mt-0.5 text-xs font-semibold text-sky-ink">{item.product}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
