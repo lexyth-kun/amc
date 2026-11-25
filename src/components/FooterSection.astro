@@ -2,42 +2,116 @@
 import content from '@/data/content.json';
 import products from '@/data/products.json';
 import BlueLine from './BlueLine.astro';
+import NextPageScrollGate from './NextPageScrollGate.astro';
 import { withBase } from '@/utils/url';
+import { resolveFooterNextPage } from '@/utils/next-page-scroll';
+
+interface Props {
+  nextTargetHref?: string;
+  nextTitle?: string;
+  nextEyebrow?: string;
+  nextLabel?: string;
+  nextHint?: string;
+  nextExternal?: boolean;
+}
+
+const autoNext = resolveFooterNextPage(
+  Astro.url.pathname,
+  import.meta.env.BASE_URL || '/'
+);
+
+const {
+  nextTargetHref = autoNext.href,
+  nextTitle = autoNext.title,
+  nextEyebrow = autoNext.eyebrow,
+  nextLabel = autoNext.nextLabel,
+  nextHint = autoNext.hint,
+  nextExternal = autoNext.external,
+} = Astro.props;
 ---
 
 <footer
   id="kontak"
   data-bg-color="#FFFFFF"
-  class="bg-bg pt-14 pb-10 md:pt-20"
+  class="bg-bg pt-16 md:pt-24"
   role="contentinfo"
 >
   <div data-footer-reveal class="mx-auto max-w-amc px-4 sm:px-6">
-    <BlueLine className="mb-12 md:mb-16" />
+    <BlueLine className="mb-10 md:mb-14" />
 
-    <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12">
-      <!-- Col 1: Brand + WhatsApp Promo Opt-In -->
-      <div class="lg:col-span-4">
-        <a href={withBase('/')} data-page-link class="inline-flex min-h-[44px] items-center gap-3 text-navy no-underline">
-          <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-logo border border-line bg-white">
-            <img src={withBase('/logo-amc.webp')} alt="Logo AMC" width="44" height="44" loading="lazy" class="h-full w-full object-cover" />
+    <!-- Top Live Status Strip -->
+    <div class="mb-10 flex flex-wrap items-center justify-between gap-4 border-b border-line pb-5">
+      <div class="flex items-center gap-3">
+        <a
+          href={withBase('/')}
+          data-page-link
+          class="inline-flex min-h-[44px] items-center gap-3 text-navy no-underline"
+        >
+          <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-logo border border-line bg-white shadow-sm">
+            <img
+              src={withBase('/logo-amc.webp')}
+              alt="Logo Al Muthi Creative"
+              width="44"
+              height="44"
+              loading="lazy"
+              class="h-full w-full object-cover"
+            />
           </span>
-          <span class="font-display text-base font-extrabold tracking-[-0.02em] text-navy">
+          <span class="font-display text-base font-extrabold tracking-[-0.02em] text-navy sm:text-lg">
             AL MUTHI <span class="text-sky-ink">CREATIVE</span>
           </span>
         </a>
+      </div>
 
-        <p class="mt-4 max-w-sm text-sm leading-relaxed text-body">
+      <div class="inline-flex items-center gap-2.5 rounded-full border border-line bg-bg-alt px-3.5 py-1.5 font-display text-xs font-extrabold text-sky-ink">
+        <span class="h-2 w-2 rounded-full bg-sky-deep" aria-hidden="true"></span>
+        <span>{content.footer.contacts.hours} • Web Shop & Bot WA Aktif</span>
+      </div>
+    </div>
+
+    <!-- Editorial Brand Statement + WhatsApp Promo Opt-In -->
+    <div class="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-12">
+      <div class="lg:col-span-6">
+        <p class="m-0 font-display text-[clamp(1.75rem,3.6vw,2.75rem)] font-extrabold leading-[1.08] tracking-[-0.03em] text-navy">
+          Semua akun premium <span class="amc-text-gradient">terjangkau & bergaransi.</span>
+        </p>
+        <p class="mt-4 max-w-lg text-sm leading-relaxed text-body sm:text-base">
           {content.footer.tagline}
         </p>
 
-        <form class="js-newsletter-form mt-6" novalidate>
+        <div class="mt-6 flex flex-wrap items-center gap-2.5 text-xs font-extrabold text-navy">
+          <span class="inline-flex items-center gap-1.5 rounded-full border border-line bg-bg-alt px-3.5 py-1.5 tabular-nums">
+            <span class="text-sky-deep" aria-hidden="true">★</span>
+            <span>4.8 / 5 Rating Asli</span>
+          </span>
+          <span class="inline-flex items-center rounded-full border border-line bg-white px-3.5 py-1.5 tabular-nums">
+            1.266 Ulasan
+          </span>
+          <span class="inline-flex items-center rounded-full border border-line bg-white px-3.5 py-1.5 tabular-nums">
+            1.300+ Order Tuntas
+          </span>
+          <span class="inline-flex items-center rounded-full border border-line bg-white px-3.5 py-1.5 tabular-nums">
+            41+ Layanan
+          </span>
+        </div>
+      </div>
+
+      <!-- Elevated WhatsApp Promo & Restock Opt-In Surface -->
+      <div class="lg:col-span-6">
+        <form
+          class="js-newsletter-form rounded-card border border-line bg-bg-alt p-5 sm:p-7"
+          novalidate
+        >
           <label
             for="footer-promo-phone"
-            class="mb-2 block font-display text-xs font-extrabold uppercase tracking-[0.14em] text-navy"
+            class="mb-1.5 block font-display text-xs font-extrabold uppercase tracking-[0.16em] text-navy"
           >
             {content.footer.newsletterLabel}
           </label>
-          <div class="flex flex-col gap-2.5 sm:flex-row">
+          <p class="m-0 mb-4 text-xs leading-relaxed text-body sm:text-sm">
+            Terima info promo Flash Sale dan update stok akun terbaru langsung via WhatsApp resmi AMC.
+          </p>
+          <div class="flex flex-col gap-3 sm:flex-row">
             <input
               id="footer-promo-phone"
               name="phone"
@@ -45,16 +119,16 @@ import { withBase } from '@/utils/url';
               inputmode="tel"
               autocomplete="tel"
               placeholder={content.footer.newsletterPlaceholder}
-              class="min-h-[44px] flex-1 rounded-2xl border border-line bg-bg-alt px-4 py-2.5 text-sm text-ink placeholder:text-body/60"
+              class="min-h-[48px] flex-1 rounded-2xl border border-line bg-white px-4 py-3 text-sm font-medium text-ink placeholder:text-[#475569]/70"
             />
             <button
               type="submit"
-              class="amc-btn-primary !min-h-[44px] shrink-0 !px-5 !py-2.5 !text-sm"
+              class="amc-btn-primary !min-h-[48px] shrink-0 !px-6 !py-3 !text-sm"
             >
               {content.footer.newsletterButton}
             </button>
           </div>
-          <p class="js-newsletter-feedback mt-2 text-xs leading-relaxed text-body" role="status" aria-live="polite"></p>
+          <p class="js-newsletter-feedback mt-2.5 text-xs leading-relaxed text-body" role="status" aria-live="polite"></p>
           <a
             href={content.footer.contacts.waAdminHref}
             target="_blank"
@@ -66,20 +140,24 @@ import { withBase } from '@/utils/url';
           </a>
         </form>
       </div>
+    </div>
 
-      <!-- Col 2: Produk -->
-      <div class="lg:col-span-2 lg:col-start-6">
-        <h3 class="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
-          Produk
+    <!-- 4-Column Architectural Sitemap Grid -->
+    <div class="mt-14 grid grid-cols-1 gap-10 border-t border-line pt-12 sm:grid-cols-2 lg:grid-cols-12">
+      <!-- Col 1: Katalog Produk -->
+      <div class="lg:col-span-3">
+        <h3 class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
+          Katalog Layanan
         </h3>
-        <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
+        <ul class="m-0 mt-4 flex list-none flex-col gap-1 p-0">
           <li>
             <a
               href={withBase('/produk/')}
               data-page-link
-              class="inline-flex min-h-[44px] items-center text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
+              class="group inline-flex min-h-[44px] items-center gap-1.5 text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
             >
-              Semua Produk (41+)
+              <span>Semua Produk (41+)</span>
+              <span aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
             </a>
           </li>
           {
@@ -99,63 +177,62 @@ import { withBase } from '@/utils/url';
         </ul>
       </div>
 
-      <!-- Col 3: Bantuan -->
-      <div class="lg:col-span-2">
-        <h3 class="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
+      <!-- Col 2: Halaman & Bantuan -->
+      <div class="lg:col-span-3">
+        <h3 class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
           Halaman & Bantuan
         </h3>
-        <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
+        <ul class="m-0 mt-4 flex list-none flex-col gap-1 p-0">
           <li>
             <a
-              href={withBase('/cara-order/')}
+              href={withBase('/about/')}
               data-page-link
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
+              class="inline-flex min-h-[44px] items-center text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
             >
-              Cara Order
+              Tentang AMC (Adrian Ali Muthi)
+            </a>
+          </li>
+          <li>
+            <a
+              href={withBase('/kategori/')}
+              data-page-link
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
+            >
+              Kategori Layanan
             </a>
           </li>
           <li>
             <a
               href={withBase('/flash-sale/')}
               data-page-link
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
             >
               Flash Sale 11.11
             </a>
           </li>
           <li>
             <a
-              href="https://order.amc.web.id/#ulasan"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
+              href={withBase('/cara-order/')}
+              data-page-link
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
             >
-              Ulasan Pembeli
+              Cara Order Kilat
             </a>
           </li>
           <li>
             <a
               href={withBase('/faq/')}
               data-page-link
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
             >
               FAQ & Garansi
             </a>
           </li>
           <li>
             <a
-              href={withBase('/about/')}
-              data-page-link
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
-            >
-              Tentang AMC
-            </a>
-          </li>
-          <li>
-            <a
               href={withBase('/kontak/')}
               data-page-link
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
             >
               Hubungi AMC
             </a>
@@ -163,18 +240,18 @@ import { withBase } from '@/utils/url';
         </ul>
       </div>
 
-      <!-- Col 4: Kontak -->
+      <!-- Col 3: Kontak Resmi -->
       <div class="lg:col-span-3">
-        <h3 class="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
-          Kontak
+        <h3 class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
+          Kanal Resmi
         </h3>
-        <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
+        <ul class="m-0 mt-4 flex list-none flex-col gap-1 p-0">
           <li>
             <a
               href={content.footer.contacts.waAdminHref}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-[44px] items-center text-sm font-bold text-navy no-underline hover:text-sky-ink"
+              class="inline-flex min-h-[44px] items-center text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
             >
               WA Admin: {content.footer.contacts.waAdminDisplay}
             </a>
@@ -184,7 +261,7 @@ import { withBase } from '@/utils/url';
               href={content.footer.contacts.waBotHref}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
             >
               WA Bot: {content.footer.contacts.waBotDisplay}
             </a>
@@ -194,7 +271,7 @@ import { withBase } from '@/utils/url';
               href={content.footer.contacts.instagramHref}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
             >
               Instagram: {content.footer.contacts.instagramDisplay}
             </a>
@@ -202,25 +279,69 @@ import { withBase } from '@/utils/url';
           <li>
             <a
               href={content.footer.contacts.emailHref}
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
             >
               Email: {content.footer.contacts.emailDisplay}
             </a>
           </li>
-          <li class="pt-1">
-            <span class="inline-flex items-center rounded-lg border border-line bg-bg-alt px-3 py-1 font-display text-xs font-extrabold text-sky-ink">
-              {content.footer.contacts.hours}
-            </span>
+          <li>
+            <a
+              href="https://order.amc.web.id/#ulasan"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
+            >
+              Ulasan Asli Pembeli →
+            </a>
           </li>
         </ul>
       </div>
+
+      <!-- Col 4: Direct Order Box -->
+      <div class="lg:col-span-3">
+        <div class="flex h-full flex-col justify-between rounded-card border border-line bg-bg-alt p-5 sm:p-6">
+          <div>
+            <p class="m-0 font-display text-[11px] font-extrabold uppercase tracking-[0.2em] text-sky-ink">
+              WEB SHOP OTOMATIS
+            </p>
+            <p class="m-0 mt-2 font-display text-lg font-extrabold tracking-[-0.02em] text-navy">
+              Siap aktivasi akun dalam hitungan menit?
+            </p>
+            <p class="m-0 mt-2 text-xs leading-relaxed text-body">
+              Checkout langsung di order.amc.web.id dengan QRIS, e-wallet, atau transfer bank 24 jam.
+            </p>
+          </div>
+
+          <div class="mt-5 flex flex-col gap-2.5">
+            <a
+              href="https://order.amc.web.id"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-magnetic
+              class="amc-btn-primary w-full !min-h-[44px] !px-4 !py-2.5 !text-xs"
+            >
+              <span>Order di order.amc.web.id</span>
+              <span aria-hidden="true">→</span>
+            </a>
+            <a
+              href={content.footer.contacts.waAdminHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="amc-btn-ghost w-full !min-h-[44px] !px-4 !py-2.5 !text-xs"
+            >
+              <span>Tanya Admin 24 Jam</span>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-line pt-6 text-xs font-medium text-body sm:flex-row sm:items-center">
-      <div class="flex flex-wrap items-center gap-3">
-        <span>{content.footer.copyright}</span>
+    <!-- Legal Bar + Back to Top -->
+    <div class="mt-12 flex flex-col items-start justify-between gap-4 border-t border-line py-6 text-xs font-medium text-body sm:flex-row sm:items-center">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span class="font-bold text-navy">{content.footer.copyright}</span>
         <span aria-hidden="true">•</span>
-        <span>{content.footer.madeIn}</span>
+        <span>Dibuat oleh Adrian Ali Muthi di Indonesia</span>
       </div>
 
       <div class="flex flex-wrap items-center gap-5">
@@ -228,7 +349,7 @@ import { withBase } from '@/utils/url';
           href="https://order.amc.web.id"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline hover:text-sky-ink"
+          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline transition-colors hover:text-sky-ink"
         >
           Lacak Orderan
         </a>
@@ -236,18 +357,37 @@ import { withBase } from '@/utils/url';
           href="https://order.amc.web.id/#ulasan"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline hover:text-sky-ink"
+          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline transition-colors hover:text-sky-ink"
         >
           Ulasan Resmi
         </a>
         <a
           href={withBase('/faq/')}
           data-page-link
-          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline hover:text-sky-ink"
+          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline transition-colors hover:text-sky-ink"
         >
           Garansi
         </a>
+        <button
+          type="button"
+          id="footer-back-to-top"
+          aria-label="Kembali ke paling atas halaman"
+          class="inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-line bg-bg-alt px-3.5 py-2 font-display text-xs font-extrabold text-navy transition-colors hover:border-sky-deep hover:text-sky-ink"
+        >
+          <span>Ke Atas</span>
+          <span aria-hidden="true">↑</span>
+        </button>
       </div>
     </div>
   </div>
+
+  <!-- Integrated Lusion Auto-Scroll Next Page Portal (part of the footer on every page) -->
+  <NextPageScrollGate
+    targetHref={nextTargetHref}
+    eyebrow={nextEyebrow}
+    title={nextTitle}
+    nextLabel={nextLabel}
+    hint={nextHint}
+    external={nextExternal}
+  />
 </footer>

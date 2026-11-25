@@ -426,10 +426,10 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
       if (win.__amcScrollTo) win.__amcScrollTo(maxY);
       else window.scrollTo(0, maxY);
     });
-    await expect(page.locator('#next-page-scroll-gate')).toBeVisible();
-    await expect(page.locator('#next-page-scroll-gate')).toContainText('Tentang AMC');
+    await expect(page.locator('footer#kontak #next-page-scroll-gate')).toBeVisible();
+    await expect(page.locator('footer#kontak #next-page-scroll-gate')).toContainText('Tentang AMC');
 
-    // Keep scrolling down via real mouse wheel at bottom -> automatically opens /about/
+    // Keep scrolling down via real mouse wheel at bottom of footer -> automatically opens /about/
     await page.mouse.move(720, 450);
     for (let i = 0; i < 6; i++) {
       await page.mouse.wheel(0, 180);
@@ -452,8 +452,11 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     await page.click('#about-particles-pause');
     await expect(page.locator('#about-particles-pause')).toHaveAttribute('aria-pressed', 'true');
 
-    // NextPageScrollGate on /about/ points to /produk/
-    await expect(page.locator('#next-page-scroll-gate')).toHaveAttribute('data-next-page-href', '/produk/');
+    // Integrated footer NextPageScrollGate on /about/ points directly to https://order.amc.web.id
+    const aboutGate = page.locator('footer#kontak #next-page-scroll-gate');
+    await expect(aboutGate).toHaveAttribute('data-next-page-href', 'https://order.amc.web.id');
+    await expect(aboutGate).toHaveAttribute('data-next-page-external', 'true');
+    await expect(aboutGate).toContainText('order.amc.web.id');
 
     // Mobile 390px zero horizontal overflow on /about/
     await page.setViewportSize({ width: 390, height: 844 });
@@ -462,6 +465,30 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     );
     expect(mOverflow).toBeLessThanOrEqual(1);
 
+    // Real overscroll at bottom of /about/ footer redirects directly to https://order.amc.web.id
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.route('https://order.amc.web.id/**', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'text/html',
+        body: '<!doctype html><html><body><h1>Order AMC Web Shop</h1></body></html>',
+      });
+    });
+
+    await page.evaluate(() => {
+      const maxY = document.documentElement.scrollHeight;
+      const win = window as Window & { __amcScrollTo?: (y: number) => void };
+      if (win.__amcScrollTo) win.__amcScrollTo(maxY);
+      else window.scrollTo(0, maxY);
+    });
+    await page.waitForTimeout(150);
+    await page.mouse.move(720, 450);
+    for (let i = 0; i < 6; i++) {
+      await page.mouse.wheel(0, 180);
+      await page.waitForTimeout(45);
+    }
+
+    await expect(page).toHaveURL(/^https:\/\/order\.amc\.web\.id\/?$/, { timeout: 6000 });
     expect(errors).toEqual([]);
     await ctx.close();
   });

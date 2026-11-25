@@ -3,7 +3,6 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import BlueLine from '@/components/BlueLine.astro';
 import FinalCtaSection from '@/components/FinalCtaSection.astro';
 import FooterSection from '@/components/FooterSection.astro';
-import NextPageScrollGate from '@/components/NextPageScrollGate.astro';
 import aboutData from '@/data/about.json';
 import products from '@/data/products.json';
 import { getProductDetailBySlug } from '@/data/product-details';
@@ -478,12 +477,4 @@ const supportedBrands = supportedBrandSlugs
 
   <FinalCtaSection />
   <FooterSection />
-
-  <!-- Seamless Lusion Next Page Scroll Gate: /about/ -> /produk/ -->
-  <NextPageScrollGate
-    targetHref="/produk/"
-    eyebrow="TERUS SCROLL UNTUK LANJUT"
-    title="Semua Produk (41+)"
-    nextLabel="Halaman Berikutnya"
-  />
 </BaseLayout>

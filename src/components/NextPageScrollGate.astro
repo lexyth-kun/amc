@@ -6,6 +6,8 @@ interface Props {
   eyebrow?: string;
   title: string;
   nextLabel?: string;
+  hint?: string;
+  external?: boolean;
 }
 
 const {
@@ -13,73 +15,128 @@ const {
   eyebrow = 'TERUS SCROLL UNTUK LANJUT',
   title,
   nextLabel = 'Halaman Berikutnya',
+  hint = 'Scroll terus ke bawah atau klik untuk langsung berpindah halaman.',
+  external = false,
 } = Astro.props;
 
-const resolvedHref = withBase(targetHref);
+const resolvedHref = external ? targetHref : withBase(targetHref);
 ---
 
-<section
+<div
   id="next-page-scroll-gate"
   data-next-page-href={resolvedHref}
+  data-next-page-external={external ? 'true' : 'false'}
   aria-label={`${nextLabel}: ${title}`}
-  class="dark-surface relative overflow-hidden bg-[#082F49] text-white"
+  class="dark-surface relative mt-4 overflow-hidden rounded-t-[28px] bg-[#082F49] text-white sm:rounded-t-[40px]"
 >
+  <!-- Ambient Sky Blue aura that intensifies smoothly as overscroll charges 0% -> 100% -->
   <div
-    class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#38BDF8]/50 to-transparent"
+    id="next-page-glow"
+    aria-hidden="true"
+    style="opacity: 0.2;"
+    class="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_100%,rgba(56,189,248,0.52)_0%,rgba(14,165,233,0.18)_42%,rgba(8,47,73,0)_76%)] transition-opacity duration-150"
+  ></div>
+
+  <div
+    class="pointer-events-none absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-[#7DD3FC]/60 to-transparent"
     aria-hidden="true"
   ></div>
 
   <a
     href={resolvedHref}
     data-next-page-link
-    data-page-link
-    class="group relative block px-4 py-16 text-white no-underline transition-colors duration-300 hover:bg-[#0C4A6E]/55 sm:px-6 md:py-24"
+    class="group relative z-10 block px-4 pt-12 pb-12 text-white no-underline transition-colors duration-300 hover:bg-[#0C4A6E]/40 sm:px-6 md:pt-16 md:pb-16"
   >
     <div class="mx-auto max-w-amc">
-      <!-- Top crosshair row (Lusion signature + motif) -->
-      <div class="mb-8 flex items-center justify-between text-xs font-bold tracking-[0.22em] text-sky-light">
+      <!-- Top Lusion crosshair indicator row -->
+      <div class="mb-7 flex items-center justify-between gap-4 text-[11px] font-extrabold tracking-[0.22em] text-sky-light sm:text-xs">
         <span aria-hidden="true">+</span>
-        <span class="font-display uppercase">{eyebrow}</span>
+        <span class="font-display text-center uppercase">{eyebrow}</span>
         <span aria-hidden="true">+</span>
       </div>
 
-      <div class="grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
+      <div class="grid grid-cols-1 items-end gap-8 lg:grid-cols-12">
         <div class="lg:col-span-8">
-          <p class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.2em] text-white/70">
-            {nextLabel}
-          </p>
-          <h2 class="m-0 mt-2 font-display text-[clamp(2.4rem,7vw,5.75rem)] font-extrabold leading-[0.98] tracking-[-0.03em] text-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2">
+          <div class="flex flex-wrap items-center gap-2.5">
+            <p class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.2em] text-white/75">
+              {nextLabel}
+            </p>
+            {
+              external && (
+                <span class="inline-flex items-center rounded-full border border-[#7DD3FC]/40 bg-[#0C4A6E]/80 px-2.5 py-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.14em] text-sky-light">
+                  CHECKOUT 24 JAM
+                </span>
+              )
+            }
+          </div>
+
+          <h2 class="m-0 mt-2.5 font-display text-[clamp(2.35rem,6.8vw,5.6rem)] font-extrabold leading-[0.98] tracking-[-0.035em] text-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2">
             {title}
           </h2>
         </div>
 
         <div class="flex flex-col items-start gap-3 lg:col-span-4 lg:items-end">
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-4">
             <span
               id="next-page-charge-pct"
-              class="tabular-nums font-display text-sm font-extrabold tracking-[0.12em] text-sky-light"
+              class="tabular-nums font-display text-sm font-extrabold tracking-[0.14em] text-sky-light"
             >
               0%
             </span>
-            <span class="inline-flex h-12 w-12 items-center justify-center rounded-full border border-[#7DD3FC]/45 bg-white/10 text-white transition-all duration-300 group-hover:translate-x-1 group-hover:border-sky-light group-hover:bg-sky group-hover:text-[#082F49]">
+
+            <!-- Circular arrow portal with SVG overscroll charge ring (r=26, C=163.36) -->
+            <span class="relative inline-flex h-14 w-14 items-center justify-center rounded-full bg-white/10 text-white transition-all duration-300 group-hover:translate-x-1 group-hover:bg-sky group-hover:text-[#082F49]">
+              <svg
+                class="pointer-events-none absolute inset-0 h-full w-full -rotate-90"
+                viewBox="0 0 56 56"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="28"
+                  cy="28"
+                  r="26"
+                  fill="none"
+                  stroke="rgba(125,211,252,0.28)"
+                  stroke-width="2"
+                ></circle>
+                <circle
+                  id="next-page-ring"
+                  cx="28"
+                  cy="28"
+                  r="26"
+                  fill="none"
+                  stroke="#7DD3FC"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-dasharray="163.36"
+                  stroke-dashoffset="163.36"
+                ></circle>
+              </svg>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5 12h14M13 5l7 7-7 7"></path>
+                {
+                  external ? (
+                    <path d="M7 17L17 7M9 7h8v8"></path>
+                  ) : (
+                    <path d="M5 12h14M13 5l7 7-7 7"></path>
+                  )
+                }
               </svg>
             </span>
           </div>
-          <p class="m-0 text-xs font-medium text-white/75 lg:text-right">
-            Scroll terus ke bawah atau klik untuk langsung berpindah halaman.
+
+          <p class="m-0 max-w-xs text-xs font-medium leading-relaxed text-white/75 lg:text-right">
+            {hint}
           </p>
         </div>
       </div>
 
-      <!-- Overscroll progress bar (0% -> 100% triggers automatic Lusion page curtain) -->
-      <div class="mt-8 h-[4px] w-full overflow-hidden rounded-full bg-white/15" aria-hidden="true">
+      <!-- Full-width overscroll charge progress bar -->
+      <div class="mt-9 h-[4px] w-full overflow-hidden rounded-full bg-white/15" aria-hidden="true">
         <div
           id="next-page-charge-bar"
-          class="h-full w-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-sky-light via-sky to-white transition-transform duration-75 ease-out"
+          class="h-full w-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-[#7DD3FC] via-[#38BDF8] to-white transition-transform duration-75 ease-out"
         ></div>
       </div>
     </div>
   </a>
-</section>
+</div>

@@ -4,6 +4,7 @@ import {
   advanceOverscrollCharge,
   decayOverscrollCharge,
   isAtDocumentBottom,
+  resolveFooterNextPage,
   shouldTriggerNextPage,
 } from '@/utils/next-page-scroll';
 
@@ -59,5 +60,30 @@ describe('About Page (Solo Creator Adrian Ali Muthi) & Lusion Auto Next-Page Scr
 
     expect(decayOverscrollCharge(0.5, 0.2, 0.8)).toBeCloseTo(0.34, 4);
     expect(decayOverscrollCharge(0.05, 1.0, 0.8)).toBe(0);
+  });
+
+  it('routes footer auto-scroll from landing/info pages to /about/ and from /about/ directly to https://order.amc.web.id', () => {
+    const fromHome = resolveFooterNextPage('/', '/');
+    expect(fromHome.href).toBe('/about/');
+    expect(fromHome.title).toContain('Tentang');
+    expect(fromHome.external).toBe(false);
+
+    const fromSubpathHome = resolveFooterNextPage('/amc/', '/amc');
+    expect(fromSubpathHome.href).toBe('/about/');
+
+    const fromAbout = resolveFooterNextPage('/about/', '/');
+    expect(fromAbout.href).toBe('https://order.amc.web.id');
+    expect(fromAbout.title).toContain('order.amc.web.id');
+    expect(fromAbout.external).toBe(true);
+
+    const fromSubpathAbout = resolveFooterNextPage('/amc/about/', '/amc');
+    expect(fromSubpathAbout.href).toBe('https://order.amc.web.id');
+    expect(fromSubpathAbout.external).toBe(true);
+
+    const fromKategori = resolveFooterNextPage('/kategori/', '/');
+    expect(fromKategori.href).toBe('/produk/');
+
+    const fromProduk = resolveFooterNextPage('/produk/', '/');
+    expect(fromProduk.href).toBe('/about/');
   });
 });

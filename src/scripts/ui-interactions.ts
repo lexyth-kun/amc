@@ -464,6 +464,18 @@ function initCatalogCategoryFilter(): void {
 }
 
 function initFooterReveal(): void {
+  const backToTopBtn = document.getElementById('footer-back-to-top');
+  if (backToTopBtn) {
+    backToTopBtn.addEventListener('click', () => {
+      const lenis = getLenis();
+      if (lenis && !prefersReducedMotion()) {
+        lenis.scrollTo(0, { duration: 1.1 });
+      } else {
+        window.scrollTo({ top: 0, behavior: prefersReducedMotion() ? 'auto' : 'smooth' });
+      }
+    });
+  }
+
   if (prefersReducedMotion()) return;
   const footerInner = document.querySelector<HTMLElement>('[data-footer-reveal]');
   if (!footerInner) return;

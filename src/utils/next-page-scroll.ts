@@ -34,3 +34,55 @@ export function decayOverscrollCharge(
 export function shouldTriggerNextPage(charge: number): boolean {
   return Number.isFinite(charge) && charge >= 1;
 }
+
+export interface FooterNextPageTarget {
+  href: string;
+  title: string;
+  eyebrow: string;
+  nextLabel: string;
+  hint: string;
+  external: boolean;
+}
+
+export function resolveFooterNextPage(
+  rawPathname: string,
+  rawBaseUrl = '/'
+): FooterNextPageTarget {
+  const base = rawBaseUrl.replace(/\/+$/, '');
+  let normalized = rawPathname || '/';
+  if (base && (normalized === base || normalized.startsWith(`${base}/`))) {
+    normalized = normalized.slice(base.length) || '/';
+  }
+  normalized = normalized.replace(/\/+$/, '') || '/';
+
+  if (normalized === '/about') {
+    return {
+      href: 'https://order.amc.web.id',
+      title: 'order.amc.web.id',
+      eyebrow: 'TERUS SCROLL UNTUK MULAI ORDER',
+      nextLabel: 'Menuju Web Shop Resmi',
+      hint: 'Scroll terus ke bawah atau klik untuk langsung order di order.amc.web.id.',
+      external: true,
+    };
+  }
+
+  if (normalized === '/kategori') {
+    return {
+      href: '/produk/',
+      title: 'Semua Produk (41+)',
+      eyebrow: 'TERUS SCROLL UNTUK LANJUT',
+      nextLabel: 'Halaman Berikutnya',
+      hint: 'Scroll terus ke bawah atau klik untuk menjelajahi seluruh 41+ layanan.',
+      external: false,
+    };
+  }
+
+  return {
+    href: '/about/',
+    title: 'Tentang AMC',
+    eyebrow: 'TERUS SCROLL UNTUK LANJUT',
+    nextLabel: 'Halaman Berikutnya',
+    hint: 'Scroll terus ke bawah atau klik untuk mengenal pembuat Al Muthi Creative.',
+    external: false,
+  };
+}

@@ -13,7 +13,6 @@ import TestimonialsSection from '@/components/TestimonialsSection.astro';
 import FaqSection from '@/components/FaqSection.astro';
 import FinalCtaSection from '@/components/FinalCtaSection.astro';
 import FooterSection from '@/components/FooterSection.astro';
-import NextPageScrollGate from '@/components/NextPageScrollGate.astro';
 ---
 
 <BaseLayout currentPath="/" showPreloader={true}>
@@ -30,10 +29,4 @@ import NextPageScrollGate from '@/components/NextPageScrollGate.astro';
   <FaqSection />
   <FinalCtaSection />
   <FooterSection />
-  <NextPageScrollGate
-    targetHref="/about/"
-    eyebrow="TERUS SCROLL UNTUK LANJUT"
-    title="Tentang AMC"
-    nextLabel="Halaman Berikutnya"
-  />
 </BaseLayout>

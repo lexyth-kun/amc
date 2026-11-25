@@ -7,6 +7,8 @@ import {
   shouldTriggerNextPage,
 } from '@/utils/next-page-scroll';
 
+const RING_CIRCUMFERENCE = 163.36;
+
 export function initNextPageScrollGate(): void {
   const gate = document.getElementById('next-page-scroll-gate');
   if (!gate) return;
@@ -16,6 +18,9 @@ export function initNextPageScrollGate(): void {
 
   const bar = document.getElementById('next-page-charge-bar');
   const pctEl = document.getElementById('next-page-charge-pct');
+  const ringEl = document.getElementById('next-page-ring');
+  const glowEl = document.getElementById('next-page-glow');
+  const linkEl = gate.querySelector<HTMLAnchorElement>('[data-next-page-link]');
 
   let charge = 0;
   let triggered = false;
@@ -30,6 +35,12 @@ export function initNextPageScrollGate(): void {
     if (pctEl) {
       pctEl.textContent = `${Math.round(charge * 100)}%`;
     }
+    if (ringEl) {
+      ringEl.style.strokeDashoffset = (RING_CIRCUMFERENCE * (1 - charge)).toFixed(2);
+    }
+    if (glowEl) {
+      glowEl.style.opacity = (0.2 + charge * 0.78).toFixed(3);
+    }
   };
 
   const navigateNow = () => {
@@ -38,9 +49,18 @@ export function initNextPageScrollGate(): void {
     charge = 1;
     renderCharge();
     void runPageTransition(() => {
-      window.location.href = targetHref;
+      window.location.assign(targetHref);
     });
   };
+
+  // Clicking the footer portal link runs the same seamless Lusion curtain wipe (internal or external)
+  if (linkEl) {
+    linkEl.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      e.preventDefault();
+      navigateNow();
+    });
+  }
 
   // Expose deterministic helper for Playwright verification
   (
@@ -55,7 +75,7 @@ export function initNextPageScrollGate(): void {
   };
 
   if (prefersReducedMotion()) {
-    // Respect reduced-motion: never auto-redirect on scroll; users click the banner intentionally.
+    // Respect reduced-motion: never auto-redirect on scroll; users click the footer portal intentionally.
     return;
   }
 
@@ -64,14 +84,14 @@ export function initNextPageScrollGate(): void {
       Math.max(window.scrollY || 0, document.documentElement.scrollTop || 0),
       window.innerHeight,
       document.documentElement.scrollHeight,
-      20
+      24
     );
 
   const onWheel = (e: WheelEvent) => {
     if (triggered) return;
     if (!atBottom()) {
       if (charge > 0 && e.deltaY < 0) {
-        charge = advanceOverscrollCharge(charge, e.deltaY * 1.4, 560);
+        charge = advanceOverscrollCharge(charge, e.deltaY * 1.4, 440);
         renderCharge();
       }
       return;
@@ -79,14 +99,14 @@ export function initNextPageScrollGate(): void {
 
     if (e.deltaY > 0) {
       lastInputTs = performance.now();
-      charge = advanceOverscrollCharge(charge, e.deltaY, 560);
+      charge = advanceOverscrollCharge(charge, e.deltaY, 440);
       renderCharge();
       if (shouldTriggerNextPage(charge)) {
         navigateNow();
       }
     } else if (e.deltaY < 0 && charge > 0) {
       lastInputTs = performance.now();
-      charge = advanceOverscrollCharge(charge, e.deltaY * 1.4, 560);
+      charge = advanceOverscrollCharge(charge, e.deltaY * 1.4, 440);
       renderCharge();
     }
   };
@@ -105,7 +125,7 @@ export function initNextPageScrollGate(): void {
     if (!atBottom()) return;
     if (deltaY > 0) {
       lastInputTs = performance.now();
-      charge = advanceOverscrollCharge(charge, deltaY * 1.6, 420);
+      charge = advanceOverscrollCharge(charge, deltaY * 1.6, 340);
       renderCharge();
       if (shouldTriggerNextPage(charge)) {
         navigateNow();
