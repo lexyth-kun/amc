@@ -1,14 +1,7 @@
 import * as THREE from 'three';
-import products from '@/data/products.json';
 import { computeTunnelPhaseState, type TunnelPhaseState } from '@/utils/tunnel-phases';
 import { getAdaptiveObjectBudget } from '@/utils/webgl-support';
 import { createCinematicCanvas2DRenderer } from './cinematic-fallback-2d';
-import { withBase } from '@/utils/url';
-
-const TUNNEL_LOGOS = products.allServices.map((s) => ({
-  name: s.name,
-  src: withBase(s.logo),
-}));
 
 export function mountCinematicVisualRenderer(): (progress: number) => void {
   const canvas = document.getElementById('cinematic-canvas') as HTMLCanvasElement | null;
@@ -45,36 +38,38 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
     coreLight.position.set(0, 0, 4);
     scene.add(coreLight);
 
+    // Radiant central Sky Blue AMC orb
     const orbGroup = new THREE.Group();
-    const orbCoreGeom = new THREE.SphereGeometry(0.95, 24, 24);
+    const orbCoreGeom = new THREE.SphereGeometry(0.98, 28, 28);
     const orbCoreMat = new THREE.MeshStandardMaterial({
       color: 0xffffff,
       emissive: 0x38bdf8,
-      emissiveIntensity: 1.45,
-      roughness: 0.1,
+      emissiveIntensity: 1.5,
+      roughness: 0.08,
     });
     orbGroup.add(new THREE.Mesh(orbCoreGeom, orbCoreMat));
 
-    const orbAuraGeom = new THREE.SphereGeometry(1.42, 20, 20);
+    const orbAuraGeom = new THREE.SphereGeometry(1.52, 24, 24);
     const orbAuraMat = new THREE.MeshBasicMaterial({
       color: 0x7dd3fc,
       transparent: true,
-      opacity: 0.3,
+      opacity: 0.34,
     });
     orbGroup.add(new THREE.Mesh(orbAuraGeom, orbAuraMat));
     scene.add(orbGroup);
 
+    // Pure luminous Sky Blue light-ring tunnel (no ghost duplicate sprites)
     const tunnelGroup = new THREE.Group();
-    const ringGeom = new THREE.TorusGeometry(4.4, 0.032, 8, 44);
+    const ringGeom = new THREE.TorusGeometry(4.5, 0.032, 8, 48);
     const ringMeshes: THREE.Mesh[] = [];
-    for (let i = 0; i < 34; i++) {
+    for (let i = 0; i < 36; i++) {
       const ringMat = new THREE.MeshBasicMaterial({
         color: i % 3 === 0 ? 0xffffff : i % 2 === 0 ? 0x7dd3fc : 0x38bdf8,
         transparent: true,
         opacity: 0.12,
       });
       const ring = new THREE.Mesh(ringGeom, ringMat);
-      ring.position.z = 8 - i * 2.7;
+      ring.position.z = 8 - i * 2.6;
       ring.rotation.z = i * 0.2;
       tunnelGroup.add(ring);
       ringMeshes.push(ring);
@@ -99,60 +94,6 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
     });
     scene.add(new THREE.Points(starGeom, starMat));
 
-    let lastRenderedState: TunnelPhaseState = computeTunnelPhaseState(0);
-
-    const logoSprites: THREE.Sprite[] = [];
-    const activeLogoList = budget.isCompactDevice
-      ? TUNNEL_LOGOS.filter((_, idx) => idx % 2 === 0)
-      : TUNNEL_LOGOS;
-
-    activeLogoList.forEach((item, idx) => {
-      const iconCanvas = document.createElement('canvas');
-      iconCanvas.width = 128;
-      iconCanvas.height = 128;
-      const ictx = iconCanvas.getContext('2d');
-      const tex = new THREE.CanvasTexture(iconCanvas);
-      tex.colorSpace = THREE.SRGBColorSpace;
-
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      img.onload = () => {
-        if (!ictx) return;
-        ictx.clearRect(0, 0, 128, 128);
-        ictx.save();
-        ictx.beginPath();
-        ictx.roundRect(8, 8, 112, 112, 26);
-        ictx.clip();
-        ictx.fillStyle = '#FFFFFF';
-        ictx.fillRect(8, 8, 112, 112);
-        ictx.drawImage(img, 8, 8, 112, 112);
-        ictx.restore();
-
-        ictx.strokeStyle = 'rgba(125, 211, 252, 0.9)';
-        ictx.lineWidth = 4;
-        ictx.beginPath();
-        ictx.roundRect(8, 8, 112, 112, 26);
-        ictx.stroke();
-        tex.needsUpdate = true;
-        draw(lastRenderedState);
-      };
-      img.src = item.src;
-
-      const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0 });
-      const sprite = new THREE.Sprite(mat);
-      const theta = idx * 1.15 + 0.35;
-      const r = budget.isCompactDevice ? 2.4 : 3.25;
-      const zSpan = 72;
-      sprite.position.set(
-        Math.cos(theta) * r,
-        Math.sin(theta) * r,
-        -4 - (idx / Math.max(1, activeLogoList.length - 1)) * zSpan
-      );
-      sprite.scale.setScalar(budget.isCompactDevice ? 1.0 : 1.25);
-      tunnelGroup.add(sprite);
-      logoSprites.push(sprite);
-    });
-
     const resize = () => {
       const w = Math.max(1, canvas.clientWidth);
       const h = Math.max(1, canvas.clientHeight);
@@ -164,29 +105,24 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
     window.addEventListener('resize', resize);
 
     const draw = (state: TunnelPhaseState) => {
-      lastRenderedState = state;
       camera.position.z = state.cameraZ;
-      tunnelGroup.rotation.z = state.tunnelTwistRad * 0.2;
+      tunnelGroup.rotation.z = state.tunnelTwistRad * 0.22;
       tunnelGroup.scale.set(state.tunnelRadiusScale, state.tunnelRadiusScale, 1);
 
       const tunnelFade = rangeRatio(state.progress, 0.1, 0.2);
       ringMeshes.forEach((m) => {
-        (m.material as THREE.MeshBasicMaterial).opacity = 0.08 + tunnelFade * 0.42;
-      });
-      const spriteFade = rangeRatio(state.progress, 0.14, 0.22);
-      logoSprites.forEach((s) => {
-        s.material.opacity = spriteFade * 0.94;
+        (m.material as THREE.MeshBasicMaterial).opacity = 0.09 + tunnelFade * 0.44;
       });
 
       const orbDistanceAhead = 11 - rangeRatio(state.progress, 0.76, 0.9) * 8.2;
       orbGroup.position.set(
         0,
-        Math.sin(state.progress * Math.PI * 5) * 0.18,
+        Math.sin(state.progress * Math.PI * 5) * 0.16,
         state.cameraZ - orbDistanceAhead
       );
-      orbGroup.scale.setScalar(state.orbScale * 0.52);
+      orbGroup.scale.setScalar(state.orbScale * 0.54);
       orbCoreMat.emissiveIntensity = state.orbGlowIntensity;
-      orbAuraMat.opacity = Math.min(0.85, 0.24 + state.progress * 0.55);
+      orbAuraMat.opacity = Math.min(0.85, 0.26 + state.progress * 0.54);
 
       renderer.render(scene, camera);
     };

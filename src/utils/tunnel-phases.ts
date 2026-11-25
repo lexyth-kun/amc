@@ -76,3 +76,69 @@ export function computeTunnelPhaseState(rawProgress: number): TunnelPhaseState {
     phase4RevealProgress,
   };
 }
+
+export interface LogoWaveMotion {
+  visible: boolean;
+  opacity: number;
+  scale: number;
+  radialFactor: number;
+  angleRad: number;
+  rotateDeg: number;
+}
+
+function smoothstep(v: number): number {
+  const t = clamp01(v);
+  return t * t * (3 - 2 * t);
+}
+
+export function computeLogoWaveMotion(
+  showcaseProgress: number,
+  groupIndex: number,
+  groupCount: number,
+  itemIndex: number,
+  itemCount = 8
+): LogoWaveMotion {
+  const safeGroups = Math.max(1, groupCount);
+  const safeItems = Math.max(1, itemCount);
+  const slice = 1 / safeGroups;
+  const pad = slice * 0.06;
+  const start = Math.max(0, groupIndex * slice - pad);
+  const end = Math.min(1, (groupIndex + 1) * slice + pad);
+  const span = Math.max(0.0001, end - start);
+  const t = (clamp01(showcaseProgress) - start) / span;
+
+  // Even angular spacing around the glowing central orb, offset per wave for organic variety
+  const baseAngle =
+    (itemIndex / safeItems) * Math.PI * 2 - Math.PI / 2 + groupIndex * 0.42;
+
+  if (t <= 0 || t >= 1) {
+    return {
+      visible: false,
+      opacity: 0,
+      scale: 0.35,
+      radialFactor: 0.32,
+      angleRad: baseAngle,
+      rotateDeg: 0,
+    };
+  }
+
+  const stagger = (itemIndex % 5) * 0.018;
+  const enter = smoothstep(rangeMap(t, stagger, 0.28 + stagger));
+  const exit = smoothstep(rangeMap(t, 0.72 + stagger * 0.3, 1.0));
+  const opacity = clamp01(enter * (1 - exit));
+
+  const breath = Math.sin(t * Math.PI * 2 + itemIndex * 0.85) * 0.03;
+  const scale = 0.38 + enter * 0.62 + breath + exit * 0.55;
+  const radialFactor = 0.36 + enter * 0.64 + exit * 0.54;
+  const angleRad = baseAngle + t * 0.48;
+  const rotateDeg = Math.cos(t * Math.PI * 2 + itemIndex * 0.75) * 4;
+
+  return {
+    visible: opacity > 0.01,
+    opacity,
+    scale,
+    radialFactor,
+    angleRad,
+    rotateDeg,
+  };
+}

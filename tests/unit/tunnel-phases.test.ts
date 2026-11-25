@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { computeTunnelPhaseState } from '@/utils/tunnel-phases';
+import { computeLogoWaveMotion, computeTunnelPhaseState } from '@/utils/tunnel-phases';
 
 describe('Extended Pinned Cinematic Tunnel Reversible Phase Math (All Services Showcase)', () => {
   it('maps progress into extended Phases 1, 2 (long all-services showcase), 3, and 4 accurately', () => {
@@ -42,5 +42,28 @@ describe('Extended Pinned Cinematic Tunnel Reversible Phase Math (All Services S
     expect(p3.orbScale).toBeGreaterThan(p2.orbScale);
     expect(p4.whiteoutOpacity).toBe(1);
     expect(p4.phase4RevealProgress).toBeGreaterThan(0.5);
+  });
+
+  it('animates frameless logo waves emerging radially from the center orb into a clean non-overlapping orbit and flying past camera', () => {
+    const beforeWave = computeLogoWaveMotion(0.0, 2, 6, 0, 10);
+    const entering = computeLogoWaveMotion(0.34, 2, 6, 0, 10);
+    const peakA = computeLogoWaveMotion(0.415, 2, 6, 0, 10);
+    const peakB = computeLogoWaveMotion(0.415, 2, 6, 5, 10);
+    const exiting = computeLogoWaveMotion(0.495, 2, 6, 0, 10);
+    const afterWave = computeLogoWaveMotion(0.85, 2, 6, 0, 10);
+
+    expect(beforeWave.visible).toBe(false);
+    expect(beforeWave.opacity).toBe(0);
+    expect(entering.visible).toBe(true);
+    expect(entering.scale).toBeLessThan(1);
+    expect(entering.radialFactor).toBeLessThan(peakA.radialFactor);
+    expect(peakA.opacity).toBeGreaterThan(0.95);
+    expect(peakA.scale).toBeGreaterThanOrEqual(0.95);
+    expect(peakA.scale).toBeLessThanOrEqual(1.08);
+    expect(Math.abs(peakA.angleRad - peakB.angleRad)).toBeGreaterThan(2.5);
+    expect(exiting.scale).toBeGreaterThan(1.1);
+    expect(exiting.radialFactor).toBeGreaterThan(peakA.radialFactor);
+    expect(exiting.opacity).toBeLessThan(peakA.opacity);
+    expect(afterWave.visible).toBe(false);
   });
 });

@@ -23,7 +23,7 @@ const serviceGroups = categoryOrder.map((cat) => ({
   id="dunia-baru"
   data-bg-color="#082F49"
   class="relative bg-bg-space"
-  aria-label="Sekuens cerita interaktif seluruh layanan Al Muthi Creative"
+  aria-label="Sekuens animasi ikon dan logo seluruh layanan Al Muthi Creative"
 >
   <div
     id="cinematic-pin-stage"
@@ -38,7 +38,7 @@ const serviceGroups = categoryOrder.map((cat) => ({
     <!-- Phase 1 Copy (0% - 16%): Deep Sky-Night + Glowing Sky Orb -->
     <div
       id="cinematic-phase1"
-      class="dark-surface pointer-events-none relative z-10 mx-auto max-w-4xl rounded-3xl bg-[radial-gradient(ellipse_at_center,rgba(8,47,73,0.82)_0%,rgba(8,47,73,0)_76%)] px-6 py-8 text-center"
+      class="dark-surface pointer-events-none relative z-10 mx-auto max-w-4xl bg-[radial-gradient(ellipse_at_center,rgba(8,47,73,0.72)_0%,rgba(8,47,73,0)_74%)] px-6 py-8 text-center"
     >
       <p class="font-display text-xs font-extrabold uppercase tracking-[0.24em] text-sky-light">
         {content.cinematic.phase1Eyebrow}
@@ -57,93 +57,92 @@ const serviceGroups = categoryOrder.map((cat) => ({
       </h2>
     </div>
 
-    <!-- Phase 2 Extended All-Services Showcase (16% - 78%): All 41 Official AMC Services -->
+    <!-- Phase 2 Pure Orbital Logo & Icon Animation (16% - 78%): Zero Cards -->
     <div
       id="cinematic-phase2"
       style="opacity: 0; pointer-events: none;"
-      class="dark-surface absolute inset-x-0 z-10 flex flex-col items-center justify-center px-4 pt-16 pb-8 sm:px-6"
+      class="dark-surface pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-between px-4 pt-24 pb-8 sm:px-6 sm:pt-28 sm:pb-10"
     >
-      <div class="w-full max-w-5xl rounded-card border border-[#38BDF8]/40 bg-[#082F49]/90 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-md sm:p-7">
-        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#38BDF8]/25 pb-4">
-          <div>
-            <p class="m-0 font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-sky-light">
-              SELURUH LAYANAN APLIKASI AMC ({products.allServices.length} LAYANAN)
-            </p>
-            <p
-              id="cinematic-active-category"
-              class="m-0 mt-1 font-display text-lg font-extrabold text-white sm:text-2xl"
+      <!-- Subtle frameless top label -->
+      <div class="pointer-events-none relative z-20 text-center">
+        <p class="m-0 font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-sky-light">
+          {products.allServices.length} LAYANAN APLIKASI PREMIUM
+        </p>
+        <p
+          id="cinematic-active-category"
+          class="m-0 mt-1 font-display text-base font-extrabold tracking-[-0.01em] text-white sm:text-xl"
+        >
+          1/{serviceGroups.length} • {serviceGroups[0]?.label}
+        </p>
+      </div>
+
+      <!-- Frameless orbital stage: pure animated official app icons orbiting the center Sky Blue orb -->
+      <div id="cinematic-orbital-stage" class="relative w-full flex-1">
+        {
+          serviceGroups.map((group, gIdx) => (
+            <div
+              data-tunnel-group={gIdx}
+              data-tunnel-group-label={group.label}
+              aria-hidden={gIdx !== 0 ? 'true' : 'false'}
+              style={gIdx === 0 ? '' : 'opacity: 0; pointer-events: none;'}
+              class="absolute inset-0"
             >
-              1/{serviceGroups.length} • {serviceGroups[0]?.label}
-            </p>
-          </div>
+              {group.items.map((service, itemIdx) => {
+                const detail = getProductDetailBySlug(service.slug);
+                return (
+                  <a
+                    href={withBase(`/produk/${service.slug}/`)}
+                    data-tunnel-icon
+                    data-tunnel-item-idx={itemIdx}
+                    data-product-link
+                    data-product-title={detail?.name ?? service.name}
+                    data-product-category={service.category}
+                    data-product-image={withBase(detail?.heroImage ?? '/showcase/amc-ecosystem-gallery.webp')}
+                    data-product-logo={withBase(service.logo)}
+                    aria-label={`Lihat detail ${service.name}`}
+                    title={service.name}
+                    class="group absolute left-1/2 top-1/2 -ml-[26px] -mt-[26px] flex h-[52px] w-[52px] items-center justify-center rounded-2xl bg-white p-2 shadow-[0_14px_38px_rgba(56,189,248,0.42)] transition-shadow duration-300 hover:shadow-[0_18px_48px_rgba(125,211,252,0.72)] sm:-ml-9 sm:-mt-9 sm:h-[72px] sm:w-[72px] sm:p-2.5"
+                    style="opacity: 0; will-change: transform, opacity;"
+                  >
+                    <img
+                      src={withBase(service.logo)}
+                      alt={`Logo ${service.name}`}
+                      width="56"
+                      height="56"
+                      loading="lazy"
+                      decoding="async"
+                      class="h-full w-full object-contain"
+                    />
+                    <span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap font-display text-[11px] font-bold tracking-[0.02em] text-sky-light opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
+                      {service.name}
+                    </span>
+                  </a>
+                );
+              })}
+            </div>
+          ))
+        }
+      </div>
 
-          <div class="flex items-center gap-1.5" aria-hidden="true">
-            {
-              serviceGroups.map((_, idx) => (
-                <span
-                  data-tunnel-dot={idx}
-                  class={`h-2 rounded-full transition-all duration-300 ${
-                    idx === 0 ? 'w-8 bg-sky-light' : 'w-2.5 bg-white/30'
-                  }`}
-                ></span>
-              ))
-            }
-          </div>
-        </div>
-
-        <div class="mt-4 min-h-[220px] sm:min-h-[250px]">
+      <!-- Minimal frameless bottom progress indicator (zero card) -->
+      <div class="pointer-events-none relative z-20 flex flex-col items-center gap-2.5">
+        <div class="flex items-center gap-1.5" aria-hidden="true">
           {
-            serviceGroups.map((group, gIdx) => (
-              <div
-                data-tunnel-group={gIdx}
-                data-tunnel-group-label={group.label}
-                hidden={gIdx !== 0}
-                class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
-              >
-                {group.items.map((service) => {
-                  const detail = getProductDetailBySlug(service.slug);
-                  return (
-                    <a
-                      href={withBase(`/produk/${service.slug}/`)}
-                      data-product-link
-                      data-product-title={detail?.name ?? service.name}
-                      data-product-category={service.category}
-                      data-product-image={withBase(detail?.heroImage ?? '/showcase/amc-ecosystem-gallery.webp')}
-                      data-product-logo={withBase(service.logo)}
-                      class="group flex items-center gap-2.5 rounded-2xl border border-[#38BDF8]/30 bg-white/10 p-2.5 text-white no-underline transition-all duration-200 hover:border-sky-light hover:bg-white/20"
-                    >
-                      <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#BAE6FD] bg-white shadow-sm">
-                        <img
-                          src={withBase(service.logo)}
-                          alt={`Logo ${service.name}`}
-                          width="40"
-                          height="40"
-                          loading="lazy"
-                          decoding="async"
-                          class="h-full w-full object-contain"
-                        />
-                      </span>
-                      <span class="min-w-0 truncate font-display text-xs font-bold text-white sm:text-[13px]">
-                        {service.name}
-                      </span>
-                    </a>
-                  );
-                })}
-              </div>
+            serviceGroups.map((_, idx) => (
+              <span
+                data-tunnel-dot={idx}
+                class={`h-1.5 rounded-full transition-all duration-300 ${
+                  idx === 0 ? 'w-7 bg-sky-light' : 'w-2 bg-white/30'
+                }`}
+              ></span>
             ))
           }
         </div>
-
-        <div class="mt-4 flex flex-col gap-2 border-t border-[#38BDF8]/25 pt-3.5 sm:flex-row sm:items-center sm:justify-between">
-          <p class="m-0 text-xs font-medium text-sky-light">
-            {content.cinematic.phase2Caption}
-          </p>
-          <div class="h-1.5 w-full overflow-hidden rounded-full bg-white/15 sm:w-44" aria-hidden="true">
-            <div
-              id="cinematic-showcase-bar"
-              class="h-full w-full origin-left scale-x-[0.04] rounded-full bg-gradient-to-r from-sky-light to-sky"
-            ></div>
-          </div>
+        <div class="h-[2px] w-40 overflow-hidden rounded-full bg-white/15 sm:w-56" aria-hidden="true">
+          <div
+            id="cinematic-showcase-bar"
+            class="h-full w-full origin-left scale-x-[0.04] rounded-full bg-gradient-to-r from-sky-light to-sky"
+          ></div>
         </div>
       </div>
     </div>

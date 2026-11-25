@@ -5,7 +5,7 @@ import { initHeaderAndMenu } from './header-menu';
 import { initPreloader } from './preloader';
 import { initMilestoneBInteractions } from './ui-interactions';
 import { finishProductPortalEntry } from './page-transition';
-import { computeTunnelPhaseState } from '@/utils/tunnel-phases';
+import { computeLogoWaveMotion, computeTunnelPhaseState } from '@/utils/tunnel-phases';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,7 +26,11 @@ function setupDeferredCinematicTunnel(): void {
   const phase4Copy = document.getElementById('cinematic-phase4-copy');
   const phase1Wrap = document.getElementById('cinematic-phase1');
   const phase2Wrap = document.getElementById('cinematic-phase2');
+  const orbitalStage = document.getElementById('cinematic-orbital-stage');
   const serviceGroups = Array.from(document.querySelectorAll<HTMLElement>('[data-tunnel-group]'));
+  const groupIcons = serviceGroups.map((group) =>
+    Array.from(group.querySelectorAll<HTMLElement>('[data-tunnel-icon]'))
+  );
   const groupDots = Array.from(document.querySelectorAll<HTMLElement>('[data-tunnel-dot]'));
   const groupLabel = document.getElementById('cinematic-active-category');
   const progressBar = document.getElementById('cinematic-showcase-bar');
@@ -42,16 +46,26 @@ function setupDeferredCinematicTunnel(): void {
       phase2Wrap.style.position = 'relative';
       phase2Wrap.style.opacity = '1';
       phase2Wrap.style.pointerEvents = 'auto';
+      phase2Wrap.classList.add('gap-8', 'py-8');
     }
-    serviceGroups.forEach((g) => {
-      g.hidden = false;
+    serviceGroups.forEach((g, idx) => {
+      g.style.position = 'relative';
       g.style.opacity = '1';
-      g.style.transform = 'none';
+      g.style.pointerEvents = 'auto';
+      g.setAttribute('aria-hidden', 'false');
+      g.classList.add('flex', 'flex-wrap', 'justify-center', 'gap-3', 'my-3');
+      (groupIcons[idx] ?? []).forEach((icon) => {
+        icon.style.position = 'static';
+        icon.style.margin = '0';
+        icon.style.opacity = '1';
+        icon.style.transform = 'none';
+        icon.style.pointerEvents = 'auto';
+      });
     });
     whiteoutEl.style.position = 'relative';
     whiteoutEl.style.opacity = '1';
     whiteoutEl.style.pointerEvents = 'auto';
-    whiteoutEl.classList.add('rounded-card', 'py-14', 'mt-6', 'mx-4');
+    whiteoutEl.classList.add('py-14', 'mt-6', 'px-4');
     return;
   }
 
@@ -96,27 +110,62 @@ function setupDeferredCinematicTunnel(): void {
       word.style.transform = `translate3d(0, ${((1 - localProgress) * 110).toFixed(1)}%, 0)`;
     });
 
+    const phase2Interactive = state.phase2Opacity > 0.55 && state.whiteoutOpacity < 0.25;
     if (phase2Wrap) {
       phase2Wrap.style.opacity = state.phase2Opacity.toFixed(3);
-      phase2Wrap.style.pointerEvents = state.phase2Opacity > 0.65 && state.whiteoutOpacity < 0.25 ? 'auto' : 'none';
     }
 
     if (serviceGroups.length > 0) {
+      const stageW = orbitalStage?.clientWidth || window.innerWidth;
+      const stageH = orbitalStage?.clientHeight || window.innerHeight * 0.65;
+      const isCompact = stageW < 640;
+      const rx = isCompact
+        ? Math.min(stageW * 0.36, 140)
+        : Math.min(stageW * 0.28, 380);
+      const ry = isCompact
+        ? Math.min(stageH * 0.34, 195)
+        : Math.min(stageH * 0.36, 225);
+
       const activeIdx = Math.min(
         serviceGroups.length - 1,
         Math.floor(state.showcaseProgress * serviceGroups.length)
       );
-      serviceGroups.forEach((group, idx) => {
-        const isCurrent = idx === activeIdx;
-        group.hidden = !isCurrent;
-        group.style.opacity = isCurrent ? '1' : '0';
+
+      serviceGroups.forEach((group, gIdx) => {
+        const icons = groupIcons[gIdx] ?? [];
+        const total = icons.length;
+        let groupMaxOpacity = 0;
+
+        icons.forEach((icon, itemIdx) => {
+          const motion = computeLogoWaveMotion(
+            state.showcaseProgress,
+            gIdx,
+            serviceGroups.length,
+            itemIdx,
+            total
+          );
+          if (motion.opacity > groupMaxOpacity) {
+            groupMaxOpacity = motion.opacity;
+          }
+          const x = Math.cos(motion.angleRad) * rx * motion.radialFactor;
+          const y = Math.sin(motion.angleRad) * ry * motion.radialFactor;
+          icon.style.opacity = motion.opacity.toFixed(3);
+          icon.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${motion.scale.toFixed(3)}) rotate(${motion.rotateDeg.toFixed(2)}deg)`;
+          icon.style.pointerEvents = phase2Interactive && motion.opacity > 0.45 ? 'auto' : 'none';
+        });
+
+        const isVisible = groupMaxOpacity > 0.01;
+        group.style.opacity = isVisible ? '1' : '0';
+        group.style.pointerEvents = 'none';
+        group.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
       });
+
       groupDots.forEach((dot, idx) => {
         const isCurrent = idx === activeIdx;
         dot.classList.toggle('bg-sky-light', isCurrent);
-        dot.classList.toggle('w-8', isCurrent);
+        dot.classList.toggle('w-7', isCurrent);
         dot.classList.toggle('bg-white/30', !isCurrent);
-        dot.classList.toggle('w-2.5', !isCurrent);
+        dot.classList.toggle('w-2', !isCurrent);
       });
       const activeName = serviceGroups[activeIdx]?.dataset.tunnelGroupLabel;
       if (groupLabel && activeName) {

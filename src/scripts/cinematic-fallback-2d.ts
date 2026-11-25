@@ -1,7 +1,4 @@
-import products from '@/data/products.json';
 import type { TunnelPhaseState } from '@/utils/tunnel-phases';
-
-const LABELS = products.allServices.map((s) => s.name);
 
 export function createCinematicCanvas2DRenderer(canvas: HTMLCanvasElement): {
   renderState: (state: TunnelPhaseState) => void;
@@ -34,30 +31,28 @@ export function createCinematicCanvas2DRenderer(canvas: HTMLCanvasElement): {
     const maxR = Math.hypot(cx, cy);
 
     // Concentric perspective Sky Blue tunnel rings
-    const ringCount = 14;
+    const ringCount = 16;
     for (let i = 0; i < ringCount; i++) {
       const depth = ((i / ringCount + state.progress * 3.0) % 1 + 1) % 1;
       const radius = Math.max(8, Math.pow(depth, 1.8) * maxR * state.tunnelRadiusScale);
-      ctx.strokeStyle = `rgba(125, 211, 252, ${(depth * 0.55).toFixed(3)})`;
+      ctx.strokeStyle = `rgba(125, 211, 252, ${(depth * 0.52).toFixed(3)})`;
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.arc(cx, cy, radius, 0, Math.PI * 2);
       ctx.stroke();
     }
 
-    // Flying service names in extended Phase 2-3
-    if (state.progress > 0.14 && state.progress < 0.88) {
-      ctx.font = '700 12px "Plus Jakarta Sans", sans-serif';
-      ctx.textAlign = 'center';
-      LABELS.forEach((label, idx) => {
-        const angle = idx * 0.9 + state.tunnelTwistRad * 0.35;
-        const depth = (((idx * 0.06 + state.progress * 2.6) % 1) + 1) % 1;
-        const dist = (42 + depth * maxR * 0.72) * state.tunnelRadiusScale;
-        const lx = cx + Math.cos(angle) * dist;
-        const ly = cy + Math.sin(angle) * dist;
-        ctx.fillStyle = `rgba(224, 242, 254, ${(depth * 0.85).toFixed(2)})`;
-        ctx.fillText(label, lx, ly);
-      });
+    // Luminous Sky Blue starlight particles orbiting outward
+    for (let i = 0; i < 42; i++) {
+      const angle = i * 1.18 + state.tunnelTwistRad * 0.35;
+      const depth = (((i * 0.047 + state.progress * 2.4) % 1) + 1) % 1;
+      const dist = (38 + depth * maxR * 0.78) * state.tunnelRadiusScale;
+      const px = cx + Math.cos(angle) * dist;
+      const py = cy + Math.sin(angle) * dist;
+      ctx.fillStyle = `rgba(186, 230, 253, ${(depth * 0.78).toFixed(2)})`;
+      ctx.beginPath();
+      ctx.arc(px, py, 1.2 + depth * 2.2, 0, Math.PI * 2);
+      ctx.fill();
     }
 
     // Central glowing Sky Blue AMC Orb

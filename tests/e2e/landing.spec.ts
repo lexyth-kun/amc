@@ -107,15 +107,16 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     expect(secText?.trim()).toMatch(/^\d{2}$/);
     await expect(page.locator('#flash-sale a[href^="/produk/"]')).toHaveCount(6);
 
-    // Extended 620vh Cinematic Tunnel scrubs across ALL 6 categories / 41 services pointing to detail pages
-    const tunnelLinksCount = await page.locator('#cinematic-phase2 a[href^="/produk/"]').count();
-    expect(tunnelLinksCount).toBeGreaterThanOrEqual(41);
+    // Extended 620vh Cinematic Tunnel renders ZERO cards — only pure floating official logo icons across all 41 services
+    await expect(page.locator('#dunia-baru .rounded-card')).toHaveCount(0);
+    const tunnelIconsCount = await page.locator('#cinematic-phase2 [data-tunnel-icon][href^="/produk/"]').count();
+    expect(tunnelIconsCount).toBeGreaterThanOrEqual(41);
 
     await page.evaluate(() => {
       const sec = document.getElementById('dunia-baru');
       const win = window as Window & { __amcScrollTo?: (y: number) => void };
       if (sec) {
-        const y = sec.offsetTop + window.innerHeight * 3.1;
+        const y = sec.offsetTop + window.innerHeight * 2.4;
         if (win.__amcScrollTo) win.__amcScrollTo(y);
         else window.scrollTo(0, y);
       }
@@ -129,6 +130,11 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
         { timeout: 3500 }
       )
       .toBeGreaterThan(0.85);
+
+    const activeAnimatedIcons = await page.locator('#cinematic-phase2 [data-tunnel-icon]').evaluateAll((els) =>
+      els.filter((el) => parseFloat((el as HTMLElement).style.opacity || '0') > 0.7 && Boolean((el as HTMLElement).style.transform)).length
+    );
+    expect(activeAnimatedIcons).toBeGreaterThan(0);
 
     await page.evaluate(() => {
       const sec = document.getElementById('dunia-baru');
