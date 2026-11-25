@@ -12,20 +12,20 @@ export async function runPageTransition(onMidpoint?: () => void | Promise<void>)
   }
 
   isTransitionRunning = true;
+  curtain.hidden = false;
   curtain.style.pointerEvents = 'auto';
 
   await new Promise<void>((resolve) => {
     const tl = gsap.timeline({
       onComplete: () => {
-        gsap.set(curtain, { yPercent: 100, clearProps: 'transform' });
-        curtain.classList.add('translate-y-full');
+        gsap.set(curtain, { clearProps: 'transform' });
+        curtain.hidden = true;
         curtain.style.pointerEvents = 'none';
         isTransitionRunning = false;
         resolve();
       },
     });
 
-    curtain.classList.remove('translate-y-full');
     gsap.set(curtain, { yPercent: 100 });
 
     tl.to(curtain, {

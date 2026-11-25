@@ -14,9 +14,22 @@ async function waitForServer(url, timeoutMs = 15000) {
       const res = await fetch(url);
       if (res.ok) return;
     } catch {}
-    await new Promise((r) => setTimeout(r, 250));
+    await new Promise((r) => setTimeout(r, 200));
   }
   throw new Error(`Preview server did not start at ${url}`);
+}
+
+async function triggerScrollReveals(page) {
+  await page.evaluate(async () => {
+    const step = Math.max(300, Math.floor(window.innerHeight * 0.65));
+    const max = document.documentElement.scrollHeight;
+    for (let y = 0; y <= max; y += step) {
+      window.scrollTo(0, y);
+      await new Promise((r) => setTimeout(r, 90));
+    }
+    window.scrollTo(0, 0);
+    await new Promise((r) => setTimeout(r, 250));
+  });
 }
 
 const server = spawn('npx', ['astro', 'preview', '--host', '127.0.0.1', '--port', '4322'], {
@@ -40,7 +53,6 @@ try {
 
   const errors = [];
 
-  // Desktop 1440x900
   const desktopPage = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   desktopPage.on('pageerror', (err) => errors.push(`Desktop pageerror: ${err.message}`));
   desktopPage.on('console', (msg) => {
@@ -48,24 +60,15 @@ try {
   });
 
   await desktopPage.goto('http://127.0.0.1:4322/', { waitUntil: 'load' });
-  await desktopPage.waitForTimeout(2100);
+  await desktopPage.waitForTimeout(1950);
+  if (milestone !== 'a') {
+    await triggerScrollReveals(desktopPage);
+  }
   await desktopPage.screenshot({
     path: resolve(outDir, `milestone-${milestone}-desktop.png`),
     fullPage: milestone !== 'a',
   });
 
-  // Also capture menu overlay open on Milestone A
-  if (milestone === 'a') {
-    await desktopPage.click('#menu-toggle-btn');
-    await desktopPage.waitForTimeout(650);
-    await desktopPage.screenshot({
-      path: resolve(outDir, `milestone-a-menu-desktop.png`),
-    });
-    await desktopPage.keyboard.press('Escape');
-    await desktopPage.waitForTimeout(500);
-  }
-
-  // Mobile 390x844
   const mobilePage = await browser.newPage({
     viewport: { width: 390, height: 844 },
     isMobile: true,
@@ -77,7 +80,10 @@ try {
   });
 
   await mobilePage.goto('http://127.0.0.1:4322/', { waitUntil: 'load' });
-  await mobilePage.waitForTimeout(2100);
+  await mobilePage.waitForTimeout(1950);
+  if (milestone !== 'a') {
+    await triggerScrollReveals(mobilePage);
+  }
 
   const overflow = await mobilePage.evaluate(() => {
     return document.documentElement.scrollWidth - window.innerWidth;

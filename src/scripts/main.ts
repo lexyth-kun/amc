@@ -1,13 +1,14 @@
 import { initMotionCore } from './motion-core';
 import { initHeaderAndMenu } from './header-menu';
 import { initPreloader } from './preloader';
+import { initMilestoneBInteractions } from './ui-interactions';
 
 function boot(): void {
   initMotionCore();
   initHeaderAndMenu();
+  initMilestoneBInteractions();
 
   initPreloader(() => {
-    // Lazy-load Three.js Hero scene after preloader completes to keep initial JS lightweight
     void import('./hero-scene').then(({ initHeroScene }) => {
       initHeroScene();
     });
