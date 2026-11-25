@@ -46,14 +46,16 @@ node scripts/run-lighthouse.mjs    # Audit Lighthouse Mobile otomatis
 
 ## Konfigurasi Deploy Cloudflare Pages (`lexyth-kun/amc`)
 
-Karena arsitektur berpindah dari berkas HTML tunggal di root ke Astro Static, pastikan pengaturan proyek di **Cloudflare Pages** diset sebagai berikut sebelum me-merge Pull Request ke `main`:
+Repo ini sudah mendukung **dua mode deploy Cloudflare Pages** sekaligus:
 
-- **Framework preset:** `Astro`
-- **Build command:** `npm run build`
-- **Build output directory:** `dist`
-- **Node.js version:** `22` (atau `>= 20`)
+1. **Mode Langsung Tanpa Ubah Pengaturan (Static Root `/`):** Hasil build statis (`index.html`, `_astro/`, `_redirects`, `order/index.html`, dan seluruh aset logo) telah disalin langsung ke root repo, sehingga deploy Cloudflare Pages lama tanpa build command tetap langsung menampilkan landing page baru.
+2. **Mode Rekomendasi untuk Edit Berikutnya (Astro Auto-Build):** Agar perubahan pada `src/data/products.json` atau `src/data/content.json` otomatis ter-build oleh Cloudflare Pages tanpa perlu menyalin ulang ke root, set konfigurasi proyek menjadi:
+   - **Framework preset:** `Astro`
+   - **Build command:** `npm run build`
+   - **Build output directory:** `dist`
+   - **Node.js version:** `22` (atau `>= 20`)
 
-Seluruh aturan redirect `/order` dan `/order/*` menuju `https://order.amc.web.id` tetap otomatis tersalin dari `public/_redirects` dan `public/order/index.html` ke dalam `dist/` serta diperkuat skrip instan di `<head>`.
+Seluruh aturan redirect `/order` dan `/order/*` menuju `https://order.amc.web.id` tetap aktif di root (`_redirects`, `order/index.html`) maupun di dalam `dist/` serta diperkuat skrip instan di `<head>`.
 
 ## Cara Mengubah Harga, Stok & Teks (Single Source of Truth)
 
