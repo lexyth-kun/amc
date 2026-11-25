@@ -9,9 +9,12 @@ function boot(): void {
   initMilestoneBInteractions();
 
   initPreloader(() => {
-    void import('./hero-scene').then(({ initHeroScene }) => {
-      initHeroScene();
-    });
+    void Promise.all([import('./hero-scene'), import('./cinematic-tunnel')]).then(
+      ([{ initHeroScene }, { initCinematicTunnel }]) => {
+        initHeroScene();
+        initCinematicTunnel();
+      }
+    );
   });
 }
 
