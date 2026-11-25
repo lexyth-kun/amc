@@ -1,0 +1,84 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FooterSection from '@/components/FooterSection.astro';
+import content from '@/data/content.json';
+---
+
+<BaseLayout
+  title="Kontak & Info Promo WhatsApp – Al Muthi Creative"
+  description="Hubungi Admin CS 24 Jam, Bot WhatsApp otomatis, Instagram resmi @almuthi_creative, atau daftarkan nomor WhatsApp untuk info promo & stok baru."
+  currentPath="/kontak/"
+  showPreloader={false}
+>
+  <section class="bg-gradient-to-b from-bg-alt via-white to-white pt-32 pb-16 md:pt-40 md:pb-24">
+    <div class="mx-auto max-w-amc px-4 sm:px-6">
+      <p class="eyebrow-label mb-3">KANAL RESMI AL MUTHI CREATIVE</p>
+      <h1 class="max-w-4xl font-display text-[clamp(2.4rem,6vw,4.8rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy">
+        Butuh Bantuan? <span class="amc-text-gradient">Admin 24 Jam</span> Siaga.
+      </h1>
+      <p class="mt-5 max-w-2xl text-base leading-relaxed text-body sm:text-lg">
+        Transaksi dan dukungan resmi hanya dilayani melalui Web Shop, WhatsApp Admin, Bot Otomatis, Instagram, dan email resmi di bawah ini.
+      </p>
+
+      <div class="mt-10 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+        <a
+          href={content.footer.contacts.waAdminHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-card border border-line bg-white p-6 text-ink no-underline shadow-sm transition-all hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc"
+        >
+          <span class="rounded-lg bg-[#25D366]/20 px-2.5 py-1 font-display text-xs font-extrabold text-wa-ink">
+            CS 24 JAM
+          </span>
+          <h2 class="mt-4 font-display text-lg font-extrabold text-navy">WhatsApp Admin</h2>
+          <p class="mt-1 text-sm font-bold text-sky-ink">{content.footer.contacts.waAdminDisplay}</p>
+          <p class="mt-2 text-xs leading-relaxed text-body">Konsultasi paket, kendala login, dan klaim garansi resmi.</p>
+        </a>
+
+        <a
+          href={content.howToOrder.botCtaHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-card border border-line bg-white p-6 text-ink no-underline shadow-sm transition-all hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc"
+        >
+          <span class="rounded-lg bg-bg-deep px-2.5 py-1 font-display text-xs font-extrabold text-sky-ink">
+            OTOMATIS 24 JAM
+          </span>
+          <h2 class="mt-4 font-display text-lg font-extrabold text-navy">Bot Order WA</h2>
+          <p class="mt-1 text-sm font-bold text-sky-ink">{content.footer.contacts.waBotDisplay}</p>
+          <p class="mt-2 text-xs leading-relaxed text-body">Ketik menu untuk cek katalog, harga, dan bayar QRIS otomatis.</p>
+        </a>
+
+        <a
+          href={content.footer.contacts.instagramHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-card border border-line bg-white p-6 text-ink no-underline shadow-sm transition-all hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc"
+        >
+          <span class="rounded-lg bg-bg-deep px-2.5 py-1 font-display text-xs font-extrabold text-sky-ink">
+            UPDATE PROMO
+          </span>
+          <h2 class="mt-4 font-display text-lg font-extrabold text-navy">Instagram Resmi</h2>
+          <p class="mt-1 text-sm font-bold text-sky-ink">{content.footer.contacts.instagramDisplay}</p>
+          <p class="mt-2 text-xs leading-relaxed text-body">Info restock harian, promo kilat, dan pengumuman resmi toko.</p>
+        </a>
+
+        <a
+          href="https://order.amc.web.id/#ulasan"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-card border border-line bg-white p-6 text-ink no-underline shadow-sm transition-all hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc"
+        >
+          <span class="rounded-lg bg-bg-deep px-2.5 py-1 font-display text-xs font-extrabold text-sky-ink">
+            4.8 / 5 RATING
+          </span>
+          <h2 class="mt-4 font-display text-lg font-extrabold text-navy">Ulasan Pembeli</h2>
+          <p class="mt-1 text-sm font-bold text-sky-ink">order.amc.web.id/#ulasan</p>
+          <p class="mt-2 text-xs leading-relaxed text-body">Baca 1.266 ulasan terverifikasi langsung dari pembeli aktif.</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <FooterSection />
+</BaseLayout>

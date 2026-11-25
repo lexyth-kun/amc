@@ -1,0 +1,117 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FeaturedProductsSection from '@/components/FeaturedProductsSection.astro';
+import FinalCtaSection from '@/components/FinalCtaSection.astro';
+import FooterSection from '@/components/FooterSection.astro';
+import BlueLine from '@/components/BlueLine.astro';
+import products from '@/data/products.json';
+
+const filterTabs = [
+  'Semua',
+  'AI & Produktivitas',
+  'Kreasi & Desain',
+  'Hiburan & Musik',
+  'VPN & Keamanan',
+  'Buzzer Sosmed',
+  'Top Up Game',
+];
+---
+
+<BaseLayout
+  title="Semua Produk & Aplikasi Premium – Al Muthi Creative"
+  description="Daftar lengkap 41+ layanan aplikasi premium, AI, desain, hiburan, VPN, buzzer sosmed, dan top up game di Al Muthi Creative."
+  currentPath="/produk/"
+  showPreloader={false}
+>
+  <section class="bg-gradient-to-b from-bg-alt via-white to-white pt-32 pb-10 md:pt-40 md:pb-14">
+    <div class="mx-auto max-w-amc px-4 sm:px-6">
+      <p class="eyebrow-label mb-3">KATALOG RESMI AL MUTHI CREATIVE</p>
+      <h1 class="max-w-4xl font-display text-[clamp(2.4rem,6vw,4.8rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy">
+        Semua <span class="amc-text-gradient">41+ Layanan</span> Aplikasi Premium.
+      </h1>
+      <p class="mt-5 max-w-2xl text-base leading-relaxed text-body sm:text-lg">
+        Pilih kategori atau langsung klik logo aplikasi di bawah untuk melihat paket aktif, stok live, dan harga terbaru di Web Shop AMC.
+      </p>
+    </div>
+  </section>
+
+  <!-- Complete Filterable Directory of All 41 Official Services -->
+  <section class="bg-bg pb-16 md:pb-24" aria-labelledby="all-services-heading">
+    <div class="mx-auto max-w-amc px-4 sm:px-6">
+      <BlueLine className="mb-10" />
+
+      <div class="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+        <div>
+          <h2 id="all-services-heading" class="font-display text-2xl font-extrabold tracking-[-0.02em] text-navy sm:text-3xl">
+            Direktori Lengkap Aplikasi & Layanan
+          </h2>
+          <p class="mt-1.5 text-sm text-body">
+            Klik salah satu aplikasi untuk langsung order di order.amc.web.id.
+          </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2" role="group" aria-label="Filter kategori layanan">
+          {
+            filterTabs.map((tab, idx) => (
+              <button
+                type="button"
+                data-catalog-filter={tab}
+                aria-pressed={idx === 0 ? 'true' : 'false'}
+                class={`min-h-[44px] rounded-full border px-4 py-2 font-display text-xs font-extrabold transition-colors ${
+                  idx === 0
+                    ? 'border-sky-deep bg-sky text-[#082F49]'
+                    : 'border-line bg-white text-navy hover:border-sky-deep hover:bg-bg-alt'
+                }`}
+              >
+                {tab}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        {
+          products.allServices.map((service) => (
+            <a
+              href={service.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              data-catalog-item
+              data-catalog-category={service.category}
+              class="group flex items-center gap-3 rounded-2xl border border-line bg-white p-3.5 text-ink no-underline shadow-sm transition-all duration-200 hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc"
+            >
+              <span class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white">
+                <img
+                  src={service.logo}
+                  alt={`Logo ${service.name}`}
+                  width="48"
+                  height="48"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-contain"
+                />
+              </span>
+              <div class="min-w-0">
+                <p class="m-0 truncate font-display text-sm font-extrabold text-navy group-hover:text-sky-ink">
+                  {service.name}
+                </p>
+                <p class="m-0 mt-0.5 truncate text-[11px] font-semibold text-body">
+                  {service.category}
+                </p>
+              </div>
+            </a>
+          ))
+        }
+      </div>
+
+      <p id="catalog-empty-state" hidden class="mt-6 rounded-2xl border border-line bg-bg-alt p-5 text-sm font-semibold text-navy">
+        Belum ada layanan pada filter ini. Pilih kategori "Semua" untuk melihat seluruh katalog.
+      </p>
+    </div>
+  </section>
+
+  <FeaturedProductsSection />
+  <FinalCtaSection />
+  <FooterSection />
+</BaseLayout>

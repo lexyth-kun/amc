@@ -5,22 +5,21 @@ import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/u
 
 <section
   id="flash-sale"
-  data-bg-color="#1A36FF"
+  data-bg-color="#0369A1"
   data-flash-ends={products.flashSale.endsAt}
   class="dark-surface relative overflow-hidden py-16 text-white md:py-28"
-  style="background: linear-gradient(150deg, #0B1B4D 0%, #1A36FF 52%, #0369A1 100%);"
+  style="background: linear-gradient(150deg, #082F49 0%, #0369A1 55%, #0284C7 100%);"
   aria-labelledby="flash-sale-heading"
 >
-  <!-- Ambient Sky Blue Highlight in Bottom Right (outside white header text area for WCAG AA) -->
   <div
-    class="pointer-events-none absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.42)_0%,rgba(56,189,248,0)_70%)]"
+    class="pointer-events-none absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(125,211,252,0.42)_0%,rgba(125,211,252,0)_70%)]"
     aria-hidden="true"
   ></div>
 
   <div class="relative z-10 mx-auto max-w-amc px-4 sm:px-6">
     <div class="mb-10 flex flex-col justify-between gap-8 lg:flex-row lg:items-end md:mb-14">
       <div>
-        <span class="inline-block font-display text-xs font-extrabold uppercase tracking-[0.2em] text-sky">
+        <span class="inline-block font-display text-xs font-extrabold uppercase tracking-[0.2em] text-sky-light">
           PROMO WAKTU TERBATAS • BERAKHIR 30 NOV 2026 23:59 WIB
         </span>
         <h2
@@ -34,7 +33,6 @@ import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/u
         </p>
       </div>
 
-      <!-- Live Tabular Countdown -->
       <div
         id="flash-countdown-box"
         aria-label="Hitung mundur berakhirnya Flash Sale"
@@ -47,14 +45,14 @@ import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/u
             { id: 'cd-minutes', label: 'Menit', init: '00' },
             { id: 'cd-seconds', label: 'Detik', init: '00' },
           ].map((unit) => (
-            <div class="flex min-w-[68px] flex-col items-center justify-center rounded-2xl border border-white/25 bg-[#0B1B4D]/75 px-3 py-3 text-center sm:min-w-[82px]">
+            <div class="flex min-w-[68px] flex-col items-center justify-center rounded-2xl border border-[#7DD3FC]/35 bg-[#082F49]/80 px-3 py-3 text-center sm:min-w-[82px]">
               <span
                 id={unit.id}
                 class="tabular-nums font-display text-2xl font-extrabold leading-none text-white sm:text-3xl"
               >
                 {unit.init}
               </span>
-              <span class="mt-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-sky">
+              <span class="mt-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-sky-light">
                 {unit.label}
               </span>
             </div>
@@ -63,11 +61,10 @@ import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/u
       </div>
     </div>
 
-    <p id="flash-expired-banner" hidden class="mb-6 rounded-2xl border border-white/30 bg-[#0B1B4D] px-4 py-3 text-sm font-bold text-white">
+    <p id="flash-expired-banner" hidden class="mb-6 rounded-2xl border border-white/30 bg-[#082F49] px-4 py-3 text-sm font-bold text-white">
       Periode Flash Sale 11.11 telah berakhir. Cek harga terbaru langsung di Web Shop AMC.
     </p>
 
-    <!-- 3 cols desktop / 2 cols mobile per section 7 ("Flash Sale 2 kolom") -->
     <div data-stagger-group class="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
       {
         products.flashSale.items.map((item) => {
@@ -79,11 +76,11 @@ import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/u
               target="_blank"
               rel="noopener noreferrer"
               data-stagger-card
-              class="group flex flex-col justify-between rounded-2xl border border-white/20 bg-white p-3.5 text-ink no-underline shadow-[0_20px_50px_rgba(6,26,58,0.24)] transition-transform duration-300 hover:-translate-y-1.5 sm:rounded-card sm:p-6"
+              class="group flex flex-col justify-between rounded-2xl border border-white/20 bg-white p-3.5 text-ink no-underline shadow-[0_20px_50px_rgba(8,47,73,0.28)] transition-transform duration-300 hover:-translate-y-1.5 sm:rounded-card sm:p-6"
             >
               <div>
                 <div class="flex items-start justify-between gap-2">
-                  <div class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white sm:h-12 sm:w-12">
+                  <div class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-line bg-white sm:h-12 sm:w-12">
                     <img
                       src={item.logo}
                       alt={`Logo ${item.name}`}
@@ -91,7 +88,7 @@ import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/u
                       height="48"
                       loading="lazy"
                       decoding="async"
-                      class="h-full w-full object-cover"
+                      class="h-full w-full object-contain"
                     />
                   </div>
 
@@ -111,7 +108,7 @@ import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/u
                   <span class="tabular-nums text-xs font-semibold text-body line-through">
                     {formatRupiah(item.originalPrice)}
                   </span>
-                  <span class="tabular-nums font-display text-lg font-extrabold tracking-[-0.02em] text-amc sm:text-2xl">
+                  <span class="tabular-nums font-display text-lg font-extrabold tracking-[-0.02em] text-sky-ink sm:text-2xl">
                     {formatRupiah(item.promoPrice)}
                   </span>
                 </div>
@@ -120,7 +117,7 @@ import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/u
               <div class="mt-4 border-t border-line pt-3">
                 <div class="mb-1.5 flex items-center justify-between text-[11px] font-bold text-navy sm:text-xs">
                   <span>Sisa {item.stockLeft} stok</span>
-                  <span class="text-amc group-hover:translate-x-0.5 transition-transform">Ambil →</span>
+                  <span class="text-sky-ink group-hover:translate-x-0.5 transition-transform">Ambil →</span>
                 </div>
                 <div
                   class="h-2 w-full overflow-hidden rounded-full bg-bg-deep"
@@ -131,7 +128,7 @@ import { buildProductOrderUrl, formatRupiah, getStockProgressPercent } from '@/u
                   aria-valuemax={item.stockTotal}
                 >
                   <div
-                    class="h-full rounded-full bg-gradient-to-r from-sale-ink to-amc"
+                    class="h-full rounded-full bg-gradient-to-r from-sale-ink to-sky-deep"
                     style={`width: ${pct}%;`}
                   ></div>
                 </div>

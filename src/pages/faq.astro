@@ -1,0 +1,29 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FaqSection from '@/components/FaqSection.astro';
+import TestimonialsSection from '@/components/TestimonialsSection.astro';
+import FooterSection from '@/components/FooterSection.astro';
+---
+
+<BaseLayout
+  title="FAQ, Garansi Resmi & Ulasan Pembeli – Al Muthi Creative"
+  description="Jawaban pertanyaan umum seputar akun Sharing & Private, garansi penuh, layanan buzzer aman tanpa password, dan ulasan pembeli resmi AMC."
+  currentPath="/faq/"
+  showPreloader={false}
+>
+  <section class="bg-gradient-to-b from-bg-alt via-white to-bg-alt pt-32 pb-6 md:pt-40 md:pb-8">
+    <div class="mx-auto max-w-amc px-4 sm:px-6">
+      <p class="eyebrow-label mb-3">PUSAT BANTUAN & KEPERCAYAAN</p>
+      <h1 class="max-w-4xl font-display text-[clamp(2.4rem,6vw,4.8rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy">
+        Pertanyaan Umum, <span class="amc-text-gradient">Garansi</span> & Ulasan.
+      </h1>
+      <p class="mt-5 max-w-2xl text-base leading-relaxed text-body sm:text-lg">
+        Transparansi penuh soal garansi, perbedaan akun Sharing vs Private, serta tautan langsung ke 1.266 ulasan pembeli resmi di order.amc.web.id/#ulasan.
+      </p>
+    </div>
+  </section>
+
+  <FaqSection />
+  <TestimonialsSection />
+  <FooterSection />
+</BaseLayout>

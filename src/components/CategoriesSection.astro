@@ -6,7 +6,7 @@ import BlueLine from './BlueLine.astro';
 
 <section
   id="kategori"
-  data-bg-color="#F4F8FF"
+  data-bg-color="#F0F9FF"
   class="bg-bg-alt py-16 md:py-28"
   aria-labelledby="categories-heading"
 >
@@ -31,7 +31,6 @@ import BlueLine from './BlueLine.astro';
       </div>
     </div>
 
-    <!-- Asymmetric 12-col hierarchy: 2 flagship 6-col cards on top, 3 focused 4-col cards below -->
     <div data-stagger-group class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-12">
       {
         products.categories.map((cat) => (
@@ -40,13 +39,13 @@ import BlueLine from './BlueLine.astro';
             target="_blank"
             rel="noopener noreferrer"
             data-stagger-card
-            class={`group flex flex-col justify-between rounded-card border border-line bg-white p-6 text-ink no-underline transition-all duration-300 hover:-translate-y-1.5 hover:border-amc hover:shadow-amc sm:p-7 ${
+            class={`group flex flex-col justify-between rounded-card border border-line bg-white p-6 text-ink no-underline transition-all duration-300 hover:-translate-y-1.5 hover:border-sky-deep hover:shadow-amc sm:p-7 ${
               cat.featured ? 'lg:col-span-6' : 'lg:col-span-4'
             }`}
           >
             <div>
               <div class="mb-6 flex items-center justify-between gap-3">
-                <span class="flex h-12 w-12 items-center justify-center rounded-2xl border border-line bg-bg-alt text-amc transition-colors duration-300 group-hover:border-amc group-hover:bg-amc group-hover:text-white">
+                <span class="flex h-12 w-12 items-center justify-center rounded-2xl border border-line bg-bg-alt text-sky-ink transition-colors duration-300 group-hover:border-sky-deep group-hover:bg-sky group-hover:text-[#082F49]">
                   {cat.id === 'ai-premium' && (
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                       <rect x="4" y="4" width="16" height="16" rx="3"></rect>
@@ -96,7 +95,7 @@ import BlueLine from './BlueLine.astro';
               </p>
             </div>
 
-            <div class="mt-6 flex items-center justify-between border-t border-line pt-4 font-display text-sm font-extrabold text-navy group-hover:text-amc">
+            <div class="mt-6 flex items-center justify-between border-t border-line pt-4 font-display text-sm font-extrabold text-navy group-hover:text-sky-ink">
               <span>Lihat kategori</span>
               <span
                 class="-translate-x-2 opacity-60 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"

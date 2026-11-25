@@ -7,6 +7,23 @@ import PageTransition from '@/components/PageTransition.astro';
 import Header from '@/components/Header.astro';
 import MenuOverlay from '@/components/MenuOverlay.astro';
 
+interface Props {
+  title?: string;
+  description?: string;
+  currentPath?: string;
+  showPreloader?: boolean;
+}
+
+const {
+  title = 'Al Muthi Creative – Akun Premium Murah & Terpercaya',
+  description = content.seo.description,
+  currentPath = '/',
+  showPreloader = true,
+} = Astro.props;
+
+const canonicalUrl =
+  currentPath === '/' ? 'https://amc.web.id/' : `https://amc.web.id${currentPath}`;
+
 const topThreeProducts = products.featuredProducts.slice(0, 3);
 
 const jsonLd = {
@@ -68,24 +85,24 @@ const jsonLd = {
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Al Muthi Creative – Akun Premium Murah &amp; Terpercaya</title>
-    <meta name="description" content={content.seo.description} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
-    <meta name="theme-color" content="#FFFFFF" />
-    <link rel="canonical" href="https://amc.web.id/" />
+    <meta name="theme-color" content="#38BDF8" />
+    <link rel="canonical" href={canonicalUrl} />
     <link rel="icon" type="image/webp" href="/logo-amc.webp" />
     <link rel="apple-touch-icon" href="/logo-amc.png" />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Al Muthi Creative" />
-    <meta property="og:title" content="Al Muthi Creative – Akun Premium Murah & Terpercaya" />
-    <meta property="og:description" content={content.seo.description} />
-    <meta property="og:url" content="https://amc.web.id/" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content="https://amc.web.id/logo-amc.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Al Muthi Creative – Akun Premium Murah & Terpercaya" />
-    <meta name="twitter:description" content={content.seo.description} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -107,7 +124,7 @@ const jsonLd = {
   <body class="bg-bg text-ink antialiased selection:bg-sky/30 selection:text-navy">
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[10002] focus:rounded-full focus:bg-amc focus:px-5 focus:py-3 focus:font-display focus:font-bold focus:text-white"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[10002] focus:rounded-full focus:bg-amc-2 focus:px-5 focus:py-3 focus:font-display focus:font-bold focus:text-white"
     >
       Langsung ke konten utama
     </a>
@@ -115,13 +132,17 @@ const jsonLd = {
     <div id="amc-cursor-dot" aria-hidden="true"></div>
     <div id="amc-cursor-ring" aria-hidden="true"></div>
 
-    <Preloader />
+    {showPreloader && <Preloader />}
     <PageTransition />
-    <Header />
-    <MenuOverlay />
+    <Header currentPath={currentPath} />
+    <MenuOverlay currentPath={currentPath} />
 
     <main id="main-content">
       <slot />
     </main>
+
+    <script>
+      import '../scripts/main.ts';
+    </script>
   </body>
 </html>

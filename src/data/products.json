@@ -8,7 +8,7 @@
       "price": 190000,
       "badge": "BARU",
       "description": "Akun sendiri, bukan sharing.",
-      "logo": "/logo-chatgpt.webp"
+      "logo": "/logos/chatgpt.svg"
     },
     {
       "slug": "claude",
@@ -17,7 +17,7 @@
       "price": 120000,
       "badge": "PALING LARIS",
       "description": "Opus, Sonnet, Haiku, Full Garansi.",
-      "logo": "/logo-claude.svg"
+      "logo": "/logos/claude.svg"
     },
     {
       "slug": "adobe",
@@ -26,7 +26,7 @@
       "price": 125000,
       "badge": null,
       "description": "Photoshop, Illustrator, Premiere Pro, After Effects.",
-      "logo": "/logo-adobe.webp"
+      "logo": "/logos/adobe.svg"
     },
     {
       "slug": "adobe-express",
@@ -35,7 +35,7 @@
       "price": 60000,
       "badge": "BARU",
       "description": "Desain grafis dan konten sosmed setahun penuh.",
-      "logo": "/logo-adobe-express.svg"
+      "logo": "/logos/adobe-express.svg"
     },
     {
       "slug": "canva",
@@ -44,7 +44,7 @@
       "price": 30000,
       "badge": null,
       "description": "Template premium, tim dan brand kit.",
-      "logo": "/logo-canva.webp"
+      "logo": "/logos/canva.svg"
     },
     {
       "slug": "capcut",
@@ -53,7 +53,7 @@
       "price": 60000,
       "badge": null,
       "description": "Edit video tanpa watermark.",
-      "logo": "/logo-capcut.webp"
+      "logo": "/logos/capcut.svg"
     },
     {
       "slug": "gemini",
@@ -62,7 +62,7 @@
       "price": 25000,
       "badge": null,
       "description": "Invite resmi, Full Garansi.",
-      "logo": "/logo-gemini.webp"
+      "logo": "/logos/gemini.svg"
     },
     {
       "slug": "netflix",
@@ -71,7 +71,7 @@
       "price": 120000,
       "badge": null,
       "description": "4K UHD, profil sendiri.",
-      "logo": "/logo-netflix.webp"
+      "logo": "/logos/netflix.svg"
     },
     {
       "slug": "youtube",
@@ -80,7 +80,7 @@
       "price": 15000,
       "badge": null,
       "description": "Tanpa iklan, bisa background play.",
-      "logo": "/logo-youtube.webp"
+      "logo": "/logos/youtube.svg"
     }
   ],
   "flashSale": {
@@ -97,7 +97,7 @@
         "promoPrice": 100000,
         "stockLeft": 4,
         "stockTotal": 20,
-        "logo": "/logo-adobe.webp"
+        "logo": "/logos/adobe.svg"
       },
       {
         "slug": "capcut",
@@ -107,7 +107,7 @@
         "promoPrice": 30000,
         "stockLeft": 6,
         "stockTotal": 20,
-        "logo": "/logo-capcut.webp"
+        "logo": "/logos/capcut.svg"
       },
       {
         "slug": "canva",
@@ -117,7 +117,7 @@
         "promoPrice": 15000,
         "stockLeft": 5,
         "stockTotal": 20,
-        "logo": "/logo-canva.webp"
+        "logo": "/logos/canva.svg"
       },
       {
         "slug": "youtube",
@@ -127,7 +127,7 @@
         "promoPrice": 15000,
         "stockLeft": 3,
         "stockTotal": 15,
-        "logo": "/logo-youtube.webp"
+        "logo": "/logos/youtube.svg"
       },
       {
         "slug": "gemini",
@@ -137,7 +137,7 @@
         "promoPrice": 50000,
         "stockLeft": 3,
         "stockTotal": 15,
-        "logo": "/logo-gemini.webp"
+        "logo": "/logos/gemini.svg"
       },
       {
         "slug": "spotify",
@@ -147,66 +147,115 @@
         "promoPrice": 15000,
         "stockLeft": 6,
         "stockTotal": 20,
-        "logo": "/logo-spotify.webp"
+        "logo": "/logos/spotify.svg"
       }
     ]
   },
   "categories": [
     {
       "id": "ai-premium",
-      "title": "AI Premium",
-      "examples": "ChatGPT, Claude, Gemini, Kiro AI",
-      "serviceCountLabel": "5 layanan aktif",
+      "title": "AI & Produktivitas",
+      "examples": "ChatGPT, Claude, Gemini, Grok AI, Discord, Zoom, Google Drive",
+      "serviceCountLabel": "10 layanan aktif",
       "href": "https://order.amc.web.id/#aplikasi",
       "featured": true
     },
     {
       "id": "desain-editing",
       "title": "Desain & Editing",
-      "examples": "Adobe CC, Canva, CapCut, Alight Motion",
+      "examples": "Adobe CC, Adobe Express, Canva, CapCut, Alight Motion, Picsart, Meitu",
       "serviceCountLabel": "7 layanan aktif",
       "href": "https://order.amc.web.id/#aplikasi",
       "featured": true
     },
     {
       "id": "streaming-hiburan",
-      "title": "Streaming & Hiburan",
-      "examples": "Netflix, YouTube, Spotify, Vidio",
-      "serviceCountLabel": "13 layanan aktif",
+      "title": "Streaming, Musik & VPN",
+      "examples": "Netflix, YouTube, Spotify, Apple Music, HBO Max, Prime Video, Viu, WeTV, Vidio, ExpressVPN",
+      "serviceCountLabel": "12 layanan aktif",
       "href": "https://order.amc.web.id/#aplikasi",
       "featured": false
     },
     {
       "id": "buzzer-sosmed",
       "title": "Buzzer Sosmed",
-      "examples": "Followers, likes, views IG / TikTok / YouTube",
-      "serviceCountLabel": "6 layanan aktif",
+      "examples": "Followers, likes, views Instagram, TikTok, Facebook, YouTube, Telegram, Shopee",
+      "serviceCountLabel": "5 platform aktif",
       "href": "https://order.amc.web.id/#buzzer",
       "featured": false
     },
     {
       "id": "topup-game",
       "title": "Top Up Game",
-      "examples": "MLBB, Roblox, Free Fire, PUBG, Valorant",
-      "serviceCountLabel": "7 layanan aktif",
+      "examples": "Mobile Legends, Roblox, Free Fire, PUBG Mobile, Genshin Impact, Honor of Kings, Valorant",
+      "serviceCountLabel": "7 game aktif",
       "href": "https://order.amc.web.id/#game",
       "featured": false
     }
   ],
   "marqueeLogos": [
-    { "name": "ChatGPT", "logo": "/logo-chatgpt.webp" },
-    { "name": "Claude", "logo": "/logo-claude.svg" },
-    { "name": "Adobe CC", "logo": "/logo-adobe.webp" },
-    { "name": "Canva", "logo": "/logo-canva.webp" },
-    { "name": "CapCut", "logo": "/logo-capcut.webp" },
-    { "name": "Gemini AI", "logo": "/logo-gemini.webp" },
-    { "name": "Netflix", "logo": "/logo-netflix.webp" },
-    { "name": "Spotify", "logo": "/logo-spotify.webp" },
-    { "name": "YouTube", "logo": "/logo-youtube.webp" },
-    { "name": "Instagram", "logo": "/logo-ig.webp" },
-    { "name": "TikTok", "logo": "/logo-tiktok.webp" },
-    { "name": "Mobile Legends", "logo": "/logo-mlbb.webp" },
-    { "name": "Roblox", "logo": "/logo-roblox.webp" }
+    { "name": "ChatGPT", "logo": "/logos/chatgpt.svg" },
+    { "name": "Claude", "logo": "/logos/claude.svg" },
+    { "name": "Adobe CC", "logo": "/logos/adobe.svg" },
+    { "name": "Adobe Express", "logo": "/logos/adobe-express.svg" },
+    { "name": "Canva", "logo": "/logos/canva.svg" },
+    { "name": "CapCut", "logo": "/logos/capcut.svg" },
+    { "name": "Gemini AI", "logo": "/logos/gemini.svg" },
+    { "name": "Netflix", "logo": "/logos/netflix.svg" },
+    { "name": "Spotify", "logo": "/logos/spotify.svg" },
+    { "name": "YouTube", "logo": "/logos/youtube.svg" },
+    { "name": "Instagram", "logo": "/logos/instagram.svg" },
+    { "name": "TikTok", "logo": "/logos/tiktok.svg" },
+    { "name": "Roblox", "logo": "/logos/roblox.svg" },
+    { "name": "Valorant", "logo": "/logos/valorant.svg" }
+  ],
+  "allServices": [
+    { "slug": "chatgpt", "name": "ChatGPT Plus", "category": "AI & Produktivitas", "logo": "/logos/chatgpt.svg", "href": "https://order.amc.web.id/#aplikasi/chatgpt" },
+    { "slug": "claude", "name": "Claude Pro", "category": "AI & Produktivitas", "logo": "/logos/claude.svg", "href": "https://order.amc.web.id/#aplikasi/claude" },
+    { "slug": "gemini", "name": "Gemini AI Pro", "category": "AI & Produktivitas", "logo": "/logos/gemini.svg", "href": "https://order.amc.web.id/#aplikasi/gemini" },
+    { "slug": "supergrok", "name": "Grok AI", "category": "AI & Produktivitas", "logo": "/logos/supergrok.svg", "href": "https://order.amc.web.id/#aplikasi/supergrok" },
+    { "slug": "discord", "name": "Discord Nitro", "category": "AI & Produktivitas", "logo": "/logos/discord.svg", "href": "https://order.amc.web.id/#aplikasi/discord" },
+    { "slug": "zoom", "name": "Zoom Pro", "category": "AI & Produktivitas", "logo": "/logos/zoom.svg", "href": "https://order.amc.web.id/#aplikasi/zoom" },
+    { "slug": "gdrive", "name": "Google Drive", "category": "AI & Produktivitas", "logo": "/logos/gdrive.svg", "href": "https://order.amc.web.id/#aplikasi/gdrive" },
+    { "slug": "gmail", "name": "Gmail Fresh", "category": "AI & Produktivitas", "logo": "/logos/gmail.svg", "href": "https://order.amc.web.id/#aplikasi/gmail" },
+    { "slug": "getcontact", "name": "GetContact", "category": "AI & Produktivitas", "logo": "/logos/getcontact.svg", "href": "https://order.amc.web.id/#aplikasi/getcontact" },
+    { "slug": "scribd", "name": "Scribd", "category": "AI & Produktivitas", "logo": "/logos/scribd.svg", "href": "https://order.amc.web.id/#aplikasi/scribd" },
+
+    { "slug": "adobe", "name": "Adobe Creative Cloud", "category": "Kreasi & Desain", "logo": "/logos/adobe.svg", "href": "https://order.amc.web.id/#aplikasi/adobe" },
+    { "slug": "adobe-express", "name": "Adobe Express", "category": "Kreasi & Desain", "logo": "/logos/adobe-express.svg", "href": "https://order.amc.web.id/#aplikasi/adobe-express" },
+    { "slug": "canva", "name": "Canva Pro / Edu", "category": "Kreasi & Desain", "logo": "/logos/canva.svg", "href": "https://order.amc.web.id/#aplikasi/canva" },
+    { "slug": "capcut", "name": "CapCut Pro", "category": "Kreasi & Desain", "logo": "/logos/capcut.svg", "href": "https://order.amc.web.id/#aplikasi/capcut" },
+    { "slug": "alight", "name": "Alight Motion", "category": "Kreasi & Desain", "logo": "/logos/alightmotion.svg", "href": "https://order.amc.web.id/#aplikasi/alight" },
+    { "slug": "picsart", "name": "Picsart", "category": "Kreasi & Desain", "logo": "/logos/picsart.svg", "href": "https://order.amc.web.id/#aplikasi/picsart" },
+    { "slug": "meitu", "name": "Meitu", "category": "Kreasi & Desain", "logo": "/logos/meitu.svg", "href": "https://order.amc.web.id/#aplikasi/meitu" },
+
+    { "slug": "netflix", "name": "Netflix Premium", "category": "Hiburan & Musik", "logo": "/logos/netflix.svg", "href": "https://order.amc.web.id/#aplikasi/netflix" },
+    { "slug": "youtube", "name": "YouTube Premium", "category": "Hiburan & Musik", "logo": "/logos/youtube.svg", "href": "https://order.amc.web.id/#aplikasi/youtube" },
+    { "slug": "spotify", "name": "Spotify Premium", "category": "Hiburan & Musik", "logo": "/logos/spotify.svg", "href": "https://order.amc.web.id/#aplikasi/spotify" },
+    { "slug": "applemusic", "name": "Apple Music", "category": "Hiburan & Musik", "logo": "/logos/applemusic.svg", "href": "https://order.amc.web.id/#aplikasi/applemusic" },
+    { "slug": "hbomax", "name": "HBO Max", "category": "Hiburan & Musik", "logo": "/logos/hbomax.svg", "href": "https://order.amc.web.id/#aplikasi/hbomax" },
+    { "slug": "primevideo", "name": "Prime Video", "category": "Hiburan & Musik", "logo": "/logos/primevideo.svg", "href": "https://order.amc.web.id/#aplikasi/primevideo" },
+    { "slug": "viu", "name": "Viu Premium", "category": "Hiburan & Musik", "logo": "/logos/viu.svg", "href": "https://order.amc.web.id/#aplikasi/viu" },
+    { "slug": "wetv", "name": "WeTV VIP", "category": "Hiburan & Musik", "logo": "/logos/wetv.svg", "href": "https://order.amc.web.id/#aplikasi/wetv" },
+    { "slug": "vidio", "name": "Vidio Platinum", "category": "Hiburan & Musik", "logo": "/logos/vidio.svg", "href": "https://order.amc.web.id/#aplikasi/vidio" },
+    { "slug": "wink", "name": "Wink VIP", "category": "Hiburan & Musik", "logo": "/logos/wink.svg", "href": "https://order.amc.web.id/#aplikasi/wink" },
+
+    { "slug": "vpnexpress", "name": "ExpressVPN", "category": "VPN & Keamanan", "logo": "/logos/expressvpn.svg", "href": "https://order.amc.web.id/#aplikasi/vpnexpress" },
+    { "slug": "vpnsurfshark", "name": "Surfshark VPN", "category": "VPN & Keamanan", "logo": "/logos/surfshark.svg", "href": "https://order.amc.web.id/#aplikasi/vpnsurfshark" },
+
+    { "slug": "buzzer-instagram", "name": "Buzzer Instagram", "category": "Buzzer Sosmed", "logo": "/logos/instagram.svg", "href": "https://order.amc.web.id/#buzzer" },
+    { "slug": "buzzer-tiktok", "name": "Buzzer TikTok", "category": "Buzzer Sosmed", "logo": "/logos/tiktok.svg", "href": "https://order.amc.web.id/#buzzer" },
+    { "slug": "buzzer-facebook", "name": "Buzzer Facebook", "category": "Buzzer Sosmed", "logo": "/logos/facebook.svg", "href": "https://order.amc.web.id/#buzzer" },
+    { "slug": "buzzer-telegram", "name": "Buzzer Telegram", "category": "Buzzer Sosmed", "logo": "/logos/telegram.svg", "href": "https://order.amc.web.id/#buzzer" },
+    { "slug": "buzzer-shopee", "name": "Buzzer Shopee", "category": "Buzzer Sosmed", "logo": "/logos/shopee.svg", "href": "https://order.amc.web.id/#buzzer" },
+
+    { "slug": "game-mlbb", "name": "Mobile Legends", "category": "Top Up Game", "logo": "/logo-mlbb.webp", "href": "https://order.amc.web.id/#game" },
+    { "slug": "game-roblox", "name": "Roblox", "category": "Top Up Game", "logo": "/logos/roblox.svg", "href": "https://order.amc.web.id/#game" },
+    { "slug": "game-valorant", "name": "Valorant", "category": "Top Up Game", "logo": "/logos/valorant.svg", "href": "https://order.amc.web.id/#game" },
+    { "slug": "game-freefire", "name": "Free Fire", "category": "Top Up Game", "logo": "/logo-freefire.webp", "href": "https://order.amc.web.id/#game" },
+    { "slug": "game-pubg", "name": "PUBG Mobile", "category": "Top Up Game", "logo": "/logo-pubg.webp", "href": "https://order.amc.web.id/#game" },
+    { "slug": "game-genshin", "name": "Genshin Impact", "category": "Top Up Game", "logo": "/logo-genshin.webp", "href": "https://order.amc.web.id/#game" },
+    { "slug": "game-hok", "name": "Honor of Kings", "category": "Top Up Game", "logo": "/logo-hok.webp", "href": "https://order.amc.web.id/#game" }
   ],
   "reelTickerItems": [
     "CHATGPT",

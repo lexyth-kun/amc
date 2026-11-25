@@ -14,8 +14,8 @@ function collectStrings(value: unknown): string[] {
   return [];
 }
 
-describe('Single Source of Truth & Anti-Slop Copy Gate (Milestone A)', () => {
-  it('contains all 9 verified Featured Products with exact slugs and Rupiah prices', () => {
+describe('Single Source of Truth, Official White-Bg Logos, Multi-Page Nav & Anti-Slop Gate', () => {
+  it('contains all 9 verified Featured Products with exact slugs, Rupiah prices, and official white-bg SVGs', () => {
     expect(products.featuredProducts).toHaveLength(9);
     const map = Object.fromEntries(products.featuredProducts.map((p) => [p.slug, p.price]));
     expect(map).toEqual({
@@ -29,6 +29,9 @@ describe('Single Source of Truth & Anti-Slop Copy Gate (Milestone A)', () => {
       netflix: 120000,
       youtube: 15000,
     });
+    for (const p of products.featuredProducts) {
+      expect(p.logo.startsWith('/logos/'), `Featured product ${p.slug} must use official /logos/*.svg`).toBe(true);
+    }
   });
 
   it('contains all 6 verified Flash Sale 11.11 items and WIB deadline', () => {
@@ -39,8 +42,23 @@ describe('Single Source of Truth & Anti-Slop Copy Gate (Milestone A)', () => {
     ]);
   });
 
-  it('contains 5 service categories covering all AMC catalog groups', () => {
+  it('contains complete catalog of all >= 35 AMC services across every category for tunnel & /produk page', () => {
     expect(products.categories).toHaveLength(5);
+    expect(products.allServices.length).toBeGreaterThanOrEqual(35);
+    const categories = new Set(products.allServices.map((s) => s.category));
+    expect(categories.has('AI & Produktivitas')).toBe(true);
+    expect(categories.has('Kreasi & Desain')).toBe(true);
+    expect(categories.has('Hiburan & Musik')).toBe(true);
+    expect(categories.has('Buzzer Sosmed')).toBe(true);
+    expect(categories.has('Top Up Game')).toBe(true);
+  });
+
+  it('routes primary navbar links to dedicated multi-page routes instead of hash-only scrolling', () => {
+    const hrefs = content.header.navLinks.map((l) => l.href);
+    expect(hrefs).toEqual(['/produk/', '/kategori/', '/flash-sale/', '/cara-order/', '/faq/']);
+    for (const link of content.header.overlayLinks) {
+      expect(link.href.startsWith('/')).toBe(true);
+    }
   });
 
   it('enforces zero em dashes (R-02) and zero forbidden portfolio terms across all JSON content', () => {
@@ -53,12 +71,10 @@ describe('Single Source of Truth & Anti-Slop Copy Gate (Milestone A)', () => {
     }
   });
 
-  it('uses honest labeled placeholders for testimonials until real customer reviews are supplied (R-18, R-38)', () => {
-    expect(content.testimonials.items).toHaveLength(3);
-    for (const item of content.testimonials.items) {
-      expect(item.isPlaceholder).toBe(true);
-      expect(item.quote).toContain('[MENUNGGU ULASAN ASLI');
-    }
+  it('links testimonials & reviews directly to official live reviews at https://order.amc.web.id/#ulasan (R-18)', () => {
+    expect(content.testimonials.reviewsUrl).toBe('https://order.amc.web.id/#ulasan');
+    expect(content.testimonials.ratingValue).toBe('4.8/5');
+    expect(content.testimonials.reviewCountLabel).toContain('1.266');
   });
 
   it('ensures every local logo path referenced in products.json exists inside public/', () => {
@@ -67,6 +83,7 @@ describe('Single Source of Truth & Anti-Slop Copy Gate (Milestone A)', () => {
       ...products.featuredProducts.map((p) => p.logo),
       ...products.flashSale.items.map((i) => i.logo),
       ...products.marqueeLogos.map((m) => m.logo),
+      ...products.allServices.map((s) => s.logo),
     ];
     for (const logoPath of logos) {
       const cleanRel = logoPath.replace(/^\//, '');

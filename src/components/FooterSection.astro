@@ -14,14 +14,14 @@ import BlueLine from './BlueLine.astro';
     <BlueLine className="mb-12 md:mb-16" />
 
     <div class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-12">
-      <!-- Col 1: Brand + Newsletter Mini (v1) -->
+      <!-- Col 1: Brand + WhatsApp Promo Opt-In -->
       <div class="lg:col-span-4">
-        <a href="#hero" data-scroll-to="#hero" class="inline-flex min-h-[44px] items-center gap-3 text-navy no-underline">
+        <a href="/" data-page-link class="inline-flex min-h-[44px] items-center gap-3 text-navy no-underline">
           <span class="flex h-11 w-11 items-center justify-center overflow-hidden rounded-logo border border-line bg-white">
             <img src="/logo-amc.webp" alt="Logo AMC" width="44" height="44" loading="lazy" class="h-full w-full object-cover" />
           </span>
           <span class="font-display text-base font-extrabold tracking-[-0.02em] text-navy">
-            AL MUTHI <span class="text-amc">CREATIVE</span>
+            AL MUTHI <span class="text-sky-ink">CREATIVE</span>
           </span>
         </a>
 
@@ -31,17 +31,18 @@ import BlueLine from './BlueLine.astro';
 
         <form class="js-newsletter-form mt-6" novalidate>
           <label
-            for="footer-newsletter-email"
+            for="footer-promo-phone"
             class="mb-2 block font-display text-xs font-extrabold uppercase tracking-[0.14em] text-navy"
           >
             {content.footer.newsletterLabel}
           </label>
           <div class="flex flex-col gap-2.5 sm:flex-row">
             <input
-              id="footer-newsletter-email"
-              name="email"
-              type="email"
-              autocomplete="email"
+              id="footer-promo-phone"
+              name="phone"
+              type="tel"
+              inputmode="tel"
+              autocomplete="tel"
               placeholder={content.footer.newsletterPlaceholder}
               class="min-h-[44px] flex-1 rounded-2xl border border-line bg-bg-alt px-4 py-2.5 text-sm text-ink placeholder:text-body/60"
             />
@@ -53,6 +54,15 @@ import BlueLine from './BlueLine.astro';
             </button>
           </div>
           <p class="js-newsletter-feedback mt-2 text-xs leading-relaxed text-body" role="status" aria-live="polite"></p>
+          <a
+            href={content.footer.contacts.waAdminHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            hidden
+            class="js-wa-confirm-link amc-btn-wa mt-2.5 !min-h-[44px] !px-4 !py-2 !text-xs"
+          >
+            Konfirmasi via WhatsApp Admin →
+          </a>
         </form>
       </div>
 
@@ -62,6 +72,15 @@ import BlueLine from './BlueLine.astro';
           Produk
         </h3>
         <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
+          <li>
+            <a
+              href="/produk/"
+              data-page-link
+              class="inline-flex min-h-[44px] items-center text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
+            >
+              Semua Produk (41+)
+            </a>
+          </li>
           {
             products.categories.map((cat) => (
               <li>
@@ -69,7 +88,7 @@ import BlueLine from './BlueLine.astro';
                   href={cat.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-amc"
+                  class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline transition-colors hover:text-sky-ink"
                 >
                   {cat.title}
                 </a>
@@ -82,44 +101,53 @@ import BlueLine from './BlueLine.astro';
       <!-- Col 3: Bantuan -->
       <div class="lg:col-span-2">
         <h3 class="font-display text-xs font-extrabold uppercase tracking-[0.18em] text-navy">
-          Bantuan
+          Halaman & Bantuan
         </h3>
         <ul class="mt-4 flex flex-col gap-1.5 list-none p-0 m-0">
           <li>
             <a
-              href="#cara-order"
-              data-scroll-to="#cara-order"
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+              href="/cara-order/"
+              data-page-link
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
               Cara Order
             </a>
           </li>
           <li>
             <a
-              href="https://order.amc.web.id"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+              href="/flash-sale/"
+              data-page-link
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
-              Lacak Orderan
+              Flash Sale 11.11
             </a>
           </li>
           <li>
-            <button
-              type="button"
-              data-open-tnc
-              class="inline-flex min-h-[44px] items-center border-0 bg-transparent p-0 text-sm font-medium text-body hover:text-amc"
+            <a
+              href="https://order.amc.web.id/#ulasan"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
-              Garansi
-            </button>
+              Ulasan Pembeli
+            </a>
           </li>
           <li>
             <a
-              href="#faq"
-              data-scroll-to="#faq"
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+              href="/faq/"
+              data-page-link
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
-              FAQ
+              FAQ & Garansi
+            </a>
+          </li>
+          <li>
+            <a
+              href="/kontak/"
+              data-page-link
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
+            >
+              Hubungi AMC
             </a>
           </li>
         </ul>
@@ -136,7 +164,7 @@ import BlueLine from './BlueLine.astro';
               href={content.footer.contacts.waAdminHref}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-[44px] items-center text-sm font-bold text-navy no-underline hover:text-amc"
+              class="inline-flex min-h-[44px] items-center text-sm font-bold text-navy no-underline hover:text-sky-ink"
             >
               WA Admin: {content.footer.contacts.waAdminDisplay}
             </a>
@@ -146,7 +174,7 @@ import BlueLine from './BlueLine.astro';
               href={content.footer.contacts.waBotHref}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
               WA Bot: {content.footer.contacts.waBotDisplay}
             </a>
@@ -156,7 +184,7 @@ import BlueLine from './BlueLine.astro';
               href={content.footer.contacts.instagramHref}
               target="_blank"
               rel="noopener noreferrer"
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
               Instagram: {content.footer.contacts.instagramDisplay}
             </a>
@@ -164,7 +192,7 @@ import BlueLine from './BlueLine.astro';
           <li>
             <a
               href={content.footer.contacts.emailHref}
-              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-amc"
+              class="inline-flex min-h-[44px] items-center text-sm font-medium text-body no-underline hover:text-sky-ink"
             >
               Email: {content.footer.contacts.emailDisplay}
             </a>
@@ -190,17 +218,25 @@ import BlueLine from './BlueLine.astro';
           href="https://order.amc.web.id"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline hover:text-amc"
+          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline hover:text-sky-ink"
         >
           Lacak Orderan
         </a>
-        <button
-          type="button"
-          data-open-tnc
-          class="inline-flex min-h-[44px] items-center border-0 bg-transparent p-0 font-bold text-navy hover:text-amc"
+        <a
+          href="https://order.amc.web.id/#ulasan"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline hover:text-sky-ink"
+        >
+          Ulasan Resmi
+        </a>
+        <a
+          href="/faq/"
+          data-page-link
+          class="inline-flex min-h-[44px] items-center font-bold text-navy no-underline hover:text-sky-ink"
         >
           Garansi
-        </button>
+        </a>
       </div>
     </div>
   </div>

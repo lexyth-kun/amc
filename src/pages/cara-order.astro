@@ -1,0 +1,33 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import HowToOrderSection from '@/components/HowToOrderSection.astro';
+import ShowreelSection from '@/components/ShowreelSection.astro';
+import FinalCtaSection from '@/components/FinalCtaSection.astro';
+import FooterSection from '@/components/FooterSection.astro';
+---
+
+<BaseLayout
+  title="Cara Order & Bot WhatsApp 24 Jam – Al Muthi Creative"
+  description="Panduan lengkap cara order otomatis lewat Web Shop order.amc.web.id, Bot WhatsApp 24 jam, dan pembayaran QRIS instan."
+  currentPath="/cara-order/"
+  showPreloader={false}
+>
+  <section class="bg-gradient-to-b from-bg-alt via-white to-white pt-32 pb-6 md:pt-40 md:pb-8">
+    <div class="mx-auto max-w-amc px-4 sm:px-6">
+      <p class="eyebrow-label mb-3">PANDUAN TRANSAKSI OTOMATIS</p>
+      <h1 class="max-w-4xl font-display text-[clamp(2.4rem,6vw,4.8rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy">
+        Cara Order <span class="amc-text-gradient">Kilat & Bergaransi</span> di AMC.
+      </h1>
+      <p class="mt-5 max-w-2xl text-base leading-relaxed text-body sm:text-lg">
+        Pilih jalur paling nyaman: checkout instan via Web Shop, order otomatis lewat Bot WhatsApp 24 jam, atau dibantu langsung oleh Admin CS.
+      </p>
+    </div>
+  </section>
+
+  <HowToOrderSection />
+  <div class="pt-12 bg-bg-alt">
+    <ShowreelSection />
+  </div>
+  <FinalCtaSection />
+  <FooterSection />
+</BaseLayout>

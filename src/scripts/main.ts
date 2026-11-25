@@ -25,18 +25,32 @@ function setupDeferredCinematicTunnel(): void {
   const phase4Copy = document.getElementById('cinematic-phase4-copy');
   const phase1Wrap = document.getElementById('cinematic-phase1');
   const phase2Wrap = document.getElementById('cinematic-phase2');
+  const serviceGroups = Array.from(document.querySelectorAll<HTMLElement>('[data-tunnel-group]'));
+  const groupDots = Array.from(document.querySelectorAll<HTMLElement>('[data-tunnel-dot]'));
+  const groupLabel = document.getElementById('cinematic-active-category');
+  const progressBar = document.getElementById('cinematic-showcase-bar');
   if (!section || !pinStage || !whiteoutEl || !phase4Copy) return;
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduced) {
     pinStage.style.height = 'auto';
-    pinStage.classList.add('py-20', 'flex-col', 'gap-12');
+    pinStage.classList.add('py-20', 'flex-col', 'gap-10');
     const canvas = document.getElementById('cinematic-canvas');
     if (canvas) canvas.style.display = 'none';
+    if (phase2Wrap) {
+      phase2Wrap.style.position = 'relative';
+      phase2Wrap.style.opacity = '1';
+      phase2Wrap.style.pointerEvents = 'auto';
+    }
+    serviceGroups.forEach((g) => {
+      g.hidden = false;
+      g.style.opacity = '1';
+      g.style.transform = 'none';
+    });
     whiteoutEl.style.position = 'relative';
     whiteoutEl.style.opacity = '1';
     whiteoutEl.style.pointerEvents = 'auto';
-    whiteoutEl.classList.add('rounded-card', 'py-14', 'mt-8', 'mx-4');
+    whiteoutEl.classList.add('rounded-card', 'py-14', 'mt-6', 'mx-4');
     return;
   }
 
@@ -80,9 +94,38 @@ function setupDeferredCinematicTunnel(): void {
       const localProgress = Math.max(0, Math.min(1, (state.phase1WordProgress - localStart) / 0.52));
       word.style.transform = `translate3d(0, ${((1 - localProgress) * 110).toFixed(1)}%, 0)`;
     });
+
     if (phase2Wrap) {
       phase2Wrap.style.opacity = state.phase2Opacity.toFixed(3);
+      phase2Wrap.style.pointerEvents = state.phase2Opacity > 0.65 && state.whiteoutOpacity < 0.25 ? 'auto' : 'none';
     }
+
+    if (serviceGroups.length > 0) {
+      const activeIdx = Math.min(
+        serviceGroups.length - 1,
+        Math.floor(state.showcaseProgress * serviceGroups.length)
+      );
+      serviceGroups.forEach((group, idx) => {
+        const isCurrent = idx === activeIdx;
+        group.hidden = !isCurrent;
+        group.style.opacity = isCurrent ? '1' : '0';
+      });
+      groupDots.forEach((dot, idx) => {
+        const isCurrent = idx === activeIdx;
+        dot.classList.toggle('bg-sky-light', isCurrent);
+        dot.classList.toggle('w-8', isCurrent);
+        dot.classList.toggle('bg-white/30', !isCurrent);
+        dot.classList.toggle('w-2.5', !isCurrent);
+      });
+      const activeName = serviceGroups[activeIdx]?.dataset.tunnelGroupLabel;
+      if (groupLabel && activeName) {
+        groupLabel.textContent = `${activeIdx + 1}/${serviceGroups.length} • ${activeName}`;
+      }
+      if (progressBar) {
+        progressBar.style.transform = `scaleX(${Math.max(0.04, state.showcaseProgress).toFixed(4)})`;
+      }
+    }
+
     whiteoutEl.style.opacity = state.whiteoutOpacity.toFixed(3);
     whiteoutEl.style.pointerEvents = state.whiteoutOpacity > 0.85 ? 'auto' : 'none';
     phase4Copy.style.opacity = state.phase4RevealProgress.toFixed(3);
@@ -101,8 +144,8 @@ function setupDeferredCinematicTunnel(): void {
     trigger: section,
     pin: pinStage,
     start: 'top top',
-    end: '+=300%',
-    scrub: 1.5,
+    end: '+=620%',
+    scrub: 1.6,
     onUpdate: (self) => applyProgress(self.progress),
   });
 }
@@ -117,16 +160,14 @@ function boot(): void {
   }, 90);
 
   initPreloader(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
+    if (!canvas || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     if (window.innerWidth < 768) {
-      const canvas = document.getElementById('hero-canvas') as HTMLCanvasElement | null;
-      if (canvas) {
-        void import('./hero-fallback-2d').then(({ mountHeroCanvas2DFallback }) => {
-          canvas.dataset.renderMode = 'canvas2d-mobile';
-          mountHeroCanvas2DFallback(canvas, 9);
-        });
-      }
+      void import('./hero-fallback-2d').then(({ mountHeroCanvas2DFallback }) => {
+        canvas.dataset.renderMode = 'canvas2d-mobile';
+        mountHeroCanvas2DFallback(canvas, 9);
+      });
       return;
     }
 

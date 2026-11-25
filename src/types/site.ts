@@ -35,6 +35,20 @@ export interface MarqueeLogoItem {
   logo: string;
 }
 
+export interface CatalogServiceItem {
+  slug: string;
+  name: string;
+  category:
+    | 'AI & Produktivitas'
+    | 'Kreasi & Desain'
+    | 'Hiburan & Musik'
+    | 'VPN & Keamanan'
+    | 'Buzzer Sosmed'
+    | 'Top Up Game';
+  logo: string;
+  href: string;
+}
+
 export interface ProductsData {
   storeBaseUrl: string;
   featuredProducts: FeaturedProduct[];
@@ -47,5 +61,6 @@ export interface ProductsData {
   };
   categories: CategoryItem[];
   marqueeLogos: MarqueeLogoItem[];
+  allServices: CatalogServiceItem[];
   reelTickerItems: string[];
 }

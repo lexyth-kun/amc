@@ -8,6 +8,7 @@ export default {
         'bg-alt': 'var(--bg-alt)',
         'bg-deep': 'var(--bg-deep)',
         'bg-space': 'var(--bg-space)',
+        'sky-light': 'var(--sky-light)',
         sky: 'var(--sky)',
         'sky-deep': 'var(--sky-deep)',
         'sky-ink': 'var(--sky-ink)',
@@ -32,8 +33,8 @@ export default {
         logo: '14px',
       },
       boxShadow: {
-        amc: '0 20px 60px rgba(26, 54, 255, 0.08)',
-        'amc-hover': '0 28px 72px rgba(26, 54, 255, 0.14)',
+        amc: '0 20px 55px rgba(2, 132, 199, 0.12), 0 8px 22px rgba(15, 23, 42, 0.05)',
+        'amc-hover': '0 26px 68px rgba(2, 132, 199, 0.2), 0 10px 24px rgba(15, 23, 42, 0.07)',
       },
       maxWidth: {
         amc: '1280px',

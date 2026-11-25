@@ -1,31 +1,50 @@
-export interface NewsletterValidationResult {
+export interface WhatsappOptInResult {
   status: 'empty' | 'invalid' | 'valid';
   message: string;
+  normalizedPhone?: string;
+  waConfirmUrl?: string;
 }
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const AMC_ADMIN_WA = '6285117120101';
 
-// TODO(v2): Connect newsletter form to official AMC mailing list endpoint once backend is provisioned.
-export function validateNewsletterEmail(rawEmail: string): NewsletterValidationResult {
-  const trimmed = rawEmail.trim();
+// TODO(v2): Connect phone/WhatsApp opt-in directly to automated AMC broadcast API when backend is enabled.
+export function validateWhatsappOptIn(rawPhone: string): WhatsappOptInResult {
+  const trimmed = rawPhone.trim();
   if (!trimmed) {
     return {
       status: 'empty',
-      message: 'Masukkan alamat email terlebih dahulu.',
+      message: 'Masukkan nomor telepon atau WhatsApp terlebih dahulu.',
     };
   }
 
-  if (!EMAIL_RE.test(trimmed)) {
+  if (/[^0-9+\-\s().]/.test(trimmed)) {
     return {
       status: 'invalid',
-      message: 'Format email belum sesuai, contoh: nama@email.com.',
+      message: 'Format nomor belum valid. Contoh: 081234567890 atau +6281234567890.',
     };
   }
 
+  let digits = trimmed.replace(/\D/g, '');
+  if (digits.startsWith('0')) {
+    digits = `62${digits.slice(1)}`;
+  }
+
+  if (digits.length < 9 || digits.length > 15) {
+    return {
+      status: 'invalid',
+      message: 'Format nomor belum valid. Contoh: 081234567890 atau +6281234567890.',
+    };
+  }
+
+  const text = encodeURIComponent(
+    `Halo Admin AMC, saya mau daftar info promo & stok baru untuk nomor WhatsApp ${digits}.`
+  );
   return {
     status: 'valid',
+    normalizedPhone: digits,
+    waConfirmUrl: `https://wa.me/${AMC_ADMIN_WA}?text=${text}`,
     message:
-      'Email dicatat di perangkat ini (server buletin email segera aktif). Untuk info promo tercepat hari ini, cek @almuthi_creative atau chat Admin WA.',
+      'Nomor tercatat di perangkat ini. Klik tombol konfirmasi WhatsApp di bawah agar admin mengaktifkan info promo & stok terbaru.',
   };
 }
 

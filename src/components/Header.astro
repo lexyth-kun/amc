@@ -1,5 +1,13 @@
 ---
 import content from '@/data/content.json';
+
+interface Props {
+  currentPath?: string;
+}
+
+const { currentPath = '/' } = Astro.props;
+const norm = (p: string) => p.replace(/\/+$/, '') || '/';
+const active = norm(currentPath);
 ---
 
 <header
@@ -8,7 +16,7 @@ import content from '@/data/content.json';
 >
   <div
     id="header-backdrop"
-    class="pointer-events-none absolute inset-0 border-b border-line bg-white/85 opacity-0 shadow-[0_12px_32px_rgba(11,27,77,0.06)] backdrop-blur-md transition-opacity duration-300"
+    class="pointer-events-none absolute inset-0 border-b border-line bg-white/95 opacity-0 shadow-[0_12px_32px_rgba(2,132,199,0.08)] backdrop-blur-md transition-opacity duration-300"
     aria-hidden="true"
   ></div>
 
@@ -17,8 +25,8 @@ import content from '@/data/content.json';
     class="relative mx-auto flex h-full max-w-amc items-center justify-between gap-4 px-4 transition-transform duration-300 sm:px-6"
   >
     <a
-      href="#hero"
-      data-scroll-to="#hero"
+      href="/"
+      data-page-link
       class="group inline-flex min-h-[44px] items-center gap-3 text-navy no-underline"
       aria-label="Al Muthi Creative Beranda"
     >
@@ -36,24 +44,32 @@ import content from '@/data/content.json';
         />
       </span>
       <span class="font-display text-sm font-extrabold tracking-[-0.02em] text-navy sm:text-base">
-        AL MUTHI <span class="text-amc">CREATIVE</span>
+        AL MUTHI <span class="text-sky-ink">CREATIVE</span>
       </span>
     </a>
 
     <nav aria-label="Navigasi utama" class="hidden lg:block">
-      <ul class="flex items-center gap-8 list-none m-0 p-0">
+      <ul class="flex items-center gap-7 list-none m-0 p-0">
         {
-          content.header.navLinks.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                data-scroll-to={item.href}
-                class="inline-flex min-h-[44px] items-center font-display text-sm font-bold text-body no-underline transition-colors hover:text-amc"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))
+          content.header.navLinks.map((item) => {
+            const isCurrent = norm(item.href) === active;
+            return (
+              <li>
+                <a
+                  href={item.href}
+                  data-page-link
+                  aria-current={isCurrent ? 'page' : undefined}
+                  class={`relative inline-flex min-h-[44px] items-center font-display text-sm no-underline transition-colors ${
+                    isCurrent
+                      ? 'font-extrabold text-sky-ink after:absolute after:inset-x-0 after:bottom-2 after:h-[2.5px] after:rounded-full after:bg-sky'
+                      : 'font-bold text-body hover:text-sky-ink'
+                  }`}
+                >
+                  {item.label}
+                </a>
+              </li>
+            );
+          })
         }
       </ul>
     </nav>
@@ -80,7 +96,7 @@ import content from '@/data/content.json';
       >
         <span class="flex flex-col gap-1" aria-hidden="true">
           <span class="block h-[2px] w-3.5 rounded-full bg-navy"></span>
-          <span class="block h-[2px] w-2.5 rounded-full bg-amc"></span>
+          <span class="block h-[2px] w-2.5 rounded-full bg-sky-deep"></span>
         </span>
         <span>{content.header.menuButtonLabel}</span>
       </button>

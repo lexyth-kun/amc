@@ -1,0 +1,20 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FlashSaleSection from '@/components/FlashSaleSection.astro';
+import BenefitsSection from '@/components/BenefitsSection.astro';
+import FooterSection from '@/components/FooterSection.astro';
+---
+
+<BaseLayout
+  title="Flash Sale 11.11 – Al Muthi Creative"
+  description="Promo harga spesial stok terbatas Flash Sale 11.11 Al Muthi Creative untuk Adobe CC, CapCut Pro, Canva Pro, YouTube Premium, Gemini AI Pro, dan Spotify."
+  currentPath="/flash-sale/"
+  showPreloader={false}
+>
+  <div class="bg-[#082F49] pt-20 md:pt-24">
+    <h1 class="sr-only">Promo Flash Sale 11.11 Al Muthi Creative</h1>
+    <FlashSaleSection />
+  </div>
+  <BenefitsSection />
+  <FooterSection />
+</BaseLayout>

@@ -11,20 +11,20 @@
     "menuButtonLabel": "MENU",
     "closeButtonLabel": "TUTUP",
     "navLinks": [
-      { "label": "Produk", "href": "#produk" },
-      { "label": "Kategori", "href": "#kategori" },
-      { "label": "Flash Sale", "href": "#flash-sale" },
-      { "label": "Cara Order", "href": "#cara-order" },
-      { "label": "FAQ", "href": "#faq" }
+      { "label": "Produk", "href": "/produk/" },
+      { "label": "Kategori", "href": "/kategori/" },
+      { "label": "Flash Sale", "href": "/flash-sale/" },
+      { "label": "Cara Order", "href": "/cara-order/" },
+      { "label": "FAQ", "href": "/faq/" }
     ],
     "overlayLinks": [
-      { "num": "01", "label": "BERANDA", "href": "#hero" },
-      { "num": "02", "label": "PRODUK", "href": "#produk" },
-      { "num": "03", "label": "KATEGORI", "href": "#kategori" },
-      { "num": "04", "label": "FLASH SALE", "href": "#flash-sale" },
-      { "num": "05", "label": "CARA ORDER", "href": "#cara-order" },
-      { "num": "06", "label": "FAQ", "href": "#faq" },
-      { "num": "07", "label": "KONTAK", "href": "#kontak" }
+      { "num": "01", "label": "BERANDA", "href": "/" },
+      { "num": "02", "label": "PRODUK", "href": "/produk/" },
+      { "num": "03", "label": "KATEGORI", "href": "/kategori/" },
+      { "num": "04", "label": "FLASH SALE", "href": "/flash-sale/" },
+      { "num": "05", "label": "CARA ORDER", "href": "/cara-order/" },
+      { "num": "06", "label": "FAQ", "href": "/faq/" },
+      { "num": "07", "label": "KONTAK", "href": "/kontak/" }
     ]
   },
   "hero": {
@@ -87,7 +87,7 @@
     "headline": "Featured Products",
     "description": "Pilihan produk paling laris minggu ini, harga live, stok terbatas.",
     "allProductsLabel": "Lihat semua produk →",
-    "allProductsHref": "https://order.amc.web.id",
+    "allProductsHref": "/produk/",
     "cardCtaLabel": "Beli →"
   },
   "categoriesSection": {
@@ -98,11 +98,13 @@
   "cinematic": {
     "phase1Eyebrow": "EKSPLORASI TANPA BATAS",
     "phase1Headline": "Masuk ke dunia baru.",
-    "phase2Caption": "Puluhan aplikasi kreatif, AI, hiburan, dan game dalam satu ekosistem.",
+    "phase2Caption": "Scroll perlahan untuk menjelajahi seluruh 41 layanan aplikasi, AI, hiburan, VPN, buzzer, dan top up game di AMC.",
     "phase4Headline": "Dan biarkan imajinasimu jalan terus.",
-    "phase4Sub": "Langsung aktif dalam hitungan menit dengan perlindungan garansi penuh AMC.",
+    "phase4Sub": "Seluruh 41 layanan siap aktif dalam hitungan menit dengan perlindungan garansi penuh AMC.",
     "ctaLabel": "Order Sekarang →",
-    "ctaHref": "https://order.amc.web.id"
+    "ctaHref": "https://order.amc.web.id",
+    "catalogCtaLabel": "Jelajahi Halaman Produk →",
+    "catalogCtaHref": "/produk/"
   },
   "howToOrder": {
     "eyebrow": "ALUR PEMESANAN",
@@ -150,7 +152,7 @@
     "counters": [
       { "target": 1300, "suffix": "+", "decimals": 0, "label": "Order selesai" },
       { "target": 4.8, "suffix": "/5", "decimals": 1, "label": "Rating toko (1.266 ulasan)" },
-      { "target": 37, "suffix": "+", "decimals": 0, "label": "Produk digital aktif" },
+      { "target": 41, "suffix": "+", "decimals": 0, "label": "Layanan & produk aktif" },
       { "target": 24, "suffix": " Jam", "decimals": 0, "label": "Admin & CS siaga" }
     ],
     "cards": [
@@ -173,33 +175,28 @@
     ]
   },
   "testimonials": {
-    "eyebrow": "ULASAN PEMBELI",
+    "eyebrow": "ULASAN PEMBELI ASLI",
     "headline": "Rating 4.8/5 dari 1.266 ulasan terverifikasi.",
-    "subnote": "Slot kutipan di bawah memakai penanda jujur sambil menunggu 3 teks ulasan pilihan dari pemilik toko.",
-    "items": [
+    "subnote": "Seluruh ulasan pelanggan ditulis langsung oleh pembeli aktif di halaman ulasan resmi Web Shop Al Muthi Creative tanpa rekayasa.",
+    "ratingValue": "4.8/5",
+    "reviewCountLabel": "1.266 ulasan terverifikasi",
+    "ordersCountLabel": "1.300+ order selesai",
+    "reviewsUrl": "https://order.amc.web.id/#ulasan",
+    "reviewsCtaLabel": "Lihat Semua Ulasan Pembeli →",
+    "secondaryCtaLabel": "Buka Web Shop AMC",
+    "secondaryCtaHref": "https://order.amc.web.id",
+    "highlights": [
       {
-        "id": "review-1",
-        "isPlaceholder": true,
-        "author": "[MENUNGGU INISIAL PEMBELI #1]",
-        "product": "ChatGPT Plus / Claude Pro",
-        "rating": 5,
-        "quote": "[MENUNGGU ULASAN ASLI PELANGGAN #1: kutipan ulasan asli dari order.amc.web.id akan ditampilkan di sini tanpa rekayasa teks]"
+        "title": "Ulasan Live di Web Shop",
+        "desc": "Setiap testimoni terhubung langsung ke layanan dan paket yang dibeli di order.amc.web.id/#ulasan."
       },
       {
-        "id": "review-2",
-        "isPlaceholder": true,
-        "author": "[MENUNGGU INISIAL PEMBELI #2]",
-        "product": "Adobe Creative Cloud / Canva Pro",
-        "rating": 5,
-        "quote": "[MENUNGGU ULASAN ASLI PELANGGAN #2: kutipan ulasan asli dari order.amc.web.id akan ditampilkan di sini tanpa rekayasa teks]"
+        "title": "Transparan per Kategori",
+        "desc": "Cek pengalaman pembeli untuk ChatGPT, Claude, Adobe CC, Canva, Netflix, Buzzer Sosmed, dan Top Up Game."
       },
       {
-        "id": "review-3",
-        "isPlaceholder": true,
-        "author": "[MENUNGGU INISIAL PEMBELI #3]",
-        "product": "Netflix Premium / Top Up Game",
-        "rating": 5,
-        "quote": "[MENUNGGU ULASAN ASLI PELANGGAN #3: kutipan ulasan asli dari order.amc.web.id akan ditampilkan di sini tanpa rekayasa teks]"
+        "title": "Tulis Ulasan Setelah Order",
+        "desc": "Pembeli yang masuk dengan akun Web Shop dapat langsung mengirim rating dan ulasan asli kapan saja."
       }
     ]
   },
@@ -218,7 +215,7 @@
       },
       {
         "q": "Apakah layanan Buzzer Sosial Media membutuhkan password akun saya?",
-        "a": "Sama sekali tidak. Layanan Buzzer Instagram, TikTok, Facebook, dan YouTube hanya membutuhkan username atau link postingan publik sehingga privasi akunmu tetap aman."
+        "a": "Sama sekali tidak. Layanan Buzzer Instagram, TikTok, Facebook, Telegram, dan Shopee hanya membutuhkan username atau link postingan publik sehingga privasi akunmu tetap aman."
       },
       {
         "q": "Berapa lama proses masuknya Top Up Game setelah pembayaran selesai?",
@@ -279,10 +276,10 @@
   },
   "footer": {
     "tagline": "Proses cepat, bergaransi. Al Muthi Creative.",
-    "newsletterLabel": "Info Promo & Stok Baru (Segera Hadir)",
-    "newsletterPlaceholder": "nama@email.com",
-    "newsletterButton": "Subscribe",
-    "newsletterSuccess": "Email dicatat di perangkat ini (server buletin email segera aktif). Untuk update promo langsung hari ini, ikuti @almuthi_creative atau hubungi WA Admin.",
+    "newsletterLabel": "Info Promo & Stok Baru (No. Telepon / WhatsApp)",
+    "newsletterPlaceholder": "0812-3456-7890 atau +62812...",
+    "newsletterButton": "Daftar Info WA",
+    "newsletterSuccess": "Nomor tercatat di perangkat ini. Klik tombol konfirmasi di bawah untuk langsung mengaktifkan info promo & stok baru via WhatsApp Admin AMC.",
     "copyright": "© 2026 Al Muthi Creative",
     "madeIn": "Dibuat dengan ♥ di Indonesia",
     "contacts": {

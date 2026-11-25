@@ -4,18 +4,19 @@
 
 :root {
   --bg: #FFFFFF;
-  --bg-alt: #F4F8FF;
-  --bg-deep: #EAF3FF;
-  --bg-space: #061A3A;
+  --bg-alt: #F0F9FF;
+  --bg-deep: #E0F2FE;
+  --bg-space: #082F49;
+  --sky-light: #7DD3FC;
   --sky: #38BDF8;
   --sky-deep: #0EA5E9;
   --sky-ink: #0369A1;
-  --amc: #1A36FF;
-  --amc-2: #233DFF;
-  --navy: #0B1B4D;
-  --ink: #0B1220;
+  --amc: #0284C7;
+  --amc-2: #0369A1;
+  --navy: #0C4A6E;
+  --ink: #0F172A;
   --body: #475569;
-  --line: #DBEAFE;
+  --line: #BAE6FD;
   --sale: #FF5A5A;
   --sale-ink: #D92D20;
   --wa: #25D366;
@@ -88,7 +89,7 @@
   }
 
   .dark-surface :focus-visible {
-    outline-color: var(--sky);
+    outline-color: var(--sky-light);
   }
 }
 
@@ -97,7 +98,7 @@
 }
 
 .amc-text-gradient {
-  background: linear-gradient(135deg, var(--amc) 0%, var(--amc-2) 55%, var(--sky-deep) 100%);
+  background: linear-gradient(135deg, #0369A1 0%, #0284C7 55%, #0790D0 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -113,21 +114,21 @@
     padding: 0.85rem 1.75rem;
     border-radius: 9999px;
     font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
-    font-weight: 700;
+    font-weight: 800;
     font-size: 0.95rem;
     line-height: 1.2;
     white-space: nowrap;
-    color: #FFFFFF;
-    background: linear-gradient(135deg, var(--amc) 0%, var(--amc-2) 100%);
-    box-shadow: 0 14px 34px rgba(26, 54, 255, 0.22);
-    transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo), filter 0.25s ease;
+    color: #082F49;
+    background: linear-gradient(135deg, #7DD3FC 0%, #38BDF8 100%);
+    box-shadow: 0 14px 34px rgba(2, 132, 199, 0.24);
+    transition: transform 0.35s var(--ease-out-expo), box-shadow 0.35s var(--ease-out-expo), background 0.25s ease;
     text-decoration: none;
   }
 
   .amc-btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 20px 44px rgba(26, 54, 255, 0.32);
-    filter: brightness(1.05);
+    background: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 100%);
+    box-shadow: 0 20px 44px rgba(2, 132, 199, 0.34);
   }
 
   .amc-btn-primary:active {
@@ -265,7 +266,7 @@
   width: 36px;
   height: 36px;
   margin: -18px 0 0 -18px;
-  border: 1.5px solid rgba(26, 54, 255, 0.45);
+  border: 1.5px solid rgba(2, 132, 199, 0.48);
 }
 
 @media (hover: none), (pointer: coarse) {

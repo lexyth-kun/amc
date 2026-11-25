@@ -15,7 +15,7 @@ import FinalCtaSection from '@/components/FinalCtaSection.astro';
 import FooterSection from '@/components/FooterSection.astro';
 ---
 
-<BaseLayout>
+<BaseLayout currentPath="/" showPreloader={true}>
   <HeroSection />
   <IntroSection />
   <ShowreelSection />
@@ -29,5 +29,4 @@ import FooterSection from '@/components/FooterSection.astro';
   <FaqSection />
   <FinalCtaSection />
   <FooterSection />
-  <script src="../scripts/main.ts"></script>
 </BaseLayout>

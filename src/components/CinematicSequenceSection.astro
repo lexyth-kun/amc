@@ -1,12 +1,27 @@
 ---
 import content from '@/data/content.json';
+import products from '@/data/products.json';
+
+const categoryOrder = [
+  'AI & Produktivitas',
+  'Kreasi & Desain',
+  'Hiburan & Musik',
+  'VPN & Keamanan',
+  'Buzzer Sosmed',
+  'Top Up Game',
+] as const;
+
+const serviceGroups = categoryOrder.map((cat) => ({
+  label: cat,
+  items: products.allServices.filter((s) => s.category === cat),
+}));
 ---
 
 <section
   id="dunia-baru"
-  data-bg-color="#061A3A"
+  data-bg-color="#082F49"
   class="relative bg-bg-space"
-  aria-label="Sekuens cerita interaktif Al Muthi Creative"
+  aria-label="Sekuens cerita interaktif seluruh layanan Al Muthi Creative"
 >
   <div
     id="cinematic-pin-stage"
@@ -18,12 +33,12 @@ import content from '@/data/content.json';
       aria-hidden="true"
     ></canvas>
 
-    <!-- Phase 1 Copy (0% - 25%): Dark Space + Glowing Orb -->
+    <!-- Phase 1 Copy (0% - 16%): Deep Sky-Night + Glowing Sky Orb -->
     <div
       id="cinematic-phase1"
-      class="dark-surface pointer-events-none relative z-10 mx-auto max-w-4xl rounded-3xl bg-[radial-gradient(ellipse_at_center,rgba(6,26,58,0.78)_0%,rgba(6,26,58,0)_75%)] px-6 py-8 text-center"
+      class="dark-surface pointer-events-none relative z-10 mx-auto max-w-4xl rounded-3xl bg-[radial-gradient(ellipse_at_center,rgba(8,47,73,0.82)_0%,rgba(8,47,73,0)_76%)] px-6 py-8 text-center"
     >
-      <p class="font-display text-xs font-extrabold uppercase tracking-[0.24em] text-sky">
+      <p class="font-display text-xs font-extrabold uppercase tracking-[0.24em] text-sky-light">
         {content.cinematic.phase1Eyebrow}
       </p>
       <h2
@@ -40,18 +55,92 @@ import content from '@/data/content.json';
       </h2>
     </div>
 
-    <!-- Phase 2 Caption (25% - 55%): Sky-Blue Product Tunnel -->
+    <!-- Phase 2 Extended All-Services Showcase (16% - 78%): All 41 Official AMC Services -->
     <div
       id="cinematic-phase2"
-      style="opacity: 0;"
-      class="pointer-events-none absolute bottom-10 inset-x-0 z-10 flex justify-center px-4"
+      style="opacity: 0; pointer-events: none;"
+      class="dark-surface absolute inset-x-0 z-10 flex flex-col items-center justify-center px-4 pt-16 pb-8 sm:px-6"
     >
-      <div class="rounded-full border border-sky/40 bg-[#061A3A]/90 px-5 py-2.5 text-center text-xs font-bold tracking-[0.04em] text-white sm:text-sm">
-        {content.cinematic.phase2Caption}
+      <div class="w-full max-w-5xl rounded-card border border-[#38BDF8]/40 bg-[#082F49]/90 p-5 shadow-[0_24px_70px_rgba(0,0,0,0.45)] backdrop-blur-md sm:p-7">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-[#38BDF8]/25 pb-4">
+          <div>
+            <p class="m-0 font-display text-[11px] font-extrabold uppercase tracking-[0.22em] text-sky-light">
+              SELURUH LAYANAN APLIKASI AMC ({products.allServices.length} LAYANAN)
+            </p>
+            <p
+              id="cinematic-active-category"
+              class="m-0 mt-1 font-display text-lg font-extrabold text-white sm:text-2xl"
+            >
+              1/{serviceGroups.length} • {serviceGroups[0]?.label}
+            </p>
+          </div>
+
+          <div class="flex items-center gap-1.5" aria-hidden="true">
+            {
+              serviceGroups.map((_, idx) => (
+                <span
+                  data-tunnel-dot={idx}
+                  class={`h-2 rounded-full transition-all duration-300 ${
+                    idx === 0 ? 'w-8 bg-sky-light' : 'w-2.5 bg-white/30'
+                  }`}
+                ></span>
+              ))
+            }
+          </div>
+        </div>
+
+        <div class="mt-4 min-h-[220px] sm:min-h-[250px]">
+          {
+            serviceGroups.map((group, gIdx) => (
+              <div
+                data-tunnel-group={gIdx}
+                data-tunnel-group-label={group.label}
+                hidden={gIdx !== 0}
+                class="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+              >
+                {group.items.map((service) => (
+                  <a
+                    href={service.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group flex items-center gap-2.5 rounded-2xl border border-[#38BDF8]/30 bg-white/10 p-2.5 text-white no-underline transition-all duration-200 hover:border-sky-light hover:bg-white/20"
+                  >
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-[#BAE6FD] bg-white shadow-sm">
+                      <img
+                        src={service.logo}
+                        alt={`Logo ${service.name}`}
+                        width="40"
+                        height="40"
+                        loading="lazy"
+                        decoding="async"
+                        class="h-full w-full object-contain"
+                      />
+                    </span>
+                    <span class="min-w-0 truncate font-display text-xs font-bold text-white sm:text-[13px]">
+                      {service.name}
+                    </span>
+                  </a>
+                ))}
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="mt-4 flex flex-col gap-2 border-t border-[#38BDF8]/25 pt-3.5 sm:flex-row sm:items-center sm:justify-between">
+          <p class="m-0 text-xs font-medium text-sky-light">
+            {content.cinematic.phase2Caption}
+          </p>
+          <div class="h-1.5 w-full overflow-hidden rounded-full bg-white/15 sm:w-44" aria-hidden="true">
+            <div
+              id="cinematic-showcase-bar"
+              class="h-full w-full origin-left scale-x-[0.04] rounded-full bg-gradient-to-r from-sky-light to-sky"
+            ></div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- Phase 3 -> 4 Reverse Black-Hole Whiteout & Final Reveal (80% - 100%) -->
+    <!-- Phase 3 -> 4 Reverse Black-Hole Whiteout & Final Reveal (90% - 100%) -->
     <div
       id="cinematic-whiteout"
       style="opacity: 0; pointer-events: none;"
@@ -65,7 +154,7 @@ import content from '@/data/content.json';
         <p class="mx-auto mt-5 max-w-xl text-base leading-relaxed text-body sm:text-lg">
           {content.cinematic.phase4Sub}
         </p>
-        <div class="mt-8 flex justify-center">
+        <div class="mt-8 flex flex-wrap items-center justify-center gap-3.5">
           <a
             href={content.cinematic.ctaHref}
             target="_blank"
@@ -74,6 +163,14 @@ import content from '@/data/content.json';
             class="amc-btn-primary"
           >
             {content.cinematic.ctaLabel}
+          </a>
+          <a
+            href={content.cinematic.catalogCtaHref}
+            data-page-link
+            data-magnetic
+            class="amc-btn-ghost"
+          >
+            {content.cinematic.catalogCtaLabel}
           </a>
         </div>
       </div>

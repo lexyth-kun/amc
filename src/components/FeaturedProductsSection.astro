@@ -32,9 +32,8 @@ import BlueLine from './BlueLine.astro';
         </p>
         <a
           href={content.featuredSection.allProductsHref}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex min-h-[44px] items-center font-display text-sm font-extrabold text-amc no-underline transition-transform duration-300 hover:translate-x-1"
+          data-page-link
+          class="inline-flex min-h-[44px] items-center font-display text-sm font-extrabold text-sky-ink no-underline transition-transform duration-300 hover:translate-x-1"
         >
           {content.featuredSection.allProductsLabel}
         </a>
@@ -55,7 +54,6 @@ import BlueLine from './BlueLine.astro';
               class="group relative flex flex-col justify-between rounded-card border border-line bg-white p-6 text-ink no-underline shadow-sm transition-[box-shadow,border-color] duration-300 hover:border-sky-deep hover:shadow-amc-hover"
               style="transform-style: preserve-3d; will-change: transform;"
             >
-              <!-- Visual Showcase Top Panel -->
               <div>
                 <div class="relative mb-6 flex h-40 items-center justify-center overflow-hidden rounded-panel border border-line/80 bg-gradient-to-br from-bg-alt via-white to-bg-deep">
                   {product.badge && (
@@ -63,14 +61,14 @@ import BlueLine from './BlueLine.astro';
                       class={`absolute left-3.5 top-3.5 z-10 inline-flex items-center rounded-lg px-2.5 py-1 font-display text-[11px] font-extrabold tracking-[0.08em] ${
                         product.badge === 'PALING LARIS'
                           ? 'bg-sale-ink text-white'
-                          : 'bg-amc text-white'
+                          : 'bg-sky text-[#082F49]'
                       }`}
                     >
                       {product.badge}
                     </span>
                   )}
 
-                  <span class="absolute right-3.5 top-3.5 rounded-lg border border-line bg-white/90 px-2.5 py-1 font-display text-xs font-bold text-navy">
+                  <span class="absolute right-3.5 top-3.5 rounded-lg border border-line bg-white/95 px-2.5 py-1 font-display text-xs font-bold text-navy">
                     {product.duration}
                   </span>
 
@@ -85,7 +83,7 @@ import BlueLine from './BlueLine.astro';
                       height="80"
                       loading="lazy"
                       decoding="async"
-                      class="h-full w-full object-cover"
+                      class="h-full w-full object-contain"
                     />
                   </div>
                 </div>
@@ -98,18 +96,17 @@ import BlueLine from './BlueLine.astro';
                 </p>
               </div>
 
-              <!-- Price + Illuminated CTA Footer -->
               <div class="mt-6 flex items-center justify-between border-t border-line pt-4">
                 <div>
                   <span class="block text-[11px] font-bold uppercase tracking-[0.12em] text-body">
                     Harga {product.duration}
                   </span>
-                  <span class="tabular-nums font-display text-2xl font-extrabold tracking-[-0.02em] text-navy transition-colors duration-300 group-hover:text-amc">
+                  <span class="tabular-nums font-display text-2xl font-extrabold tracking-[-0.02em] text-navy transition-colors duration-300 group-hover:text-sky-ink">
                     {formatRupiah(product.price)}
                   </span>
                 </div>
 
-                <span class="inline-flex min-h-[44px] items-center justify-center rounded-full border border-line bg-bg-alt px-4 py-2 font-display text-sm font-extrabold text-navy transition-all duration-300 group-hover:border-transparent group-hover:bg-gradient-to-r group-hover:from-amc group-hover:to-amc-2 group-hover:text-white group-hover:shadow-[0_10px_24px_rgba(26,54,255,0.28)]">
+                <span class="inline-flex min-h-[44px] items-center justify-center rounded-full border border-line bg-bg-alt px-4 py-2 font-display text-sm font-extrabold text-navy transition-all duration-300 group-hover:border-transparent group-hover:bg-gradient-to-r group-hover:from-sky-light group-hover:to-sky group-hover:text-[#082F49] group-hover:shadow-[0_10px_24px_rgba(2,132,199,0.28)]">
                   {content.featuredSection.cardCtaLabel}
                 </span>
               </div>

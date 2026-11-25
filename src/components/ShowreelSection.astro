@@ -5,7 +5,7 @@ import products from '@/data/products.json';
 
 <section
   id="reel"
-  data-bg-color="#F4F8FF"
+  data-bg-color="#F0F9FF"
   class="bg-bg-alt pb-16 md:pb-28"
   aria-labelledby="reel-heading"
 >
@@ -15,7 +15,6 @@ import products from '@/data/products.json';
       data-fade-up
       class="group relative overflow-hidden rounded-card border border-line bg-gradient-to-br from-bg-deep via-white to-bg-alt p-6 shadow-amc sm:p-10 md:p-16"
     >
-      <!-- Abstract Mesh & Floating Plus Visual Thumbnail -->
       <div
         class="pointer-events-none absolute inset-0 transition-transform duration-500 ease-out group-hover:scale-[1.03]"
         aria-hidden="true"
@@ -24,7 +23,7 @@ import products from '@/data/products.json';
           class="absolute -left-20 -top-20 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(56,189,248,0.28)_0%,rgba(56,189,248,0)_70%)]"
         ></div>
         <div
-          class="absolute -bottom-24 -right-16 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(26,54,255,0.18)_0%,rgba(26,54,255,0)_72%)]"
+          class="absolute -bottom-24 -right-16 h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(2,132,199,0.18)_0%,rgba(2,132,199,0)_72%)]"
         ></div>
 
         <svg
@@ -39,7 +38,7 @@ import products from '@/data/products.json';
         <svg
           class="absolute -bottom-4 -left-4 h-20 w-20 rotate-12 opacity-60 sm:bottom-8 sm:left-10 sm:h-24 sm:w-24"
           viewBox="0 0 120 120"
-          fill="#DBEAFE"
+          fill="#E0F2FE"
         >
           <rect x="44" y="12" width="32" height="96" rx="12"></rect>
           <rect x="12" y="44" width="96" height="32" rx="12"></rect>
@@ -60,9 +59,9 @@ import products from '@/data/products.json';
           id="open-reel-btn"
           aria-haspopup="dialog"
           aria-controls="showreel-modal"
-          class="mt-8 inline-flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-full border border-line bg-white font-display text-xs font-extrabold tracking-[0.16em] text-navy shadow-[0_20px_50px_rgba(26,54,255,0.18)] transition-transform duration-300 group-hover:scale-110 hover:!scale-110 sm:h-28 sm:w-28"
+          class="mt-8 inline-flex h-24 w-24 flex-col items-center justify-center gap-1 rounded-full border border-line bg-white font-display text-xs font-extrabold tracking-[0.16em] text-navy shadow-[0_20px_50px_rgba(2,132,199,0.2)] transition-transform duration-300 group-hover:scale-110 hover:!scale-110 sm:h-28 sm:w-28"
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="ml-0.5 text-amc" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="ml-0.5 text-sky-ink" aria-hidden="true">
             <path d="M8 5v14l11-7z"></path>
           </svg>
           <span>{content.showreel.playButtonLabel}</span>
@@ -119,7 +118,7 @@ import products from '@/data/products.json';
     aria-modal="true"
     aria-labelledby="showreel-modal-title"
     hidden
-    class="fixed inset-0 z-[9992] flex items-center justify-center bg-navy/70 p-4"
+    class="fixed inset-0 z-[9992] flex items-center justify-center bg-[#082F49]/70 p-4"
   >
     <div class="relative w-full max-w-2xl rounded-card border border-line bg-white p-6 shadow-2xl sm:p-8">
       <div class="flex items-center justify-between gap-4 border-b border-line pb-4">
@@ -165,7 +164,7 @@ import products from '@/data/products.json';
               aria-selected={idx === 0 ? 'true' : 'false'}
               class={`min-h-[44px] rounded-xl border px-2 py-2 font-display text-xs font-extrabold transition-colors ${
                 idx === 0
-                  ? 'border-amc bg-amc text-white'
+                  ? 'border-amc-2 bg-amc-2 text-white'
                   : 'border-line bg-bg-alt text-navy hover:border-sky-deep'
               }`}
             >

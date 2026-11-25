@@ -1,17 +1,13 @@
 import * as THREE from 'three';
+import products from '@/data/products.json';
 import { computeTunnelPhaseState, type TunnelPhaseState } from '@/utils/tunnel-phases';
 import { getAdaptiveObjectBudget } from '@/utils/webgl-support';
 import { createCinematicCanvas2DRenderer } from './cinematic-fallback-2d';
 
-const TUNNEL_LOGOS = [
-  { name: 'ChatGPT', src: '/logo-chatgpt.webp' },
-  { name: 'Claude', src: '/logo-claude.svg' },
-  { name: 'Adobe', src: '/logo-adobe.webp' },
-  { name: 'Canva', src: '/logo-canva.webp' },
-  { name: 'Netflix', src: '/logo-netflix.webp' },
-  { name: 'Spotify', src: '/logo-spotify.webp' },
-  { name: 'MLBB', src: '/logo-mlbb.webp' },
-];
+const TUNNEL_LOGOS = products.allServices.map((s) => ({
+  name: s.name,
+  src: s.logo,
+}));
 
 export function mountCinematicVisualRenderer(): (progress: number) => void {
   const canvas = document.getElementById('cinematic-canvas') as HTMLCanvasElement | null;
@@ -33,18 +29,18 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
     });
     canvas.dataset.renderMode = 'webgl';
     renderer.setPixelRatio(budget.isCompactDevice ? 1 : budget.maxDpr);
-    renderer.setClearColor(0x061a3a, 1);
+    renderer.setClearColor(0x082f49, 1);
 
     const scene = new THREE.Scene();
-    scene.fog = new THREE.FogExp2(0x061a3a, 0.026);
+    scene.fog = new THREE.FogExp2(0x082f49, 0.022);
 
-    const camera = new THREE.PerspectiveCamera(56, 1, 0.1, 110);
-    camera.position.set(0, 0, 14);
+    const camera = new THREE.PerspectiveCamera(56, 1, 0.1, 130);
+    camera.position.set(0, 0, 16);
 
-    const ambient = new THREE.AmbientLight(0x7dd3fc, 1.4);
+    const ambient = new THREE.AmbientLight(0x7dd3fc, 1.5);
     scene.add(ambient);
 
-    const coreLight = new THREE.PointLight(0x38bdf8, 12, 48);
+    const coreLight = new THREE.PointLight(0x38bdf8, 12, 54);
     coreLight.position.set(0, 0, 4);
     scene.add(coreLight);
 
@@ -53,32 +49,32 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
     const orbCoreMat = new THREE.MeshStandardMaterial({
       color: 0xffffff,
       emissive: 0x38bdf8,
-      emissiveIntensity: 1.4,
+      emissiveIntensity: 1.45,
       roughness: 0.1,
     });
     orbGroup.add(new THREE.Mesh(orbCoreGeom, orbCoreMat));
 
     const orbAuraGeom = new THREE.SphereGeometry(1.42, 20, 20);
     const orbAuraMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
+      color: 0x7dd3fc,
       transparent: true,
-      opacity: 0.28,
+      opacity: 0.3,
     });
     orbGroup.add(new THREE.Mesh(orbAuraGeom, orbAuraMat));
     scene.add(orbGroup);
 
     const tunnelGroup = new THREE.Group();
-    const ringGeom = new THREE.TorusGeometry(4.2, 0.032, 8, 44);
+    const ringGeom = new THREE.TorusGeometry(4.4, 0.032, 8, 44);
     const ringMeshes: THREE.Mesh[] = [];
-    for (let i = 0; i < 22; i++) {
+    for (let i = 0; i < 34; i++) {
       const ringMat = new THREE.MeshBasicMaterial({
-        color: i % 3 === 0 ? 0xffffff : i % 2 === 0 ? 0x38bdf8 : 0x1a36ff,
+        color: i % 3 === 0 ? 0xffffff : i % 2 === 0 ? 0x7dd3fc : 0x38bdf8,
         transparent: true,
         opacity: 0.12,
       });
       const ring = new THREE.Mesh(ringGeom, ringMat);
-      ring.position.z = 6 - i * 2.4;
-      ring.rotation.z = i * 0.22;
+      ring.position.z = 8 - i * 2.7;
+      ring.rotation.z = i * 0.2;
       tunnelGroup.add(ring);
       ringMeshes.push(ring);
     }
@@ -87,10 +83,10 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
     const starPositions = new Float32Array(budget.tunnelParticleCount * 3);
     for (let i = 0; i < budget.tunnelParticleCount; i++) {
       const angle = (i * 2.39996) % (Math.PI * 2);
-      const radius = 2.4 + ((i * 7) % 10) * 1.1;
+      const radius = 2.6 + ((i * 7) % 10) * 1.1;
       starPositions[i * 3] = Math.cos(angle) * radius;
       starPositions[i * 3 + 1] = Math.sin(angle) * radius;
-      starPositions[i * 3 + 2] = 12 - (i / budget.tunnelParticleCount) * 62;
+      starPositions[i * 3 + 2] = 14 - (i / budget.tunnelParticleCount) * 96;
     }
     const starGeom = new THREE.BufferGeometry();
     starGeom.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
@@ -105,7 +101,11 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
     let lastRenderedState: TunnelPhaseState = computeTunnelPhaseState(0);
 
     const logoSprites: THREE.Sprite[] = [];
-    TUNNEL_LOGOS.forEach((item, idx) => {
+    const activeLogoList = budget.isCompactDevice
+      ? TUNNEL_LOGOS.filter((_, idx) => idx % 2 === 0)
+      : TUNNEL_LOGOS;
+
+    activeLogoList.forEach((item, idx) => {
       const iconCanvas = document.createElement('canvas');
       iconCanvas.width = 128;
       iconCanvas.height = 128;
@@ -127,7 +127,7 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
         ictx.drawImage(img, 8, 8, 112, 112);
         ictx.restore();
 
-        ictx.strokeStyle = 'rgba(56, 189, 248, 0.85)';
+        ictx.strokeStyle = 'rgba(125, 211, 252, 0.9)';
         ictx.lineWidth = 4;
         ictx.beginPath();
         ictx.roundRect(8, 8, 112, 112, 26);
@@ -139,10 +139,15 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
 
       const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0 });
       const sprite = new THREE.Sprite(mat);
-      const theta = (idx / TUNNEL_LOGOS.length) * Math.PI * 2 + 0.4;
-      const r = budget.isCompactDevice ? 2.15 : 2.95;
-      sprite.position.set(Math.cos(theta) * r, Math.sin(theta) * r, -9 - idx * 3.8);
-      sprite.scale.setScalar(budget.isCompactDevice ? 1.05 : 1.35);
+      const theta = idx * 1.15 + 0.35;
+      const r = budget.isCompactDevice ? 2.4 : 3.25;
+      const zSpan = 72;
+      sprite.position.set(
+        Math.cos(theta) * r,
+        Math.sin(theta) * r,
+        -4 - (idx / Math.max(1, activeLogoList.length - 1)) * zSpan
+      );
+      sprite.scale.setScalar(budget.isCompactDevice ? 1.0 : 1.25);
       tunnelGroup.add(sprite);
       logoSprites.push(sprite);
     });
@@ -160,22 +165,22 @@ export function mountCinematicVisualRenderer(): (progress: number) => void {
     const draw = (state: TunnelPhaseState) => {
       lastRenderedState = state;
       camera.position.z = state.cameraZ;
-      tunnelGroup.rotation.z = state.tunnelTwistRad * 0.25;
+      tunnelGroup.rotation.z = state.tunnelTwistRad * 0.2;
       tunnelGroup.scale.set(state.tunnelRadiusScale, state.tunnelRadiusScale, 1);
 
-      const tunnelFade = rangeRatio(state.progress, 0.14, 0.26);
+      const tunnelFade = rangeRatio(state.progress, 0.1, 0.2);
       ringMeshes.forEach((m) => {
         (m.material as THREE.MeshBasicMaterial).opacity = 0.08 + tunnelFade * 0.42;
       });
-      const spriteFade = rangeRatio(state.progress, 0.2, 0.28);
+      const spriteFade = rangeRatio(state.progress, 0.14, 0.22);
       logoSprites.forEach((s) => {
-        s.material.opacity = spriteFade * 0.96;
+        s.material.opacity = spriteFade * 0.94;
       });
 
-      const orbDistanceAhead = 9.5 - rangeRatio(state.progress, 0.55, 0.8) * 6.8;
+      const orbDistanceAhead = 11 - rangeRatio(state.progress, 0.76, 0.9) * 8.2;
       orbGroup.position.set(
         0,
-        Math.sin(state.progress * Math.PI * 4) * 0.18,
+        Math.sin(state.progress * Math.PI * 5) * 0.18,
         state.cameraZ - orbDistanceAhead
       );
       orbGroup.scale.setScalar(state.orbScale * 0.52);

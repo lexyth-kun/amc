@@ -2,6 +2,10 @@ import gsap from 'gsap';
 import { getLenis, prefersReducedMotion, scrollToAnchor } from './motion-core';
 import { runPageTransition } from './page-transition';
 
+function normalizePath(p: string): string {
+  return p.replace(/\/+$/, '') || '/';
+}
+
 export function initHeaderAndMenu(): void {
   const backdrop = document.getElementById('header-backdrop');
   const inner = document.getElementById('header-inner');
@@ -26,6 +30,24 @@ export function initHeaderAndMenu(): void {
   window.addEventListener('scroll', syncHeader, { passive: true });
   window.addEventListener('amc:scroll-sync', syncHeader);
   syncHeader();
+
+  // Smooth Lusion page-transition curtain for multi-page navbar navigation
+  document.querySelectorAll<HTMLAnchorElement>('[data-page-link]').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('#')) return;
+      if (normalizePath(href) === normalizePath(window.location.pathname)) {
+        e.preventDefault();
+        scrollToAnchor('#main-content');
+        return;
+      }
+      e.preventDefault();
+      void runPageTransition(() => {
+        window.location.href = href;
+      });
+    });
+  });
 
   if (!toggleBtn || !closeBtn || !overlay) return;
 
@@ -113,16 +135,24 @@ export function initHeaderAndMenu(): void {
 
   overlay.querySelectorAll<HTMLAnchorElement>('[data-overlay-link]').forEach((link) => {
     link.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
       const href = link.dataset.overlayLink;
       if (!href) return;
       e.preventDefault();
+      if (href.startsWith('#')) {
+        void runPageTransition(async () => {
+          await closeMenu(false);
+          scrollToAnchor(href);
+        });
+        return;
+      }
+      if (normalizePath(href) === normalizePath(window.location.pathname)) {
+        void closeMenu(true);
+        return;
+      }
       void runPageTransition(async () => {
         await closeMenu(false);
-        if (href.startsWith('#')) {
-          scrollToAnchor(href);
-        } else {
-          window.location.href = href;
-        }
+        window.location.href = href;
       });
     });
   });

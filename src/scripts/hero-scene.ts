@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { getAdaptiveObjectBudget } from '@/utils/webgl-support';
 import { mountHeroCanvas2DFallback } from './hero-fallback-2d';
 
-const COLOR_CYCLE = [0xffffff, 0x38bdf8, 0x1a36ff] as const;
+const COLOR_CYCLE = [0xffffff, 0x7dd3fc, 0x38bdf8, 0x0284c7] as const;
 
 function createBeveledCrossGeometry(compact: boolean): THREE.ExtrudeGeometry {
   const armHalf = 0.24;
@@ -102,20 +102,20 @@ export function initHeroScene(): () => void {
   const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 60);
   camera.position.set(0, 0, 11.5);
 
-  const hemiLight = new THREE.HemisphereLight(0xffffff, 0xdbeafe, 1.85);
+  const hemiLight = new THREE.HemisphereLight(0xffffff, 0xbae6fd, 1.9);
   scene.add(hemiLight);
 
   const dirLight = new THREE.DirectionalLight(0xffffff, 2.2);
   dirLight.position.set(6, 9, 8);
   scene.add(dirLight);
 
-  const skyPoint = new THREE.PointLight(0x38bdf8, 6.5, 22);
+  const skyPoint = new THREE.PointLight(0x38bdf8, 7.0, 24);
   skyPoint.position.set(-5, -5, 5);
   scene.add(skyPoint);
 
-  const royalRim = new THREE.PointLight(0x1a36ff, 4.5, 20);
-  royalRim.position.set(6, -3, 4);
-  scene.add(royalRim);
+  const skyRim = new THREE.PointLight(0x0284c7, 4.8, 22);
+  skyRim.position.set(6, -3, 4);
+  scene.add(skyRim);
 
   const worldGroup = new THREE.Group();
   scene.add(worldGroup);
@@ -140,7 +140,7 @@ export function initHeroScene(): () => void {
 
   for (let i = 0; i < budget.heroCrossCount; i++) {
     const ratioRoll = i / budget.heroCrossCount;
-    const colorIndex = ratioRoll < 0.5 ? 0 : ratioRoll < 0.8 ? 1 : 2;
+    const colorIndex = ratioRoll < 0.42 ? 0 : ratioRoll < 0.68 ? 1 : ratioRoll < 0.88 ? 2 : 3;
 
     const material: CrossMat =
       budget.isCompactDevice || softwareGl
@@ -148,16 +148,16 @@ export function initHeroScene(): () => void {
             color: COLOR_CYCLE[colorIndex],
             specular: 0xffffff,
             shininess: 105,
-            emissive: colorIndex === 0 ? 0xeaf3ff : 0x000000,
+            emissive: colorIndex === 0 ? 0xe0f2fe : 0x000000,
             emissiveIntensity: colorIndex === 0 ? 0.22 : 0,
           })
         : new THREE.MeshPhysicalMaterial({
             color: COLOR_CYCLE[colorIndex],
             roughness: 0.15,
-            metalness: 0.1,
+            metalness: 0.08,
             clearcoat: 1.0,
             clearcoatRoughness: 0.08,
-            emissive: colorIndex === 0 ? 0xeaf3ff : 0x000000,
+            emissive: colorIndex === 0 ? 0xe0f2fe : 0x000000,
             emissiveIntensity: colorIndex === 0 ? 0.18 : 0,
           });
 
@@ -269,7 +269,7 @@ export function initHeroScene(): () => void {
 
     node.colorIndex = (node.colorIndex + 1) % COLOR_CYCLE.length;
     node.mesh.material.color.setHex(COLOR_CYCLE[node.colorIndex]);
-    node.mesh.material.emissive.setHex(node.colorIndex === 0 ? 0xeaf3ff : 0x000000);
+    node.mesh.material.emissive.setHex(node.colorIndex === 0 ? 0xe0f2fe : 0x000000);
     node.mesh.material.emissiveIntensity = node.colorIndex === 0 ? 0.18 : 0;
 
     const baseScale = node.mesh.scale.x;

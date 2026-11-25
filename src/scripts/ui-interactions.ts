@@ -2,7 +2,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { computeCardTilt, lerpNumber, nextReelStepIndex } from '@/utils/interaction-math';
 import { computeCountdownParts } from '@/utils/countdown';
-import { formatAnimatedCounter, validateNewsletterEmail } from '@/utils/newsletter';
+import { formatAnimatedCounter, validateWhatsappOptIn } from '@/utils/newsletter';
 import { getLenis, prefersReducedMotion } from './motion-core';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -15,9 +15,9 @@ export function initMilestoneBInteractions(): void {
   initFlashSaleCountdown();
   initHowToOrderPreview();
   initAnimatedCounters();
-  initTestimonialCarousel();
   initFaqAndTncModal();
-  initNewsletterForms();
+  initWhatsappPromoForms();
+  initCatalogCategoryFilter();
   initFooterReveal();
 }
 
@@ -187,7 +187,7 @@ function initShowreelModal(): void {
       t.setAttribute('aria-selected', selected ? 'true' : 'false');
       t.className = `min-h-[44px] rounded-xl border px-2 py-2 font-display text-xs font-extrabold transition-colors ${
         selected
-          ? 'border-amc bg-amc text-white'
+          ? 'border-amc-2 bg-amc-2 text-white'
           : 'border-line bg-bg-alt text-navy hover:border-sky-deep'
       }`;
     });
@@ -344,83 +344,6 @@ function initAnimatedCounters(): void {
   });
 }
 
-function initTestimonialCarousel(): void {
-  const viewport = document.getElementById('testi-viewport');
-  const prevBtn = document.getElementById('testi-prev-btn');
-  const nextBtn = document.getElementById('testi-next-btn');
-  const pauseBtn = document.getElementById('testi-pause-btn');
-  const pauseLabel = document.getElementById('testi-pause-label');
-  const slides = Array.from(document.querySelectorAll<HTMLElement>('[data-testi-slide]'));
-  if (!viewport || !slides.length) return;
-
-  let activeIdx = 0;
-  let paused = prefersReducedMotion();
-  let timerId: number | null = null;
-
-  const syncSlideState = (idx: number) => {
-    activeIdx = nextReelStepIndex(idx, slides.length, 0);
-    const isMobileStack = window.innerWidth < 1024;
-    slides.forEach((slide, i) => {
-      const isCurrent = i === activeIdx;
-      slide.classList.toggle('border-amc', isCurrent);
-      slide.classList.toggle('shadow-amc', isCurrent);
-      slide.classList.toggle('border-line', !isCurrent);
-      slide.hidden = isMobileStack ? !isCurrent : false;
-    });
-  };
-
-  const stopTimer = () => {
-    if (timerId !== null) {
-      window.clearInterval(timerId);
-      timerId = null;
-    }
-  };
-
-  const startTimer = () => {
-    stopTimer();
-    if (paused) return;
-    timerId = window.setInterval(() => {
-      syncSlideState(nextReelStepIndex(activeIdx, slides.length, 1));
-    }, 5000);
-  };
-
-  prevBtn?.addEventListener('click', () => {
-    syncSlideState(nextReelStepIndex(activeIdx, slides.length, -1));
-    startTimer();
-  });
-
-  nextBtn?.addEventListener('click', () => {
-    syncSlideState(nextReelStepIndex(activeIdx, slides.length, 1));
-    startTimer();
-  });
-
-  pauseBtn?.addEventListener('click', () => {
-    paused = !paused;
-    pauseBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
-    if (pauseLabel) pauseLabel.textContent = paused ? 'Putar' : 'Jeda';
-    if (paused) stopTimer();
-    else startTimer();
-  });
-
-  let dragStartX: number | null = null;
-  viewport.addEventListener('pointerdown', (e) => {
-    dragStartX = e.clientX;
-  });
-  viewport.addEventListener('pointerup', (e) => {
-    if (dragStartX === null) return;
-    const dx = e.clientX - dragStartX;
-    dragStartX = null;
-    if (Math.abs(dx) > 42) {
-      syncSlideState(nextReelStepIndex(activeIdx, slides.length, dx < 0 ? 1 : -1));
-      startTimer();
-    }
-  });
-
-  window.addEventListener('resize', () => syncSlideState(activeIdx));
-  syncSlideState(0);
-  startTimer();
-}
-
 function initFaqAndTncModal(): void {
   const faqBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-faq-btn]'));
   faqBtns.forEach((btn) => {
@@ -475,27 +398,67 @@ function initFaqAndTncModal(): void {
   });
 }
 
-function initNewsletterForms(): void {
+function initWhatsappPromoForms(): void {
   document.querySelectorAll<HTMLFormElement>('.js-newsletter-form').forEach((form) => {
-    const input = form.querySelector<HTMLInputElement>('input[name="email"]');
+    const input = form.querySelector<HTMLInputElement>('input[name="phone"]');
     const feedback = form.querySelector<HTMLElement>('.js-newsletter-feedback');
+    const waLink = form.querySelector<HTMLAnchorElement>('.js-wa-confirm-link');
     if (!input || !feedback) return;
 
     form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const result = validateNewsletterEmail(input.value);
+      const result = validateWhatsappOptIn(input.value);
       feedback.textContent = result.message;
 
       if (result.status === 'valid') {
         feedback.className = 'js-newsletter-feedback mt-2 text-xs font-semibold leading-relaxed text-sky-ink';
         try {
-          window.localStorage.setItem('amc_newsletter_interest_v1', input.value.trim());
+          window.localStorage.setItem('amc_wa_promo_v1', result.normalizedPhone || input.value.trim());
         } catch {}
+        if (waLink && result.waConfirmUrl) {
+          waLink.href = result.waConfirmUrl;
+          waLink.hidden = false;
+        }
         input.value = '';
       } else {
         feedback.className = 'js-newsletter-feedback mt-2 text-xs font-semibold leading-relaxed text-sale-ink';
+        if (waLink) waLink.hidden = true;
         input.focus();
       }
+    });
+  });
+}
+
+function initCatalogCategoryFilter(): void {
+  const buttons = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-catalog-filter]'));
+  const cards = Array.from(document.querySelectorAll<HTMLElement>('[data-catalog-item]'));
+  const emptyEl = document.getElementById('catalog-empty-state');
+  if (!buttons.length || !cards.length) return;
+
+  const applyFilter = (category: string) => {
+    let visible = 0;
+    buttons.forEach((btn) => {
+      const isActive = btn.dataset.catalogFilter === category;
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      btn.classList.toggle('bg-sky', isActive);
+      btn.classList.toggle('text-[#082F49]', isActive);
+      btn.classList.toggle('border-sky-deep', isActive);
+      btn.classList.toggle('bg-white', !isActive);
+      btn.classList.toggle('text-navy', !isActive);
+      btn.classList.toggle('border-line', !isActive);
+    });
+    cards.forEach((card) => {
+      const match = category === 'Semua' || card.dataset.catalogCategory === category;
+      card.hidden = !match;
+      if (match) visible++;
+    });
+    if (emptyEl) emptyEl.hidden = visible > 0;
+  };
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const cat = btn.dataset.catalogFilter || 'Semua';
+      applyFilter(cat);
     });
   });
 }

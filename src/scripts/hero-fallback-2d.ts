@@ -1,7 +1,7 @@
 const PALETTE = [
-  { main: '#FFFFFF', edge: '#DBEAFE' },
-  { main: '#38BDF8', edge: '#0EA5E9' },
-  { main: '#1A36FF', edge: '#0B1B4D' },
+  { main: '#FFFFFF', edge: '#BAE6FD' },
+  { main: '#7DD3FC', edge: '#38BDF8' },
+  { main: '#38BDF8', edge: '#0284C7' },
 ] as const;
 
 interface PlusShape2D {

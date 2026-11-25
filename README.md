@@ -10,19 +10,19 @@ Rebuild halaman depan `amc.web.id` dengan koreografi *spatial storytelling* satu
 ## Hasil Verifikasi Terukur (Milestone F)
 
 - **Lighthouse Mobile CLI (`scripts/run-lighthouse.mjs`, standard headless Chrome, Slow 4G + 4x CPU slowdown):**
-  - **Performance:** `97 / 100` (target `≥ 85`)
+  - **Performance:** `93 / 100` (target `≥ 85`)
   - **Accessibility:** `100 / 100`
   - **Best Practices:** `100 / 100`
   - **SEO:** `100 / 100`
-  - **LCP:** `1.76s` (target `< 2.5s`)
-  - **CLS:** `0.0222` (target `< 0.1`)
-  - **TBT:** `194ms`
-  - *Catatan metodologi:* Pengukuran dilakukan di VM Linux tanpa GPU menggunakan flag headless Chrome standar (`--headless=new --no-sandbox --disable-setuid-sandbox --disable-dev-shm-usage`). Sebagai pembanding transparan, jika flag `--use-gl=angle --use-angle=swiftshader` dipaksakan pada VM CPU-only ini, cold-start compositor SwiftShader menambah stall ~1.3s sehingga hasil pembandingnya Performance `63/100`, LCP `2.74s`, TBT `1629ms` (A11y/BP/SEO tetap `100/100`).
+  - **LCP:** `1.80s` (target `< 2.5s`)
+  - **CLS:** `0.0004` (target `< 0.1`)
+  - **TBT:** `305ms`
+  - *Catatan metodologi:* Pengukuran dilakukan di VM Linux tanpa GPU menggunakan flag headless Chrome standar (`--headless=new --no-sandbox --disable-setuid-sandbox --disable-dev-shm-usage`).
 - **Ukuran Bundel JS (Gzip):**
-  - **Bundel Interaksi Awal (`gsap` + `ScrollTrigger` + `Lenis` + UI):** `57.99 KB gzip`
+  - **Bundel Interaksi Awal (`gsap` + `ScrollTrigger` + `Lenis` + UI):** `58.49 KB gzip`
   - **Bundel Three.js (Lazy-Loaded asinkron):** `129.46 KB gzip`
-  - **Total Seluruh JS Situs:** `194.10 KB gzip` (jauh di bawah batas `< 300 KB gzip`)
-- **Otomasi Pengujian:** `tsc --noEmit` (0 error), `7/7` file Vitest (`23/23` unit & anti-slop gate tests), dan `3/3` skenario penuh Playwright E2E (desktop 1440px, tablet 768px, mobile 390px + reduced-motion + redirect `/order`) lulus tanpa error console.
+  - **Total Seluruh JS Situs:** `195.60 KB gzip` (jauh di bawah batas `< 300 KB gzip`)
+- **Otomasi Pengujian:** `tsc --noEmit` (0 error), `7/7` halaman Astro statis (`/`, `/produk/`, `/kategori/`, `/flash-sale/`, `/cara-order/`, `/faq/`, `/kontak/`), `7/7` file Vitest (`26/26` unit & anti-slop tests), dan `4/4` skenario penuh Playwright E2E lulus tanpa error console.
 
 ## Stack Teknis
 
