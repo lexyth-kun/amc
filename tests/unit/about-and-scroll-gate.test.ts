@@ -7,6 +7,13 @@ import {
   resolveFooterNextPage,
   shouldTriggerNextPage,
 } from '@/utils/next-page-scroll';
+import {
+  computeReviewDeckFlipState,
+  findSphereAtPoint,
+  stepSphereParticlePhysics,
+  waveIndexToScrollProgress,
+  type SphereBody,
+} from '@/utils/about-interactive';
 
 function collectStrings(value: unknown): string[] {
   if (typeof value === 'string') return [value];
@@ -17,16 +24,33 @@ function collectStrings(value: unknown): string[] {
   return [];
 }
 
-describe('About Page (Solo Creator Adrian Ali Muthi) & Lusion Auto Next-Page Scroll Gate', () => {
+describe('About Page (Hologram Solo Creator, 3D Flip Reviews, Movable Spheres & Auto Scroll Gate)', () => {
   it('lists strictly one solo creator named Adrian Ali Muthi with zero fabricated team members', () => {
     expect(aboutData.creators).toHaveLength(1);
     expect(aboutData.creators[0].index).toBe('001');
     expect(aboutData.creators[0].name).toBe('Adrian Ali Muthi');
   });
 
-  it('contains all 4 Lusion-style expertise pillars and verified AMC milestones without slop', () => {
-    expect(aboutData.expertise).toHaveLength(4);
-    expect(aboutData.expertise.map((e) => e.letter)).toEqual(['A', 'K', 'H', 'G']);
+  it('groups real buyer reviews into 3 flip clusters (Adobe CC, ChatGPT/Claude/Gemini, CapCut/Canva/Wink) with Ayo Order Sekarang CTA and zero slop', () => {
+    expect(aboutData.reviewWaves).toHaveLength(3);
+    expect(aboutData.reviewWaves[0].label).toMatch(/adobe/i);
+    expect(aboutData.reviewWaves[1].label).toMatch(/chatgpt.*claude.*gemini/i);
+    expect(aboutData.reviewWaves[2].label).toMatch(/capcut.*canva.*wink/i);
+
+    for (const wave of aboutData.reviewWaves) {
+      expect(wave.reviews).toHaveLength(3);
+      for (const review of wave.reviews) {
+        expect(review.author.length).toBeGreaterThan(1);
+        expect(review.quote.length).toBeGreaterThan(12);
+        expect(review.rating).toBeGreaterThanOrEqual(4);
+        expect(review.logo).toMatch(/^\/logos\/.+\.svg$/);
+      }
+    }
+
+    expect(aboutData.orderCta.headlineLine1).toMatch(/ayo order/i);
+    expect(aboutData.orderCta.headlineLine2).toMatch(/sekarang/i);
+    expect(aboutData.orderCta.botHref).toContain('27748304118');
+    expect(aboutData.orderCta.shopHref).toContain('order.amc.web.id');
 
     const allStrings = collectStrings(aboutData);
     const forbiddenWords = /\b(project|projects|portofolio|klien studio|case study)\b/i;
@@ -39,6 +63,74 @@ describe('About Page (Solo Creator Adrian Ali Muthi) & Lusion Auto Next-Page Scr
     expect(joined).toContain('1.266');
     expect(joined).toContain('4.8');
     expect(joined).toContain('1.300+');
+  });
+
+  it('computes reversible 3D scroll-flip angles (0 -> 180 -> 360 deg) across 3 review waves without mirroring text', () => {
+    const atWave0 = computeReviewDeckFlipState(waveIndexToScrollProgress(0), 3);
+    expect(atWave0.activeWaveIndex).toBe(0);
+    for (const card of atWave0.cards) {
+      expect(card.angleDeg).toBe(0);
+      expect(card.showingFace).toBe('front');
+      expect(card.frontWaveIndex).toBe(0);
+      expect(card.visibleWaveIndex).toBe(0);
+    }
+
+    const midFlip1 = computeReviewDeckFlipState(0.32, 3);
+    expect(midFlip1.cards[0].angleDeg).toBeGreaterThan(midFlip1.cards[1].angleDeg);
+    expect(midFlip1.cards[1].angleDeg).toBeGreaterThan(midFlip1.cards[2].angleDeg);
+    expect(midFlip1.cards[0].sheenOpacity).toBeGreaterThan(0);
+
+    const atWave1 = computeReviewDeckFlipState(waveIndexToScrollProgress(1), 3);
+    expect(atWave1.activeWaveIndex).toBe(1);
+    for (const card of atWave1.cards) {
+      expect(card.angleDeg).toBe(180);
+      expect(card.showingFace).toBe('back');
+      expect(card.backWaveIndex).toBe(1);
+      expect(card.frontWaveIndex).toBe(2);
+      expect(card.visibleWaveIndex).toBe(1);
+    }
+
+    const atWave2 = computeReviewDeckFlipState(waveIndexToScrollProgress(2), 3);
+    expect(atWave2.activeWaveIndex).toBe(2);
+    for (const card of atWave2.cards) {
+      expect(card.angleDeg).toBe(360);
+      expect(card.showingFace).toBe('front');
+      expect(card.frontWaveIndex).toBe(2);
+      expect(card.visibleWaveIndex).toBe(2);
+    }
+  });
+
+  it('moves, pushes, grabs, and resolves elastic collisions for interactive 3D sphere particles', () => {
+    const spheres: SphereBody[] = [
+      { x: 200, y: 200, vx: 0, vy: 0, radius: 32, mass: 1, tone: 'sky', phase: 0 },
+      { x: 255, y: 200, vx: 0, vy: 0, radius: 32, mass: 1, tone: 'pearl', phase: 1 },
+    ];
+
+    expect(findSphereAtPoint(spheres, 205, 204)).toBe(0);
+    expect(findSphereAtPoint(spheres, 20, 20)).toBeNull();
+
+    // Drag sphere 0 rightward into sphere 1 and verify elastic collision separates and accelerates sphere 1
+    stepSphereParticlePhysics(
+      spheres,
+      { x: 235, y: 200, vx: 14, vy: 0, active: true, grabbedIndex: 0 },
+      { width: 800, height: 600 },
+      1
+    );
+    expect(spheres[0].x).toBeGreaterThan(200);
+    expect(spheres[1].vx).toBeGreaterThan(0);
+
+    // Cursor hover repulsion moves nearby free sphere away from pointer
+    const freeSpheres: SphereBody[] = [
+      { x: 300, y: 300, vx: 0, vy: 0, radius: 28, mass: 1, tone: 'deep', phase: 0 },
+    ];
+    stepSphereParticlePhysics(
+      freeSpheres,
+      { x: 270, y: 300, vx: 6, vy: 0, active: true, grabbedIndex: null },
+      { width: 800, height: 600 },
+      1
+    );
+    expect(freeSpheres[0].vx).toBeGreaterThan(0);
+    expect(freeSpheres[0].x).toBeGreaterThan(300);
   });
 
   it('detects document bottom and charges/decays overscroll progress deterministically', () => {

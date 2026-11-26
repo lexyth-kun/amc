@@ -1,11 +1,12 @@
 {
   "seo": {
     "title": "Tentang Al Muthi Creative (Adrian Ali Muthi) | AMC",
-    "description": "Kenali Al Muthi Creative dan sang pendiri Adrian Ali Muthi. Dibangun mandiri untuk menghadirkan 41+ layanan akun premium, AI terbaru 2026, hiburan, dan top up game bergaransi penuh."
+    "description": "Kenali Al Muthi Creative dan sang pendiri Adrian Ali Muthi. Lihat ulasan nyata pembeli per layanan (Adobe CC, ChatGPT, Claude, Gemini, CapCut, Canva, Wink) dan pesan langsung via Bot WA 24 jam."
   },
   "hero": {
     "eyebrow": "TENTANG AL MUTHI CREATIVE",
     "scrollCue": "SCROLL UNTUK JELAJAHI",
+    "particleHint": "Geser & lempar bola 3D",
     "lines": [
       "TOKO DIGITAL",
       "AKUN PREMIUM",
@@ -20,6 +21,8 @@
       "name": "Adrian Ali Muthi",
       "role": "Founder & Pembuat Tunggal, Al Muthi Creative",
       "monogram": "AAM",
+      "hologramTag": "HOLOGRAM PROFIL • 1 / 1 PEMBUAT TUNGGAL",
+      "hologramHint": "Gerakkan kursor untuk memutar proyeksi hologram",
       "summary": "Seluruh fondasi Al Muthi Creative, mulai dari desain antarmuka amc.web.id, katalog interaktif, sistem Web Shop otomatis order.amc.web.id, hingga integrasi Bot WhatsApp 24 jam, dirancang dan dijalankan langsung oleh satu orang: Adrian Ali Muthi.",
       "philosophy": "Bekerja secara mandiri menjaga setiap detail tetap konsisten: harga transparan tanpa biaya tersembunyi, pembaruan katalog mengikuti rilis teknologi terbaru per November 2026, dan tanggapan cepat setiap kali pelanggan butuh bantuan garansi."
     }
@@ -64,59 +67,137 @@
       }
     ]
   },
-  "expertiseSection": {
-    "eyebrow": "BIDANG LAYANAN",
-    "headline": "Empat Pilar Utama AMC.",
-    "sub": "Fokus mendalam pada empat kategori digital yang paling dibutuhkan pengguna harian di Indonesia."
+  "reviewDeckSection": {
+    "eyebrow": "AREA OF EXPERTISE • ULASAN NYATA",
+    "headline": "Ulasan Pembeli per Layanan.",
+    "sub": "Scroll untuk membalik kartu ulasan 3D secara langsung. Seluruh kutipan diambil dari arsip pembeli asli di order.amc.web.id/#ulasan.",
+    "scrollHint": "Scroll terus atau pilih kategori layanan untuk membalik kartu 3D"
   },
-  "expertise": [
+  "reviewWaves": [
     {
+      "id": "adobe-cc",
+      "code": "01",
       "letter": "A",
-      "title": "AI & Produktivitas",
-      "description": "Akses lini AI terbaru November 2026 lengkap dengan panduan aktivasi jelas dan jaminan masa pakai.",
-      "items": [
-        "ChatGPT Plus (GPT-6.2 Astra & Sol)",
-        "Claude Pro (Opus 5.5, Sonnet 5.5, Fable 5.2)",
-        "Gemini AI Pro (Hydrogen, Neon, Carbon)",
-        "Grok 4.7, Zoom AI Companion & Google One"
-      ],
-      "href": "/produk/"
+      "shortLabel": "Adobe CC",
+      "label": "Adobe Creative Cloud",
+      "summary": "Tiga ulasan pembeli langsung untuk Photoshop, Lightroom, Premiere Pro, dan After Effects full version.",
+      "href": "/produk/adobe/",
+      "reviews": [
+        {
+          "author": "Aufa",
+          "service": "Adobe Creative Cloud",
+          "logo": "/logos/adobe.svg",
+          "rating": 5,
+          "date": "25 Apr 2026",
+          "source": "Ulasan Live order.amc.web.id",
+          "quote": "buat langganan Adobe terbaik disini, udah berkali kali order gapernah mengecewakan"
+        },
+        {
+          "author": "Citra",
+          "service": "Adobe Creative Cloud",
+          "logo": "/logos/adobe.svg",
+          "rating": 5,
+          "date": "25 Apr 2026",
+          "source": "Ulasan Live order.amc.web.id",
+          "quote": "Baru 5 menit setelah transfer, akun Adobe CC Premium sudah masuk! Super cepat dan amanah banget Al Muthi Creative."
+        },
+        {
+          "author": "Hesti",
+          "service": "Adobe Creative Cloud",
+          "logo": "/logos/adobe.svg",
+          "rating": 5,
+          "date": "25 Apr 2026",
+          "source": "Ulasan Live order.amc.web.id",
+          "quote": "Adobe CC & After Effects langsung full. Pelayanan super cepat dan trusted."
+        }
+      ]
     },
     {
+      "id": "ai-suite",
+      "code": "02",
+      "letter": "I",
+      "shortLabel": "ChatGPT, Claude & Gemini",
+      "label": "ChatGPT, Claude & Gemini",
+      "summary": "Tiga ulasan nyata pembeli ekosistem AI harian untuk kuliah, riset, coding, dan otomasi kerja.",
+      "href": "/produk/chatgpt/",
+      "reviews": [
+        {
+          "author": "M***a L.",
+          "service": "ChatGPT Plus",
+          "logo": "/logos/chatgpt.svg",
+          "rating": 5,
+          "date": "Arsip Web Shop AMC",
+          "source": "Mahasiswi • order.amc.web.id",
+          "quote": "ChatGPT Plus dari sini, harga pelajar banget. Legit!"
+        },
+        {
+          "author": "Sari",
+          "service": "Claude Pro • Layanan AI",
+          "logo": "/logos/claude.svg",
+          "rating": 5,
+          "date": "25 Apr 2026",
+          "source": "Ulasan Live order.amc.web.id",
+          "quote": "Pelayanan terbaik. Beli akun premium di sini selalu cepat dan 100% amanah."
+        },
+        {
+          "author": "Salma Oktaviani",
+          "service": "Gemini AI Pro",
+          "logo": "/logos/gemini.svg",
+          "rating": 5,
+          "date": "19 Okt 2026",
+          "source": "Web Shop order.amc.web.id",
+          "quote": "Sudah langganan 4 bulan di Al Muthi Creative, harganya paling terjangkau dan garansinya beneran aman."
+        }
+      ]
+    },
+    {
+      "id": "creative-video",
+      "code": "03",
       "letter": "K",
-      "title": "Kreasi & Desain",
-      "description": "Perangkat lunak kreatif andalan desainer grafis, editor video pendek, dan tim konten media sosial.",
-      "items": [
-        "Adobe Creative Cloud (MAX 2026 & Firefly)",
-        "Adobe Express 1 Tahun",
-        "Canva Pro & Integrasi Affinity Studio",
-        "CapCut Pro Team 4K, Alight Motion, Picsart"
-      ],
-      "href": "/produk/"
-    },
-    {
-      "letter": "H",
-      "title": "Hiburan & Privasi",
-      "description": "Streaming film 4K HDR, musik audio lossless 24-bit, dan jaringan VPN privat untuk kerja maupun santai.",
-      "items": [
-        "Netflix 4K Spatial Audio & HBO Max",
-        "YouTube Premium 1080p Enhanced",
-        "Spotify Lossless 24-bit & Apple Music",
-        "ExpressVPN & Surfshark VPN"
-      ],
-      "href": "/produk/"
-    },
-    {
-      "letter": "G",
-      "title": "Growth & Game",
-      "description": "Top up instan 1 sampai 3 menit dan penguatan interaksi sosial media aman tanpa meminta kata sandi.",
-      "items": [
-        "Mobile Legends, Honor of Kings, Free Fire",
-        "Valorant, Roblox, PUBG & Genshin Impact",
-        "Buzzer Instagram, TikTok, Facebook, Telegram, Shopee",
-        "Checkout QRIS Instan & Bot WA 24 Jam"
-      ],
-      "href": "/kategori/"
+      "shortLabel": "CapCut, Canva & Wink",
+      "label": "CapCut, Canva & Wink",
+      "summary": "Tiga ulasan pembeli kreator konten untuk editing video 4K, desain presentasi, dan kualitas visual pro tanpa aplikasi mod.",
+      "href": "/produk/capcut/",
+      "reviews": [
+        {
+          "author": "Fauziah",
+          "service": "CapCut Pro",
+          "logo": "/logos/capcut.svg",
+          "rating": 5,
+          "date": "06 Apr 2026",
+          "source": "Ulasan Live order.amc.web.id",
+          "quote": "Fitur premiumnya ke unlock dan beneran garansi no tipu tipu"
+        },
+        {
+          "author": "S***i H.",
+          "service": "Canva Pro",
+          "logo": "/logos/canva.svg",
+          "rating": 5,
+          "date": "Arsip Web Shop AMC",
+          "source": "Content Creator • order.amc.web.id",
+          "quote": "Canva Pro-nya murah banget, garansinya juga masuk. Langganan terus!"
+        },
+        {
+          "author": "Pembeli Terverifikasi",
+          "service": "Wink & Editor Video Pro",
+          "logo": "/logos/wink.svg",
+          "rating": 5,
+          "date": "11 Apr 2026",
+          "source": "Ulasan Live order.amc.web.id",
+          "quote": "recomend buat yang nyari akun premium atau pro, bukan aplikasi mod"
+        }
+      ]
     }
-  ]
+  ],
+  "orderCta": {
+    "eyebrow": "SIAP PAKAI APLIKASI PREMIUM HARI INI?",
+    "headlineLine1": "Ayo Order",
+    "headlineLine2": "Sekarang!",
+    "subheadline": "Pilih layanan favoritmu langsung lewat Bot WhatsApp otomatis 24 jam atau checkout instan via QRIS di Web Shop resmi order.amc.web.id.",
+    "botLabel": "Order Via Bot WA",
+    "botHref": "https://wa.me/27748304118?text=Halo%20Bot%20AMC%2C%20saya%20mau%20order",
+    "shopLabel": "Order di Web Shop",
+    "shopHref": "https://order.amc.web.id",
+    "particleHint": "Gerakkan bola-bola 3D dengan kursor atau jari"
+  }
 }

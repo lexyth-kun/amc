@@ -473,9 +473,68 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     expect(aboutText).not.toContain('—');
     expect(aboutText).not.toMatch(/\b(project|projects|portofolio|klien studio|case study)\b/i);
 
-    // Pause control on fluid particle background works (R-39)
+    // 1. Movable 3D sphere particles in hero respond to pointer drag/move
+    const heroSpheresCanvas = page.locator('#about-particles-canvas');
+    await expect(heroSpheresCanvas).toBeVisible();
+    await page.mouse.move(900, 320);
+    await page.mouse.down();
+    await page.mouse.move(1080, 410, { steps: 6 });
+    await page.mouse.up();
+    await expect(heroSpheresCanvas).toHaveAttribute('data-spheres-moved', 'true');
+
+    // Pause control on 3D spheres works (R-39)
     await page.click('#about-particles-pause');
     await expect(page.locator('#about-particles-pause')).toHaveAttribute('aria-pressed', 'true');
+    await page.click('#about-particles-pause');
+    await expect(page.locator('#about-particles-pause')).toHaveAttribute('aria-pressed', 'false');
+
+    // 2. Interactive 3D Hologram Solo Creator Chamber renders and reacts to hover
+    const holoCanvas = page.locator('#founder-hologram-canvas');
+    await holoCanvas.scrollIntoViewIfNeeded();
+    await expect(holoCanvas).toBeVisible();
+    const holoBox = await holoCanvas.boundingBox();
+    expect(holoBox?.width ?? 0).toBeGreaterThan(250);
+    expect(holoBox?.height ?? 0).toBeGreaterThan(250);
+    await page.mouse.move((holoBox?.x ?? 200) + 120, (holoBox?.y ?? 200) + 120);
+
+    // 3. Lusion 3D Scroll-Flip Real Review Deck flips across Adobe CC -> ChatGPT/Claude/Gemini -> CapCut/Canva/Wink
+    const reviewDeck = page.locator('#ulasan-layanan');
+    await reviewDeck.scrollIntoViewIfNeeded();
+    await expect(reviewDeck).toHaveAttribute('data-active-wave-id', 'adobe-cc');
+    await expect(page.locator('#review-deck-active-label')).toContainText('Adobe Creative Cloud');
+    await expect(page.locator('[data-review-slot="0"] [data-flip-front]')).toContainText('Aufa');
+
+    // Flip to Wave 2: ChatGPT, Claude & Gemini (rotateY 180deg)
+    await page.click('[data-review-wave-tab="1"]');
+    await expect(reviewDeck).toHaveAttribute('data-active-wave-id', 'ai-suite', { timeout: 4000 });
+    await expect(page.locator('#review-deck-active-label')).toContainText('ChatGPT, Claude & Gemini');
+    await expect
+      .poll(
+        async () => Number(await page.locator('[data-review-slot="0"] [data-flip-card]').getAttribute('data-flip-angle')),
+        { timeout: 4000 }
+      )
+      .toBeGreaterThanOrEqual(160);
+
+    // Flip to Wave 3: CapCut, Canva & Wink (rotateY 360deg)
+    await page.click('[data-review-wave-tab="2"]');
+    await expect(reviewDeck).toHaveAttribute('data-active-wave-id', 'creative-video', { timeout: 4000 });
+    await expect(page.locator('#review-deck-active-label')).toContainText('CapCut, Canva & Wink');
+    await expect(page.locator('[data-review-slot="0"] [data-flip-front]')).toContainText('Fauziah');
+    await expect
+      .poll(
+        async () => Number(await page.locator('[data-review-slot="0"] [data-flip-card]').getAttribute('data-flip-angle')),
+        { timeout: 4000 }
+      )
+      .toBeGreaterThanOrEqual(340);
+
+    // 4. Final CTA replaces "Let's work together" with "Ayo Order Sekarang!" + movable 3D spheres
+    const orderCta = page.locator('#about-order-cta');
+    await orderCta.scrollIntoViewIfNeeded();
+    await expect(page.locator('#about-order-cta-heading')).toContainText('Ayo Order');
+    await expect(page.locator('#about-order-cta-heading')).toContainText('Sekarang');
+    await expect(orderCta.locator('a[href*="27748304118"]')).toContainText('Order Via Bot WA');
+    await expect(orderCta.locator('a[href="https://order.amc.web.id"]')).toContainText('Order di Web Shop');
+    await expect(page.locator('#about-cta-particles-canvas')).toBeVisible();
 
     // Integrated footer NextPageScrollGate on /about/ points directly to https://order.amc.web.id
     const aboutGate = page.locator('footer#kontak #next-page-scroll-gate');

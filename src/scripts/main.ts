@@ -213,9 +213,18 @@ function boot(): void {
     finishProductPortalEntry();
   }
 
-  if (document.getElementById('about-particles-canvas')) {
+  if (document.querySelector('[data-about-spheres]')) {
     void import('./about-particles').then(({ initAboutFluidParticles }) => {
       initAboutFluidParticles();
+    });
+  }
+
+  if (
+    document.getElementById('founder-hologram-canvas') ||
+    document.getElementById('ulasan-layanan')
+  ) {
+    void import('./about-experience').then(({ initAboutExperience }) => {
+      initAboutExperience();
     });
   }
 

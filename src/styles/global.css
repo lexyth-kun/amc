@@ -209,8 +209,8 @@
   display: inline-block;
   overflow: hidden;
   vertical-align: bottom;
-  padding-bottom: 0.18em;
-  margin-bottom: -0.18em;
+  padding-bottom: 0.26em;
+  margin-bottom: -0.26em;
 }
 
 .word-inner {
@@ -350,6 +350,126 @@ html.amc-portal-entering #main-content {
 
 .low-stock-pulse {
   animation: softPulseOpacity 1.6s ease-in-out 2;
+}
+
+/* About page: interactive movable 3D sphere sections */
+.amc-spheres-stage {
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.amc-spheres-stage.is-grabbing {
+  cursor: grabbing;
+  user-select: none;
+}
+
+/* About page: Lusion-inspired 3D Hologram Solo Creator Chamber */
+.amc-holo-card {
+  --holo-x: 50%;
+  --holo-y: 42%;
+  transform-style: preserve-3d;
+  transition: transform 0.25s var(--ease-out-expo), box-shadow 0.35s ease;
+}
+
+.amc-holo-scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(125, 211, 252, 0.08) 0px,
+    rgba(125, 211, 252, 0.08) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+.amc-holo-iridescence {
+  background: radial-gradient(
+    circle at var(--holo-x) var(--holo-y),
+    rgba(125, 211, 252, 0.28) 0%,
+    rgba(56, 189, 248, 0.14) 26%,
+    rgba(14, 165, 233, 0.04) 54%,
+    transparent 74%
+  );
+}
+
+/* About page: Lusion-inspired 3D Scroll-Flip Real Review Deck */
+.amc-flip-scene {
+  perspective: 1600px;
+}
+
+.amc-flip-card {
+  position: relative;
+  width: 100%;
+  min-height: 310px;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.amc-flip-card.is-smooth-flip {
+  transition: transform 0.72s var(--ease-out-expo);
+}
+
+.amc-flip-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 1.5rem;
+  overflow: hidden;
+}
+
+.amc-flip-front {
+  transform: rotateY(0deg);
+}
+
+.amc-flip-back {
+  transform: rotateY(180deg);
+}
+
+.amc-flip-sheen {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 20%,
+    rgba(125, 211, 252, 0.32) 48%,
+    rgba(255, 255, 255, 0.55) 54%,
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.12s linear;
+}
+
+.amc-wave-tab {
+  min-height: 42px;
+  border-radius: 9999px;
+  border: 1.5px solid #BAE6FD;
+  background: #FFFFFF;
+  color: #0C4A6E;
+  padding: 0.5rem 1rem;
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.amc-wave-tab:hover {
+  border-color: #0EA5E9;
+  background: #F0F9FF;
+  color: #082F49;
+}
+
+.amc-wave-tab.is-active,
+.amc-wave-tab.is-active:hover,
+.amc-wave-tab.is-active:focus-visible {
+  border-color: #082F49;
+  background: #082F49;
+  color: #FFFFFF;
+  box-shadow: 0 10px 24px rgba(8, 47, 73, 0.2);
 }
 
 @media (prefers-reduced-motion: reduce) {

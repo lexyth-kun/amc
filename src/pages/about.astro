@@ -2,7 +2,6 @@
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import BlueLine from '@/components/BlueLine.astro';
 import ActionIcon from '@/components/ActionIcon.astro';
-import FinalCtaSection from '@/components/FinalCtaSection.astro';
 import FooterSection from '@/components/FooterSection.astro';
 import aboutData from '@/data/about.json';
 import products from '@/data/products.json';
@@ -35,6 +34,19 @@ const supportedBrandSlugs = [
 const supportedBrands = supportedBrandSlugs
   .map((slug) => products.allServices.find((s) => s.slug === slug))
   .filter((item): item is (typeof products.allServices)[number] => Boolean(item));
+
+const resolvedReviewWaves = aboutData.reviewWaves.map((wave) => ({
+  ...wave,
+  href: withBase(wave.href),
+  reviews: wave.reviews.map((review) => ({
+    ...review,
+    logo: withBase(review.logo),
+  })),
+}));
+
+const initialFrontWave = resolvedReviewWaves[0];
+const initialBackWave = resolvedReviewWaves[1];
+const fiveStarIndices = [0, 1, 2, 3, 4];
 ---
 
 <BaseLayout
@@ -44,16 +56,19 @@ const supportedBrands = supportedBrandSlugs
   showPreloader={false}
 >
   <!-- ======================================================================
-       01. ABOUT HERO: Fluid Sky Blue Particle Cloud + Giant Display Manifesto
+       01. ABOUT HERO: Interactive Movable 3D Sphere Particles + Manifesto
        ====================================================================== -->
   <section
     id="about-hero"
     data-bg-color="#FFFFFF"
+    data-spheres-stage
     aria-labelledby="about-hero-heading"
-    class="relative flex min-h-[92dvh] flex-col justify-between overflow-hidden bg-gradient-to-b from-white via-[#F0F9FF]/65 to-white pt-28 pb-12 md:pt-36 md:pb-16"
+    class="amc-spheres-stage relative flex min-h-[92dvh] flex-col justify-between overflow-hidden bg-gradient-to-b from-white via-[#F0F9FF]/75 to-white pt-28 pb-12 md:pt-36 md:pb-16"
   >
     <canvas
       id="about-particles-canvas"
+      data-about-spheres
+      data-spheres-density="hero"
       class="pointer-events-none absolute inset-0 z-0 h-full w-full"
       aria-hidden="true"
     ></canvas>
@@ -74,14 +89,20 @@ const supportedBrands = supportedBrandSlugs
           <p class="eyebrow-label m-0">{aboutData.hero.eyebrow}</p>
         </div>
 
-        <button
-          type="button"
-          id="about-particles-pause"
-          aria-pressed="false"
-          class="min-h-[40px] rounded-full border border-line bg-white/90 px-3.5 py-1.5 font-display text-[11px] font-bold text-body transition-colors hover:border-sky-deep hover:text-navy"
-        >
-          Jeda Latar
-        </button>
+        <div class="flex items-center gap-2.5">
+          <span class="hidden items-center gap-1.5 rounded-full border border-[#BAE6FD] bg-white/90 px-3 py-1.5 text-[11px] font-bold text-sky-ink sm:inline-flex">
+            <span class="h-2 w-2 rounded-full bg-sky-deep" aria-hidden="true"></span>
+            <span>{aboutData.hero.particleHint}</span>
+          </span>
+          <button
+            type="button"
+            id="about-particles-pause"
+            aria-pressed="false"
+            class="min-h-[40px] rounded-full border border-line bg-white/95 px-3.5 py-1.5 font-display text-[11px] font-bold text-body shadow-sm transition-colors hover:border-sky-deep hover:text-navy"
+          >
+            Jeda Bola 3D
+          </button>
+        </div>
       </div>
 
       <div class="my-10 md:my-14">
@@ -99,7 +120,7 @@ const supportedBrands = supportedBrandSlugs
         </h1>
 
         <div class="mt-10 grid grid-cols-1 items-end gap-8 lg:grid-cols-12">
-          <p class="m-0 max-w-2xl text-base leading-relaxed text-body sm:text-xl lg:col-span-7">
+          <p class="m-0 max-w-2xl rounded-2xl bg-white/70 p-4 text-base leading-relaxed text-body backdrop-blur-sm sm:p-5 sm:text-xl lg:col-span-7">
             {aboutData.hero.lead}
           </p>
 
@@ -114,7 +135,7 @@ const supportedBrands = supportedBrandSlugs
   </section>
 
   <!-- ======================================================================
-       02. SOLO CREATOR SPOTLIGHT: [[ 001 ]] Adrian Ali Muthi (Hanya 1 Pembuat)
+       02. SOLO CREATOR HOLOGRAM CHAMBER: [[ 001 ]] Adrian Ali Muthi (1 / 1)
        ====================================================================== -->
   <section
     id="founder"
@@ -126,59 +147,82 @@ const supportedBrands = supportedBrandSlugs
       <BlueLine className="mb-12 md:mb-16" />
 
       <div class="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-14">
-        <!-- Left Lusion [[ 001 ]] Founder Plate -->
+        <!-- Left Lusion Interactive 3D Hologram Chamber (Strictly 1 Person: Adrian Ali Muthi) -->
         <div class="lg:col-span-5" data-fade-up>
-          <div class="relative overflow-hidden rounded-card border border-line bg-white p-5 shadow-amc sm:p-6">
-            <div class="mb-4 flex items-center justify-between gap-3 border-b border-line pb-3 font-display text-xs font-extrabold tracking-[0.16em] text-sky-ink">
+          <div
+            id="founder-hologram-card"
+            class="amc-holo-card relative overflow-hidden rounded-[2rem] border border-[#38BDF8]/45 bg-[#041C2C] p-5 text-white shadow-[0_28px_70px_rgba(8,47,73,0.28)] sm:p-6"
+          >
+            <!-- Subtle Holographic Scanlines & Pointer Iridescent Sheen -->
+            <div class="amc-holo-scanlines pointer-events-none absolute inset-0 z-10 opacity-75" aria-hidden="true"></div>
+            <div class="amc-holo-iridescence pointer-events-none absolute inset-0 z-10" aria-hidden="true"></div>
+
+            <!-- Corner Reticle Brackets -->
+            <span aria-hidden="true" class="pointer-events-none absolute left-3 top-3 z-20 h-4 w-4 border-l-2 border-t-2 border-[#7DD3FC]/75"></span>
+            <span aria-hidden="true" class="pointer-events-none absolute right-3 top-3 z-20 h-4 w-4 border-r-2 border-t-2 border-[#7DD3FC]/75"></span>
+            <span aria-hidden="true" class="pointer-events-none absolute bottom-3 left-3 z-20 h-4 w-4 border-b-2 border-l-2 border-[#7DD3FC]/75"></span>
+            <span aria-hidden="true" class="pointer-events-none absolute bottom-3 right-3 z-20 h-4 w-4 border-b-2 border-r-2 border-[#7DD3FC]/75"></span>
+
+            <!-- Hologram Top Telemetry Header -->
+            <div class="relative z-20 mb-4 flex items-center justify-between gap-2 border-b border-[#38BDF8]/25 px-2 pb-3 pt-1 font-display text-[10px] font-extrabold tracking-[0.14em] text-[#7DD3FC] sm:text-[11px] sm:tracking-[0.16em]">
               <span class="shrink-0 whitespace-nowrap">[[ {soloCreator.index} ]]</span>
-              <span class="text-right">PEMBUAT TUNGGAL • 1 / 1</span>
+              <span class="inline-flex items-center gap-1.5 text-right">
+                <span class="h-2 w-2 shrink-0 rounded-full bg-[#38BDF8] shadow-[0_0_10px_#38BDF8]" aria-hidden="true"></span>
+                <span>{soloCreator.hologramTag}</span>
+              </span>
             </div>
 
-            <div class="relative overflow-hidden rounded-2xl border border-line bg-bg-alt">
-              <img
-                src={withBase('/showcase/amc-ecosystem-gallery.webp')}
-                alt="Galeri empat pilar layanan aplikasi premium Al Muthi Creative oleh Adrian Ali Muthi"
-                width="1280"
-                height="800"
-                loading="lazy"
-                decoding="async"
-                class="aspect-[4/3] h-auto w-full object-cover"
-              />
-              <div class="pointer-events-none absolute inset-0 flex flex-col justify-between bg-gradient-to-t from-[#082F49]/90 via-[#082F49]/15 to-transparent p-5">
-                <div class="flex items-center justify-between">
-                  <span class="flex h-12 w-12 items-center justify-center overflow-hidden rounded-xl border border-white/80 bg-white p-1.5 shadow-md">
-                    <img
-                      src={withBase('/logo-amc.webp')}
-                      alt="Logo Al Muthi Creative"
-                      width="44"
-                      height="44"
-                      loading="lazy"
-                      class="h-full w-full object-cover"
-                    />
-                  </span>
-                  <span class="rounded-lg bg-white/95 px-2.5 py-1 font-display text-xs font-extrabold tracking-[0.14em] text-navy">
-                    {soloCreator.monogram}
-                  </span>
-                </div>
+            <!-- Live 3D Hologram Projection Viewport -->
+            <div class="relative z-20 overflow-hidden rounded-2xl border border-[#38BDF8]/30 bg-gradient-to-b from-[#07263D] via-[#051F33] to-[#031320]">
+              <canvas
+                id="founder-hologram-canvas"
+                class="block h-[330px] w-full sm:h-[370px]"
+                role="img"
+                aria-label="Proyeksi hologram 3D interaktif pendiri tunggal Al Muthi Creative, Adrian Ali Muthi"
+              ></canvas>
 
-                <div>
-                  <p class="m-0 font-display text-[11px] font-extrabold uppercase tracking-[0.2em] text-sky-light">
-                    FOUNDER & SOLE CREATOR
-                  </p>
-                  <p class="m-0 mt-1 font-display text-2xl font-extrabold tracking-[-0.02em] text-white">
-                    {soloCreator.name}
-                  </p>
-                </div>
+              <!-- Floating AMC Crest + Monogram Badge inside Hologram -->
+              <div class="pointer-events-none absolute left-4 top-4 flex items-center gap-2.5">
+                <span class="flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-[#7DD3FC]/60 bg-white/95 p-1 shadow-[0_0_20px_rgba(56,189,248,0.35)]">
+                  <img
+                    src={withBase('/logo-amc.webp')}
+                    alt="Logo Al Muthi Creative"
+                    width="36"
+                    height="36"
+                    loading="lazy"
+                    class="h-full w-full object-cover"
+                  />
+                </span>
+                <span class="rounded-lg border border-[#7DD3FC]/40 bg-[#082F49]/85 px-2.5 py-1 font-display text-[11px] font-extrabold tracking-[0.16em] text-[#E0F2FE]">
+                  {soloCreator.monogram}
+                </span>
+              </div>
+
+              <div class="pointer-events-none absolute right-4 top-4 rounded-full border border-[#38BDF8]/40 bg-[#082F49]/80 px-2.5 py-1 font-display text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#7DD3FC]">
+                3D HOLO
+              </div>
+
+              <!-- Hologram Identity Readout Plate -->
+              <div class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#031320] via-[#041C2C]/85 to-transparent p-4 sm:p-5">
+                <p class="m-0 font-display text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#7DD3FC]">
+                  FOUNDER & SOLE CREATOR
+                </p>
+                <p class="m-0 mt-1 font-display text-2xl font-extrabold tracking-[-0.02em] text-white">
+                  {soloCreator.name}
+                </p>
+                <p class="m-0 mt-1 text-[11px] font-semibold text-[#BAE6FD]">
+                  {soloCreator.hologramHint}
+                </p>
               </div>
             </div>
 
-            <div class="mt-4 flex items-center justify-between text-xs font-bold text-body">
+            <div class="relative z-20 mt-4 flex items-center justify-between text-xs font-bold text-[#BAE6FD]">
               <span>Al Muthi Creative • Indonesia</span>
               <a
                 href="https://www.instagram.com/almuthi_creative"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="font-display font-extrabold text-sky-ink no-underline hover:underline"
+                class="font-display font-extrabold text-[#7DD3FC] no-underline hover:text-white hover:underline"
               >
                 @almuthi_creative →
               </a>
@@ -322,7 +366,6 @@ const supportedBrands = supportedBrandSlugs
       <BlueLine className="mb-12 md:mb-16" />
 
       <div class="grid grid-cols-1 gap-12 lg:grid-cols-12">
-        <!-- Sticky Left Oversized Counter -->
         <div class="lg:col-span-4">
           <div class="lg:sticky lg:top-28">
             <p class="eyebrow-label mb-3">{aboutData.milestones.eyebrow}</p>
@@ -355,7 +398,6 @@ const supportedBrands = supportedBrandSlugs
           </div>
         </div>
 
-        <!-- Right Tabular Hairline Ledger Groups -->
         <div class="space-y-10 lg:col-span-8">
           {
             aboutData.milestones.groups.map((group) => (
@@ -387,95 +429,336 @@ const supportedBrands = supportedBrandSlugs
   </section>
 
   <!-- ======================================================================
-       05. AREA OF EXPERTISE (Lusion S / C / T / P -> AMC A / K / H / G)
+       05. AREA OF EXPERTISE -> Lusion 3D Scroll-Flip Real Buyer Reviews Deck
+           Wave 01: Adobe CC (3 reviews)
+           Wave 02: ChatGPT, Claude & Gemini (3 reviews)
+           Wave 03: CapCut, Canva & Wink (3 reviews)
        ====================================================================== -->
   <section
-    id="bidang-layanan"
+    id="ulasan-layanan"
     data-bg-color="#FFFFFF"
-    aria-labelledby="expertise-heading"
-    class="scroll-mt-24 bg-bg py-20 md:py-28"
+    data-active-wave="0"
+    data-active-wave-id="adobe-cc"
+    aria-labelledby="review-deck-heading"
+    class="relative bg-bg"
   >
-    <div class="mx-auto max-w-amc px-4 sm:px-6">
-      <BlueLine className="mb-12 md:mb-16" />
+    <div
+      id="review-deck-stage"
+      class="flex min-h-[100svh] flex-col justify-center py-20 lg:py-14"
+    >
+      <div class="mx-auto w-full max-w-amc px-4 sm:px-6">
+        <BlueLine className="mb-8 md:mb-10" />
 
-      <div class="mb-12 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-        <div>
-          <p class="eyebrow-label mb-3">{aboutData.expertiseSection.eyebrow}</p>
-          <h2
-            id="expertise-heading"
-            data-split-words
-            class="m-0 font-display text-[clamp(2.2rem,5.4vw,4.5rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy"
-          >
-            {aboutData.expertiseSection.headline}
-          </h2>
-        </div>
-
-        <!-- Signature 4-letter Lusion monogram strip -->
-        <div class="flex items-center gap-2.5" aria-hidden="true">
-          {aboutData.expertise.map((pillar) => (
-            <span class="flex h-12 w-12 items-center justify-center rounded-2xl border border-line bg-bg-alt font-display text-lg font-extrabold text-navy">
-              {pillar.letter}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      <div data-stagger-group class="grid grid-cols-1 gap-6 md:grid-cols-2">
-        {
-          aboutData.expertise.map((pillar) => (
-            <article
-              data-stagger-card
-              class="group relative flex flex-col justify-between overflow-hidden rounded-card border border-line bg-white p-6 shadow-sm transition-all duration-500 hover:-translate-y-1 hover:border-sky-deep hover:shadow-amc sm:p-8"
+        <!-- Top Header + 3 Clickable Service Wave Tabs -->
+        <div class="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div class="max-w-2xl">
+            <p class="eyebrow-label mb-2.5">{aboutData.reviewDeckSection.eyebrow}</p>
+            <h2
+              id="review-deck-heading"
+              data-split-words
+              class="m-0 font-display text-[clamp(2.1rem,5vw,4.1rem)] font-extrabold leading-[1.0] tracking-[-0.03em] text-navy"
             >
-              <!-- Giant Architectural Monogram Watermark -->
-              <span
-                aria-hidden="true"
-                class="pointer-events-none absolute -right-4 -top-6 select-none font-display text-[9rem] font-extrabold leading-none text-[#E0F2FE] transition-colors duration-500 group-hover:text-[#BAE6FD]"
-              >
-                {pillar.letter}
-              </span>
+              {aboutData.reviewDeckSection.headline}
+            </h2>
+            <p class="m-0 mt-3 text-sm leading-relaxed text-body sm:text-base">
+              {aboutData.reviewDeckSection.sub}
+            </p>
+          </div>
 
-              <div class="relative z-10">
-                <div class="mb-5 flex items-center gap-3">
-                  <span class="flex h-11 w-11 items-center justify-center rounded-xl bg-sky font-display text-lg font-extrabold text-[#082F49]">
-                    {pillar.letter}
-                  </span>
-                  <h3 class="m-0 font-display text-2xl font-extrabold tracking-[-0.02em] text-navy">
-                    {pillar.title}
-                  </h3>
+          <!-- 3 Service Cluster Flip Controls -->
+          <div class="flex flex-col items-start gap-3 lg:items-end">
+            <div class="flex flex-wrap gap-2" role="group" aria-label="Pilih kelompok ulasan layanan">
+              {
+                resolvedReviewWaves.map((wave, idx) => (
+                  <button
+                    type="button"
+                    data-review-wave-tab={String(idx)}
+                    aria-pressed={idx === 0 ? 'true' : 'false'}
+                    class:list={['amc-wave-tab', idx === 0 && 'is-active']}
+                  >
+                    <span class="mr-1.5 opacity-75">{wave.code}</span>
+                    <span>{wave.shortLabel}</span>
+                  </button>
+                ))
+              }
+            </div>
+
+            <!-- Thin Scroll Flip Progress Track -->
+            <div class="h-1.5 w-full max-w-[260px] overflow-hidden rounded-full bg-[#E0F2FE]">
+              <div
+                id="review-deck-progress-bar"
+                class="h-full w-full origin-left rounded-full bg-gradient-to-r from-[#38BDF8] to-[#0284C7]"
+                style="transform: scaleX(0.08);"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Active Wave Descriptor Strip -->
+        <div class="mt-7 flex flex-col justify-between gap-2 rounded-2xl border border-[#BAE6FD] bg-[#F0F9FF] px-4 py-3.5 sm:flex-row sm:items-center sm:px-5">
+          <div class="min-w-0">
+            <p
+              id="review-deck-active-label"
+              class="m-0 font-display text-sm font-extrabold tracking-[0.02em] text-navy"
+            >
+              {initialFrontWave.code} / 03 • {initialFrontWave.label}
+            </p>
+            <p id="review-deck-active-summary" class="m-0 mt-0.5 text-xs font-medium text-body sm:text-sm">
+              {initialFrontWave.summary}
+            </p>
+          </div>
+          <a
+            id="review-deck-active-link"
+            href={initialFrontWave.href}
+            data-page-link
+            class="inline-flex min-h-[36px] shrink-0 items-center font-display text-xs font-extrabold text-sky-ink no-underline hover:underline"
+          >
+            Lihat detail {initialFrontWave.shortLabel} →
+          </a>
+        </div>
+
+        <!-- 3 Double-Sided 3D Flip Review Cards -->
+        <div class="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-3">
+          {
+            [0, 1, 2].map((slotIdx) => {
+              const frontReview = initialFrontWave.reviews[slotIdx];
+              const backReview = initialBackWave.reviews[slotIdx];
+              return (
+                <div data-review-slot={String(slotIdx)} class="amc-flip-scene">
+                  <div data-flip-card data-flip-angle="0" class="amc-flip-card">
+                    <!-- FRONT FACE (Wave 01 Adobe CC -> swaps while hidden at 180deg to Wave 03 CapCut, Canva & Wink) -->
+                    <article
+                      data-flip-front
+                      class="amc-flip-face amc-flip-front border border-[#BAE6FD] bg-white p-6 shadow-[0_14px_34px_rgba(8,47,73,0.08)]"
+                    >
+                      <div class="amc-flip-sheen" data-flip-sheen aria-hidden="true"></div>
+                      <div>
+                        <div class="flex items-center justify-between gap-3">
+                          <div class="flex items-center gap-3 min-w-0">
+                            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-line bg-white p-1.5 shadow-sm">
+                              <img
+                                data-face-logo
+                                src={frontReview.logo}
+                                alt={`Logo ${frontReview.service}`}
+                                width="32"
+                                height="32"
+                                loading="lazy"
+                                class="h-full w-full object-contain"
+                              />
+                            </span>
+                            <div class="min-w-0">
+                              <span
+                                data-face-service
+                                class="block truncate font-display text-xs font-extrabold text-navy"
+                              >
+                                {frontReview.service}
+                              </span>
+                              <div class="mt-0.5 flex items-center gap-0.5 text-[#0284C7]" aria-label="Rating 5 dari 5 bintang">
+                                {fiveStarIndices.map(() => (
+                                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 2.4l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.3l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9L12 2.4z"></path>
+                                  </svg>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          <span
+                            data-face-code
+                            class="shrink-0 rounded-full border border-[#BAE6FD] bg-[#F0F9FF] px-2.5 py-1 font-display text-[11px] font-extrabold tracking-[0.12em] text-sky-ink"
+                          >
+                            {initialFrontWave.code} / 03
+                          </span>
+                        </div>
+
+                        <blockquote
+                          data-face-quote
+                          class="m-0 mt-5 font-display text-base font-bold leading-[1.55] tracking-[-0.01em] text-navy sm:text-[1.06rem]"
+                        >
+                          "{frontReview.quote}"
+                        </blockquote>
+                      </div>
+
+                      <div class="mt-6 flex items-end justify-between gap-3 border-t border-line pt-4">
+                        <div class="min-w-0">
+                          <p data-face-author class="m-0 truncate font-display text-sm font-extrabold text-navy">
+                            {frontReview.author}
+                          </p>
+                          <p data-face-source class="m-0 mt-0.5 truncate text-[11px] font-semibold text-body">
+                            {frontReview.source}
+                          </p>
+                        </div>
+                        <span data-face-date class="shrink-0 text-[11px] font-bold text-sky-ink">
+                          {frontReview.date}
+                        </span>
+                      </div>
+                    </article>
+
+                    <!-- BACK FACE (Wave 02 ChatGPT, Claude & Gemini, revealed cleanly at rotateY 180deg) -->
+                    <article
+                      data-flip-back
+                      class="amc-flip-face amc-flip-back border border-[#7DD3FC] bg-gradient-to-br from-white via-[#F0F9FF] to-[#E0F2FE] p-6 shadow-[0_14px_34px_rgba(8,47,73,0.10)]"
+                    >
+                      <div>
+                        <div class="flex items-center justify-between gap-3">
+                          <div class="flex items-center gap-3 min-w-0">
+                            <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#7DD3FC] bg-white p-1.5 shadow-sm">
+                              <img
+                                data-face-logo
+                                src={backReview.logo}
+                                alt={`Logo ${backReview.service}`}
+                                width="32"
+                                height="32"
+                                loading="lazy"
+                                class="h-full w-full object-contain"
+                              />
+                            </span>
+                            <div class="min-w-0">
+                              <span
+                                data-face-service
+                                class="block truncate font-display text-xs font-extrabold text-navy"
+                              >
+                                {backReview.service}
+                              </span>
+                              <div class="mt-0.5 flex items-center gap-0.5 text-[#0284C7]" aria-label="Rating 5 dari 5 bintang">
+                                {fiveStarIndices.map(() => (
+                                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 2.4l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.3l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9L12 2.4z"></path>
+                                  </svg>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          <span
+                            data-face-code
+                            class="shrink-0 rounded-full border border-[#7DD3FC] bg-white px-2.5 py-1 font-display text-[11px] font-extrabold tracking-[0.12em] text-sky-ink"
+                          >
+                            {initialBackWave.code} / 03
+                          </span>
+                        </div>
+
+                        <blockquote
+                          data-face-quote
+                          class="m-0 mt-5 font-display text-base font-bold leading-[1.55] tracking-[-0.01em] text-navy sm:text-[1.06rem]"
+                        >
+                          "{backReview.quote}"
+                        </blockquote>
+                      </div>
+
+                      <div class="mt-6 flex items-end justify-between gap-3 border-t border-[#BAE6FD] pt-4">
+                        <div class="min-w-0">
+                          <p data-face-author class="m-0 truncate font-display text-sm font-extrabold text-navy">
+                            {backReview.author}
+                          </p>
+                          <p data-face-source class="m-0 mt-0.5 truncate text-[11px] font-semibold text-body">
+                            {backReview.source}
+                          </p>
+                        </div>
+                        <span data-face-date class="shrink-0 text-[11px] font-bold text-sky-ink">
+                          {backReview.date}
+                        </span>
+                      </div>
+                    </article>
+                  </div>
                 </div>
+              );
+            })
+          }
+        </div>
 
-                <p class="m-0 max-w-md text-sm leading-relaxed text-body sm:text-base">
-                  {pillar.description}
-                </p>
-
-                <ul class="m-0 mt-5 list-none space-y-2 border-t border-line pt-5 p-0 text-sm font-semibold text-navy">
-                  {pillar.items.map((item) => (
-                    <li class="flex items-center gap-2.5">
-                      <span class="h-1.5 w-1.5 shrink-0 rounded-full bg-sky-deep" aria-hidden="true"></span>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div class="relative z-10 mt-6 pt-2">
-                <a
-                  href={withBase(pillar.href)}
-                  data-page-link
-                  class="inline-flex min-h-[44px] items-center gap-2 font-display text-sm font-extrabold text-sky-ink no-underline transition-transform duration-300 group-hover:translate-x-1"
-                >
-                  <span>Lihat katalog {pillar.title}</span>
-                  <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            </article>
-          ))
-        }
+        <!-- Bottom Verification Bar -->
+        <div class="mt-7 flex flex-col items-start justify-between gap-3 text-xs font-semibold text-body sm:flex-row sm:items-center">
+          <span>{aboutData.reviewDeckSection.scrollHint}</span>
+          <a
+            href="https://order.amc.web.id/#ulasan"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex min-h-[40px] items-center font-display font-extrabold text-sky-ink no-underline hover:underline"
+          >
+            Buka seluruh 1.266 ulasan di order.amc.web.id/#ulasan →
+          </a>
+        </div>
       </div>
+    </div>
+
+    <!-- Pre-resolved wave dataset for client 3D flip engine -->
+    <script
+      id="about-review-waves-data"
+      type="application/json"
+      set:html={JSON.stringify(resolvedReviewWaves)}
+    ></script>
+  </section>
+
+  <!-- ======================================================================
+       06. FINAL CTA: "Ayo Order Sekarang!" + Interactive Movable 3D Spheres
+           (Replaces Lusion "Let's work together!")
+       ====================================================================== -->
+  <section
+    id="about-order-cta"
+    data-bg-color="#E0F2FE"
+    data-spheres-stage
+    aria-labelledby="about-order-cta-heading"
+    class="amc-spheres-stage relative flex min-h-[78dvh] items-center overflow-hidden bg-gradient-to-b from-white via-[#F0F9FF] to-[#E0F2FE] py-24 md:py-32"
+  >
+    <canvas
+      id="about-cta-particles-canvas"
+      data-about-spheres
+      data-spheres-density="cta"
+      class="pointer-events-none absolute inset-0 z-0 h-full w-full"
+      aria-hidden="true"
+    ></canvas>
+
+    <div class="relative z-10 mx-auto max-w-4xl px-4 text-center sm:px-6">
+      <p class="eyebrow-label mb-4">{aboutData.orderCta.eyebrow}</p>
+
+      <h2
+        id="about-order-cta-heading"
+        class="m-0 font-display text-[clamp(3rem,9vw,7.4rem)] font-extrabold leading-[1.04] tracking-[-0.035em] text-navy"
+      >
+        <span data-split-words class="block">{aboutData.orderCta.headlineLine1}</span>
+        <span data-split-words class="block">
+          <span class="amc-text-gradient">{aboutData.orderCta.headlineLine2}</span>
+        </span>
+      </h2>
+
+      <p class="mx-auto mt-6 max-w-xl rounded-2xl bg-white/75 px-5 py-3 text-base leading-[1.7] text-body backdrop-blur-sm sm:text-lg">
+        {aboutData.orderCta.subheadline}
+      </p>
+
+      <div data-stagger-group class="mt-9 flex flex-wrap items-center justify-center gap-4">
+        <a
+          href={aboutData.orderCta.botHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-stagger-card
+          data-magnetic
+          class="amc-btn-primary"
+        >
+          <ActionIcon name="bot" size={18} />
+          <span>{aboutData.orderCta.botLabel}</span>
+        </a>
+
+        <a
+          href={aboutData.orderCta.shopHref}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-stagger-card
+          data-magnetic
+          class="amc-btn-ghost"
+        >
+          <ActionIcon name="shop" size={18} />
+          <span>{aboutData.orderCta.shopLabel}</span>
+        </a>
+      </div>
+
+      <p class="mt-6 inline-flex items-center gap-2 rounded-full border border-[#BAE6FD] bg-white/85 px-4 py-1.5 text-[11px] font-bold text-sky-ink">
+        <span class="h-2 w-2 rounded-full bg-sky-deep" aria-hidden="true"></span>
+        <span>{aboutData.orderCta.particleHint}</span>
+      </p>
     </div>
   </section>
 
-  <FinalCtaSection />
+  <!-- Minimalist Lusion Footer with Auto-Scroll Portal straight to https://order.amc.web.id -->
   <FooterSection />
 </BaseLayout>
