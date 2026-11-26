@@ -33,68 +33,80 @@ function createHologramPortraitTexture(
   tint: 'primary' | 'ghost'
 ): HTMLCanvasElement {
   const outW = 380;
-  const outH = 440;
+  const outH = 430;
   const off = document.createElement('canvas');
   off.width = outW;
   off.height = outH;
   const octx = off.getContext('2d');
   if (!octx) return off;
 
-  // Cover-fit portrait centered cleanly on Adrian's face & shoulders
-  const imgAspect = img.naturalWidth / Math.max(1, img.naturalHeight);
-  const boxAspect = outW / outH;
-  let sx = 0;
-  let sy = 0;
-  let sw = img.naturalWidth;
-  let sh = img.naturalHeight;
-  if (imgAspect > boxAspect) {
-    sw = img.naturalHeight * boxAspect;
-    sx = (img.naturalWidth - sw) * 0.5;
-  } else {
-    sh = img.naturalWidth / boxAspect;
-    sy = (img.naturalHeight - sh) * 0.12;
-  }
+  // Contain-fit transparent cutout cleanly with subtle headroom above curly hair
+  const scale = Math.min((outW * 0.94) / Math.max(1, img.naturalWidth), (outH * 0.96) / Math.max(1, img.naturalHeight));
+  const dw = img.naturalWidth * scale;
+  const dh = img.naturalHeight * scale;
+  const dx = (outW - dw) * 0.5;
+  const dy = outH - dh;
 
-  octx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+  octx.clearRect(0, 0, outW, outH);
+  octx.drawImage(img, dx, dy, dw, dh);
   const frame = octx.getImageData(0, 0, outW, outH);
   const data = frame.data;
 
-  const cx = outW * 0.5;
-  const cy = outH * 0.46;
+  // Copy original alpha for fresnel rim-edge detection along transparent cutout silhouette
+  const origAlpha = new Uint8Array(outW * outH);
+  for (let p = 0; p < outW * outH; p++) {
+    origAlpha[p] = data[p * 4 + 3];
+  }
 
   for (let y = 0; y < outH; y++) {
-    const scanStripe = y % 3 === 0 ? 0.80 : 1.06;
-    const ny = (y - cy) / (outH * 0.48);
+    const scanStripe = y % 3 === 0 ? 0.80 : 1.07;
+    const bottomFade = y > outH * 0.84 ? Math.max(0, 1 - (y - outH * 0.84) / (outH * 0.16)) : 1;
+
     for (let x = 0; x < outW; x++) {
-      const idx = (y * outW + x) * 4;
+      const pIdx = y * outW + x;
+      const srcAlpha = origAlpha[pIdx] / 255;
+      const idx = pIdx * 4;
+
+      if (srcAlpha < 0.02) {
+        data[idx + 3] = 0;
+        continue;
+      }
+
       const r = data[idx];
       const g = data[idx + 1];
       const b = data[idx + 2];
 
-      // Perceptual luminance with crisp S-curve portrait contrast
-      let lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-      lum = Math.max(0, Math.min(1, (lum - 0.08) * 1.18));
-      const curved = Math.pow(lum, 0.88) * scanStripe;
+      // Crisp perceptual luminance preserving facial features (eyes, brows, lips, curls) + subtle blazer visibility
+      const rawLum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      const lifted = Math.min(1, 0.08 + Math.pow(rawLum, 0.96) * 0.90);
 
-      // Soft radial hologram vignette mask + gentle fade at bottom emitter merge
-      const nx = (x - cx) / (outW * 0.45);
-      const radialDist = Math.sqrt(nx * nx * 1.08 + ny * ny * 0.92);
-      const edgeFade = Math.max(0, Math.min(1, 1 - Math.max(0, radialDist - 0.62) / 0.38));
-      const bottomFade = y > outH * 0.78 ? Math.max(0, 1 - (y - outH * 0.78) / (outH * 0.22)) : 1;
-      const maskAlpha = edgeFade * bottomFade;
+      // Compute glowing holographic fresnel rim along transparent cutout silhouette
+      let edgeFactor = 0;
+      if (x > 2 && x < outW - 3 && y > 2 && y < outH - 3) {
+        const minNeighbor = Math.min(
+          origAlpha[pIdx - 3],
+          origAlpha[pIdx + 3],
+          origAlpha[pIdx - outW * 3],
+          origAlpha[pIdx + outW * 3]
+        ) / 255;
+        edgeFactor = Math.max(0, srcAlpha - minNeighbor);
+      }
+
+      const curved = Math.min(1, lifted * scanStripe);
+      const maskAlpha = srcAlpha * bottomFade;
 
       if (tint === 'primary') {
-        // Luminous Lusion Sky Blue / Cyan Hologram ramp
-        data[idx] = Math.min(255, Math.round(14 + Math.pow(curved, 1.55) * 215));
-        data[idx + 1] = Math.min(255, Math.round(78 + curved * 176));
-        data[idx + 2] = Math.min(255, Math.round(138 + curved * 117));
-        data[idx + 3] = Math.round(Math.min(1, (0.28 + curved * 0.78) * maskAlpha) * 255);
+        // High-contrast Lusion Electric Sky Blue / Cyan Hologram ramp + bright Fresnel rim
+        data[idx] = Math.min(255, Math.round(6 + Math.pow(curved, 1.75) * 205 + edgeFactor * 155));
+        data[idx + 1] = Math.min(255, Math.round(42 + Math.pow(curved, 1.1) * 195 + edgeFactor * 120));
+        data[idx + 2] = Math.min(255, Math.round(92 + Math.pow(curved, 0.9) * 160 + edgeFactor * 95));
+        data[idx + 3] = Math.round(Math.min(1, (0.64 + curved * 0.34 + edgeFactor * 0.3) * maskAlpha) * 255);
       } else {
-        // Chromatic cyan-indigo parallax echo ghost
-        data[idx] = Math.min(255, Math.round(92 + curved * 130));
-        data[idx + 1] = Math.min(255, Math.round(188 + curved * 67));
+        // Delicate chromatic cyan-periwinkle parallax echo ghost
+        data[idx] = Math.min(255, Math.round(70 + curved * 140));
+        data[idx + 1] = Math.min(255, Math.round(170 + curved * 82));
         data[idx + 2] = 255;
-        data[idx + 3] = Math.round(Math.min(1, curved * 0.42 * maskAlpha) * 255);
+        data[idx + 3] = Math.round(Math.min(1, (0.16 + curved * 0.30) * maskAlpha) * 255);
       }
     }
   }
@@ -236,16 +248,17 @@ function initFounderHologram(): void {
       const splitX = 4 + Math.abs(currentNx) * 6;
       const flicker = reduced ? 1 : 0.92 + Math.sin(t * 11) * 0.035 + Math.cos(t * 17) * 0.025;
 
-      // Chromatic cyan-lilac holographic echo layer
+      // Subtle chromatic cyan-lilac holographic echo behind primary portrait
       ctx.save();
       ctx.globalCompositeOperation = 'screen';
-      ctx.globalAlpha = 0.55 * flicker;
+      ctx.globalAlpha = 0.28 * flicker;
       ctx.drawImage(ghostHoloTex, baseX + splitX, baseY - 1, drawW, drawH);
-      ctx.globalAlpha = 0.34 * flicker;
+      ctx.globalAlpha = 0.18 * flicker;
       ctx.drawImage(ghostHoloTex, baseX - splitX * 0.7, baseY + 1, drawW, drawH);
 
-      // Primary sharp cyan hologram portrait
-      ctx.globalAlpha = 0.96 * flicker;
+      // Primary sharp cyan hologram portrait (preserves deep eyes, brows, curls & suit detail)
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.globalAlpha = 0.94 * flicker;
       ctx.drawImage(primaryHoloTex, baseX, baseY, drawW, drawH);
 
       // Subtle holographic glitch-slice offset during scan wave
