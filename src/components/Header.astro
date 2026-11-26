@@ -1,5 +1,6 @@
 ---
 import content from '@/data/content.json';
+import ActionIcon from './ActionIcon.astro';
 import { withBase } from '@/utils/url';
 
 interface Props {
@@ -86,7 +87,8 @@ const active = norm(currentPath);
         data-magnetic
         class="amc-btn-primary hidden sm:inline-flex !min-h-[44px] !px-5 !py-2.5 !text-sm"
       >
-        {content.header.ctaLabel}
+        <ActionIcon name="bot" size={17} />
+        <span>{content.header.ctaLabel}</span>
       </a>
 
       <button

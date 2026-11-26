@@ -1,6 +1,7 @@
 ---
 import content from '@/data/content.json';
 import products from '@/data/products.json';
+import ActionIcon from './ActionIcon.astro';
 import { getProductDetailBySlug } from '@/data/product-details';
 import { withBase } from '@/utils/url';
 
@@ -169,7 +170,8 @@ const serviceGroups = categoryOrder.map((cat) => ({
             data-magnetic
             class="amc-btn-primary"
           >
-            {content.cinematic.ctaLabel}
+            <ActionIcon name="bot" size={18} />
+            <span>{content.cinematic.ctaLabel}</span>
           </a>
           <a
             href={withBase(content.cinematic.catalogCtaHref)}

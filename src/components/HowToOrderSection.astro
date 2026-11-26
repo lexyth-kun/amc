@@ -1,6 +1,7 @@
 ---
 import content from '@/data/content.json';
 import BlueLine from './BlueLine.astro';
+import ActionIcon from './ActionIcon.astro';
 import { withBase } from '@/utils/url';
 ---
 
@@ -98,7 +99,8 @@ import { withBase } from '@/utils/url';
               data-magnetic
               class="amc-btn-primary flex-1 !min-h-[48px] !px-5 !text-sm"
             >
-              {content.howToOrder.primaryCtaLabel}
+              <ActionIcon name="bot" size={18} />
+              <span>{content.howToOrder.primaryCtaLabel}</span>
             </a>
             <a
               href={content.howToOrder.botCtaHref}
@@ -106,7 +108,8 @@ import { withBase } from '@/utils/url';
               rel="noopener noreferrer"
               class="amc-btn-ghost !min-h-[48px] !px-4 !text-sm"
             >
-              {content.howToOrder.botCtaLabel}
+              <ActionIcon name="shop" size={18} />
+              <span>{content.howToOrder.botCtaLabel}</span>
             </a>
           </div>
 

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import ActionIcon from '@/components/ActionIcon.astro';
 import { getAllProductDetails, getProductDetailBySlug, type ProductDetail } from '@/data/product-details';
 import { formatRupiah, getStockProgressPercent } from '@/utils/format';
 import { withBase } from '@/utils/url';
@@ -137,10 +138,8 @@ const flashStockPct = detail.flashSale
                 data-magnetic
                 class="amc-btn-primary"
               >
-                <span>Order Sekarang (Bot WA)</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 12h14M13 5l7 7-7 7"></path>
-                </svg>
+                <ActionIcon name="bot" size={18} />
+                <span>Order Via Bot WA</span>
               </a>
 
               <a
@@ -150,7 +149,8 @@ const flashStockPct = detail.flashSale
                 data-magnetic
                 class="amc-btn-ghost"
               >
-                <span>Lihat di Web Shop</span>
+                <ActionIcon name="shop" size={18} />
+                <span>Order di Web Shop</span>
               </a>
             </div>
 
@@ -595,10 +595,8 @@ const flashStockPct = detail.flashSale
               data-magnetic
               class="amc-btn-primary"
             >
-              <span>Order Sekarang (Bot WA)</span>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <path d="M5 12h14M13 5l7 7-7 7"></path>
-              </svg>
+              <ActionIcon name="bot" size={18} />
+              <span>Order Via Bot WA</span>
             </a>
 
             <a
@@ -607,7 +605,8 @@ const flashStockPct = detail.flashSale
               rel="noopener noreferrer"
               class="amc-btn-ghost"
             >
-              <span>Lihat di order.amc.web.id</span>
+              <ActionIcon name="shop" size={18} />
+              <span>Order di Web Shop</span>
             </a>
           </div>
         </div>

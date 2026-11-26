@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import BlueLine from '@/components/BlueLine.astro';
+import ActionIcon from '@/components/ActionIcon.astro';
 import FinalCtaSection from '@/components/FinalCtaSection.astro';
 import FooterSection from '@/components/FooterSection.astro';
 import aboutData from '@/data/about.json';
@@ -221,8 +222,8 @@ const supportedBrands = supportedBrandSlugs
               data-magnetic
               class="amc-btn-primary"
             >
-              <span>Order Sekarang (Bot WA)</span>
-              <span aria-hidden="true">→</span>
+              <ActionIcon name="bot" size={18} />
+              <span>Order Via Bot WA</span>
             </a>
             <a
               href={withBase('/produk/')}

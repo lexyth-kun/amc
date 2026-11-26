@@ -1,5 +1,6 @@
 ---
 import content from '@/data/content.json';
+import ActionIcon from './ActionIcon.astro';
 ---
 
 <section
@@ -54,7 +55,8 @@ import content from '@/data/content.json';
         data-magnetic
         class="amc-btn-primary"
       >
-        {content.finalCta.primaryLabel}
+        <ActionIcon name="bot" size={18} />
+        <span>{content.finalCta.primaryLabel}</span>
       </a>
 
       <a
@@ -65,6 +67,7 @@ import content from '@/data/content.json';
         data-magnetic
         class="amc-btn-ghost"
       >
+        <ActionIcon name="shop" size={18} />
         <span>{content.finalCta.waLabel}</span>
       </a>
     </div>

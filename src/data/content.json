@@ -111,9 +111,9 @@
   "howToOrder": {
     "eyebrow": "ALUR PEMESANAN",
     "headline": "Order semudah chat.",
-    "primaryCtaLabel": "Order via Bot WA →",
+    "primaryCtaLabel": "Order Via Bot WA",
     "primaryCtaHref": "https://wa.me/27748304118?text=menu",
-    "botCtaLabel": "Buka Web Shop",
+    "botCtaLabel": "Order di Web Shop",
     "botCtaHref": "https://order.amc.web.id",
     "helperNote": "Kendala akun atau klaim garansi? Chat CS.",
     "helperHref": "https://wa.me/6285117120101",
@@ -271,9 +271,9 @@
     "headlineHighlight": "upgrade",
     "headlineAfter": "akunmu?",
     "subheadline": "Stok Flash Sale menipis, order otomatis 24 jam lewat Bot WhatsApp AMC sekarang.",
-    "primaryLabel": "Order Sekarang (Bot WA) →",
+    "primaryLabel": "Order Via Bot WA",
     "primaryHref": "https://wa.me/27748304118?text=menu",
-    "waLabel": "Buka Web Shop",
+    "waLabel": "Order di Web Shop",
     "waHref": "https://order.amc.web.id"
   },
   "footer": {
