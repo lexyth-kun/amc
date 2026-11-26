@@ -5,7 +5,11 @@ import { initHeaderAndMenu } from './header-menu';
 import { initPreloader } from './preloader';
 import { initMilestoneBInteractions } from './ui-interactions';
 import { finishProductPortalEntry } from './page-transition';
-import { computeLogoWaveMotion, computeTunnelPhaseState } from '@/utils/tunnel-phases';
+import {
+  computeLogoWaveMotion,
+  computeTunnelPhaseState,
+  waveIndexToTunnelProgress,
+} from '@/utils/tunnel-phases';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,12 +31,15 @@ function setupDeferredCinematicTunnel(): void {
   const phase1Wrap = document.getElementById('cinematic-phase1');
   const phase2Wrap = document.getElementById('cinematic-phase2');
   const orbitalStage = document.getElementById('cinematic-orbital-stage');
+  const worldWatermark = document.getElementById('cinematic-world-watermark');
+  const worldNav = document.getElementById('cinematic-world-nav');
   const serviceGroups = Array.from(document.querySelectorAll<HTMLElement>('[data-tunnel-group]'));
   const groupIcons = serviceGroups.map((group) =>
     Array.from(group.querySelectorAll<HTMLElement>('[data-tunnel-icon]'))
   );
-  const groupDots = Array.from(document.querySelectorAll<HTMLElement>('[data-tunnel-dot]'));
+  const groupDots = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-tunnel-dot]'));
   const groupLabel = document.getElementById('cinematic-active-category');
+  const groupSubtitle = document.getElementById('cinematic-active-subtitle');
   const progressBar = document.getElementById('cinematic-showcase-bar');
   if (!section || !pinStage || !whiteoutEl || !phase4Copy) return;
 
@@ -42,6 +49,8 @@ function setupDeferredCinematicTunnel(): void {
     pinStage.classList.add('py-20', 'flex-col', 'gap-10');
     const canvas = document.getElementById('cinematic-canvas');
     if (canvas) canvas.style.display = 'none';
+    if (worldWatermark) worldWatermark.style.display = 'none';
+    if (worldNav) worldNav.style.display = 'none';
     if (phase2Wrap) {
       phase2Wrap.style.position = 'relative';
       phase2Wrap.style.opacity = '1';
@@ -70,16 +79,70 @@ function setupDeferredCinematicTunnel(): void {
   }
 
   const p1Words = Array.from(section.querySelectorAll<HTMLElement>('.cinematic-p1-word'));
-  let renderVisual: ((progress: number) => void) | null = null;
+  let renderVisual: ((progress: number, pointerX?: number, pointerY?: number) => void) | null = null;
   let loadingVisual = false;
   let currentProgress = 0;
+  let lastActiveWave = -1;
+
+  // Interactive damped pointer parallax for WebGL camera steering & editorial watermark drift
+  let targetPx = 0;
+  let targetPy = 0;
+  let smoothPx = 0;
+  let smoothPy = 0;
+  let parallaxRaf = 0;
+
+  const tickParallax = () => {
+    smoothPx += (targetPx - smoothPx) * 0.1;
+    smoothPy += (targetPy - smoothPy) * 0.1;
+
+    renderVisual?.(currentProgress, smoothPx, smoothPy);
+    if (worldWatermark) {
+      const scrollDriftX = (currentProgress - 0.45) * -90;
+      worldWatermark.style.transform = `translate3d(${(scrollDriftX - smoothPx * 28).toFixed(1)}px, ${(-smoothPy * 16).toFixed(1)}px, 0)`;
+    }
+
+    if (Math.abs(targetPx - smoothPx) > 0.002 || Math.abs(targetPy - smoothPy) > 0.002) {
+      parallaxRaf = window.requestAnimationFrame(tickParallax);
+    } else {
+      parallaxRaf = 0;
+    }
+  };
+
+  const kickParallax = () => {
+    if (!parallaxRaf) {
+      parallaxRaf = window.requestAnimationFrame(tickParallax);
+    }
+  };
+
+  pinStage.addEventListener(
+    'pointermove',
+    (ev) => {
+      if (ev.pointerType === 'touch') return;
+      const rect = pinStage.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+      targetPx = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+      targetPy = ((ev.clientY - rect.top) / rect.height) * 2 - 1;
+      kickParallax();
+    },
+    { passive: true }
+  );
+
+  pinStage.addEventListener(
+    'pointerleave',
+    () => {
+      targetPx = 0;
+      targetPy = 0;
+      kickParallax();
+    },
+    { passive: true }
+  );
 
   const ensureVisualRenderer = () => {
     if (loadingVisual || renderVisual) return;
     loadingVisual = true;
     void import('./cinematic-tunnel').then(({ mountCinematicVisualRenderer }) => {
       renderVisual = mountCinematicVisualRenderer();
-      renderVisual(currentProgress);
+      renderVisual(currentProgress, smoothPx, smoothPy);
     });
   };
 
@@ -105,8 +168,8 @@ function setupDeferredCinematicTunnel(): void {
       phase1Wrap.style.transform = `translate3d(0, ${((1 - state.phase1WordProgress) * 18).toFixed(1)}px, 0)`;
     }
     p1Words.forEach((word, idx) => {
-      const localStart = idx * 0.16;
-      const localProgress = Math.max(0, Math.min(1, (state.phase1WordProgress - localStart) / 0.52));
+      const localStart = idx * 0.1;
+      const localProgress = Math.max(0, Math.min(1, (state.phase1WordProgress - localStart) / 0.42));
       word.style.transform = `translate3d(0, ${((1 - localProgress) * 110).toFixed(1)}%, 0)`;
     });
 
@@ -114,17 +177,20 @@ function setupDeferredCinematicTunnel(): void {
     if (phase2Wrap) {
       phase2Wrap.style.opacity = state.phase2Opacity.toFixed(3);
     }
+    if (worldNav) {
+      worldNav.style.pointerEvents = phase2Interactive ? 'auto' : 'none';
+    }
 
     if (serviceGroups.length > 0) {
       const stageW = orbitalStage?.clientWidth || window.innerWidth;
-      const stageH = orbitalStage?.clientHeight || window.innerHeight * 0.65;
+      const stageH = orbitalStage?.clientHeight || window.innerHeight * 0.62;
       const isCompact = stageW < 640;
-      const rx = isCompact
-        ? Math.min(stageW * 0.36, 140)
-        : Math.min(stageW * 0.28, 380);
-      const ry = isCompact
-        ? Math.min(stageH * 0.34, 195)
-        : Math.min(stageH * 0.36, 225);
+      const halfW = isCompact
+        ? Math.min(stageW * 0.42, 165)
+        : Math.min(stageW * 0.4, 495);
+      const halfH = isCompact
+        ? Math.min(stageH * 0.38, 195)
+        : Math.min(stageH * 0.42, 250);
 
       const activeIdx = Math.min(
         serviceGroups.length - 1,
@@ -147,10 +213,10 @@ function setupDeferredCinematicTunnel(): void {
           if (motion.opacity > groupMaxOpacity) {
             groupMaxOpacity = motion.opacity;
           }
-          const x = Math.cos(motion.angleRad) * rx * motion.radialFactor;
-          const y = Math.sin(motion.angleRad) * ry * motion.radialFactor;
+          const x = motion.xNorm * halfW;
+          const y = motion.yNorm * halfH;
           icon.style.opacity = motion.opacity.toFixed(3);
-          icon.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${motion.scale.toFixed(3)}) rotate(${motion.rotateDeg.toFixed(2)}deg)`;
+          icon.style.transform = `perspective(900px) translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) scale(${motion.scale.toFixed(3)}) rotate(${motion.rotateDeg.toFixed(2)}deg) rotateY(${motion.tiltYDeg.toFixed(1)}deg)`;
           icon.style.pointerEvents = phase2Interactive && motion.opacity > 0.45 ? 'auto' : 'none';
         });
 
@@ -160,17 +226,40 @@ function setupDeferredCinematicTunnel(): void {
         group.setAttribute('aria-hidden', isVisible ? 'false' : 'true');
       });
 
-      groupDots.forEach((dot, idx) => {
-        const isCurrent = idx === activeIdx;
-        dot.classList.toggle('bg-sky-light', isCurrent);
-        dot.classList.toggle('w-7', isCurrent);
-        dot.classList.toggle('bg-white/30', !isCurrent);
-        dot.classList.toggle('w-2', !isCurrent);
-      });
-      const activeName = serviceGroups[activeIdx]?.dataset.tunnelGroupLabel;
-      if (groupLabel && activeName) {
-        groupLabel.textContent = `${activeIdx + 1}/${serviceGroups.length} • ${activeName}`;
+      if (activeIdx !== lastActiveWave) {
+        lastActiveWave = activeIdx;
+        groupDots.forEach((dot, idx) => {
+          const isCurrent = idx === activeIdx;
+          dot.setAttribute('aria-selected', isCurrent ? 'true' : 'false');
+          dot.classList.toggle('border-[#7DD3FC]/70', isCurrent);
+          dot.classList.toggle('bg-[#38BDF8]/25', isCurrent);
+          dot.classList.toggle('text-white', isCurrent);
+          dot.classList.toggle('shadow-[0_0_20px_rgba(56,189,248,0.35)]', isCurrent);
+          dot.classList.toggle('border-white/15', !isCurrent);
+          dot.classList.toggle('bg-white/[0.04]', !isCurrent);
+          dot.classList.toggle('text-white/60', !isCurrent);
+        });
+
+        const activeGroup = serviceGroups[activeIdx];
+        const activeName = activeGroup?.dataset.tunnelGroupLabel;
+        const activeSub = activeGroup?.dataset.tunnelGroupSubtitle;
+        const activeWatermark = activeGroup?.dataset.tunnelGroupWatermark;
+        if (groupLabel && activeName) {
+          groupLabel.textContent = `0${activeIdx + 1}/0${serviceGroups.length} • ${activeName}`;
+        }
+        if (groupSubtitle && activeSub) {
+          groupSubtitle.textContent = activeSub;
+        }
+        if (worldWatermark && activeWatermark) {
+          worldWatermark.textContent = activeWatermark;
+        }
       }
+
+      if (worldWatermark) {
+        const scrollDriftX = (progress - 0.45) * -90;
+        worldWatermark.style.transform = `translate3d(${(scrollDriftX - smoothPx * 28).toFixed(1)}px, ${(-smoothPy * 16).toFixed(1)}px, 0)`;
+      }
+
       if (progressBar) {
         progressBar.style.transform = `scaleX(${Math.max(0.04, state.showcaseProgress).toFixed(4)})`;
       }
@@ -185,18 +274,32 @@ function setupDeferredCinematicTunnel(): void {
       document.body.style.backgroundColor = '#FFFFFF';
     }
 
-    renderVisual?.(progress);
+    renderVisual?.(progress, smoothPx, smoothPy);
   };
 
   applyProgress(0);
 
-  ScrollTrigger.create({
+  const tunnelTrigger = ScrollTrigger.create({
     trigger: section,
     pin: pinStage,
     start: 'top top',
     end: '+=620%',
     scrub: 1.6,
     onUpdate: (self) => applyProgress(self.progress),
+  });
+
+  // Allow users to click any of the 6 world pills to warp directly to that category wave
+  groupDots.forEach((dot, idx) => {
+    dot.addEventListener('click', () => {
+      const targetProgress = waveIndexToTunnelProgress(idx, serviceGroups.length);
+      const targetY = tunnelTrigger.start + (tunnelTrigger.end - tunnelTrigger.start) * targetProgress;
+      const win = window as Window & { __amcScrollTo?: (y: number) => void };
+      if (win.__amcScrollTo) {
+        win.__amcScrollTo(targetY);
+      } else {
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+      }
+    });
   });
 }
 

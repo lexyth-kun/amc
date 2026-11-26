@@ -136,6 +136,16 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     );
     expect(activeAnimatedIcons).toBeGreaterThan(0);
 
+    // Interactive 6-world jump pill warps smoothly to Buzzer Sosmed and updates editorial HUD & watermark
+    await page.locator('#cinematic-world-nav [data-tunnel-dot="4"]').click();
+    await expect
+      .poll(
+        async () => (await page.locator('#cinematic-world-watermark').textContent())?.trim(),
+        { timeout: 3500 }
+      )
+      .toBe('BUZZER');
+    await expect(page.locator('#cinematic-active-category')).toContainText('Buzzer Sosmed');
+
     await page.evaluate(() => {
       const sec = document.getElementById('dunia-baru');
       const win = window as Window & { __amcScrollTo?: (y: number) => void };

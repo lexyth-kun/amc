@@ -5,18 +5,51 @@ import ActionIcon from './ActionIcon.astro';
 import { getProductDetailBySlug } from '@/data/product-details';
 import { withBase } from '@/utils/url';
 
-const categoryOrder = [
-  'AI & Produktivitas',
-  'Kreasi & Desain',
-  'Hiburan & Musik',
-  'VPN & Keamanan',
-  'Buzzer Sosmed',
-  'Top Up Game',
+const worldConfigs = [
+  {
+    category: 'AI & Produktivitas',
+    shortLabel: 'AI',
+    watermark: 'AI 2026',
+    subtitle: 'ChatGPT, Claude, Gemini, hingga Grok siap kerja cerdas setiap hari.',
+  },
+  {
+    category: 'Kreasi & Desain',
+    shortLabel: 'Desain',
+    watermark: 'KREASI',
+    subtitle: 'Suite kreatif Adobe, Canva, dan CapCut untuk karya visual tanpa batas.',
+  },
+  {
+    category: 'Hiburan & Musik',
+    shortLabel: 'Hiburan',
+    watermark: 'HIBURAN',
+    subtitle: 'Streaming film 4K dan musik bebas iklan untuk semua perangkat.',
+  },
+  {
+    category: 'VPN & Keamanan',
+    shortLabel: 'VPN',
+    watermark: 'PRIVASI',
+    subtitle: 'Koneksi terenkripsi kecepatan tinggi dengan privasi terjaga penuh.',
+  },
+  {
+    category: 'Buzzer Sosmed',
+    shortLabel: 'Buzzer',
+    watermark: 'BUZZER',
+    subtitle: 'Dorong visibilitas konten organik di Instagram, TikTok, dan Shopee.',
+  },
+  {
+    category: 'Top Up Game',
+    shortLabel: 'Game',
+    watermark: 'GAMING',
+    subtitle: 'Isi diamond, Robux, hingga VP cepat masuk dalam hitungan menit.',
+  },
 ] as const;
 
-const serviceGroups = categoryOrder.map((cat) => ({
-  label: cat,
-  items: products.allServices.filter((s) => s.category === cat),
+const serviceGroups = worldConfigs.map((cfg) => ({
+  label: cfg.category,
+  shortLabel: cfg.shortLabel,
+  watermark: cfg.watermark,
+  subtitle: cfg.subtitle,
+  items: products.allServices.filter((s) => s.category === cfg.category),
 }));
 ---
 
@@ -36,17 +69,17 @@ const serviceGroups = categoryOrder.map((cat) => ({
       aria-hidden="true"
     ></canvas>
 
-    <!-- Phase 1 Copy (0% - 16%): Deep Sky-Night + Glowing Sky Orb -->
+    <!-- Phase 1 Copy (0% - 16%): Deep Sky-Night + Celestial Gyro Core -->
     <div
       id="cinematic-phase1"
-      class="dark-surface pointer-events-none relative z-10 mx-auto max-w-4xl bg-[radial-gradient(ellipse_at_center,rgba(8,47,73,0.72)_0%,rgba(8,47,73,0)_74%)] px-6 py-8 text-center"
+      class="dark-surface pointer-events-none relative z-10 mx-auto max-w-5xl bg-[radial-gradient(ellipse_at_center,rgba(8,47,73,0.78)_0%,rgba(8,47,73,0)_74%)] px-6 py-8 text-center"
     >
       <p class="font-display text-xs font-extrabold uppercase tracking-[0.24em] text-sky-light">
         {content.cinematic.phase1Eyebrow}
       </p>
       <h2
         id="cinematic-phase1-heading"
-        class="mt-4 font-display text-[clamp(2.5rem,6.5vw,5.5rem)] font-extrabold leading-[1.04] tracking-[-0.03em] text-white"
+        class="mt-4 font-display text-[clamp(2.5rem,6.2vw,5.4rem)] font-extrabold leading-[1.06] tracking-[-0.03em] text-white"
       >
         {
           content.cinematic.phase1Headline.split(' ').map((word) => (
@@ -58,32 +91,53 @@ const serviceGroups = categoryOrder.map((cat) => ({
       </h2>
     </div>
 
-    <!-- Phase 2 Pure Orbital Logo & Icon Animation (16% - 78%): Zero Cards -->
+    <!-- Phase 2 Multi-World Spatial Choreography (16% - 78%): Zero Cards -->
     <div
       id="cinematic-phase2"
       style="opacity: 0; pointer-events: none;"
-      class="dark-surface pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-between px-4 pt-24 pb-8 sm:px-6 sm:pt-28 sm:pb-10"
+      class="dark-surface pointer-events-none absolute inset-0 z-10 flex flex-col items-center justify-between px-4 pt-24 pb-6 sm:px-6 sm:pt-28 sm:pb-8"
     >
-      <!-- Subtle frameless top label -->
-      <div class="pointer-events-none relative z-20 text-center">
-        <p class="m-0 font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-sky-light">
+      <!-- Giant kinetic editorial watermark behind floating logos -->
+      <div
+        aria-hidden="true"
+        class="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden select-none"
+      >
+        <span
+          id="cinematic-world-watermark"
+          class="font-display text-[clamp(4.5rem,17vw,14.5rem)] font-extrabold leading-none tracking-[-0.04em] text-white/[0.065] whitespace-nowrap will-change-transform"
+        >
+          {serviceGroups[0]?.watermark}
+        </span>
+      </div>
+
+      <!-- Frameless editorial world HUD with subtle radial scrim for razor-sharp contrast -->
+      <div class="pointer-events-none relative z-20 mx-auto max-w-2xl bg-[radial-gradient(ellipse_at_center,rgba(5,28,54,0.84)_0%,rgba(5,28,54,0)_76%)] px-8 py-2 text-center">
+        <p class="m-0 font-display text-[11px] font-extrabold uppercase tracking-[0.24em] text-[#7DD3FC]">
           {products.allServices.length} LAYANAN APLIKASI PREMIUM
         </p>
         <p
           id="cinematic-active-category"
-          class="m-0 mt-1 font-display text-base font-extrabold tracking-[-0.01em] text-white sm:text-xl"
+          class="m-0 mt-1 font-display text-lg font-extrabold tracking-[-0.02em] text-white sm:text-2xl"
         >
-          1/{serviceGroups.length} • {serviceGroups[0]?.label}
+          01/0{serviceGroups.length} • {serviceGroups[0]?.label}
+        </p>
+        <p
+          id="cinematic-active-subtitle"
+          class="m-0 mt-1 text-xs font-medium text-[#BAE6FD]/95 sm:text-sm"
+        >
+          {serviceGroups[0]?.subtitle}
         </p>
       </div>
 
-      <!-- Frameless orbital stage: pure animated official app icons orbiting the center Sky Blue orb -->
-      <div id="cinematic-orbital-stage" class="relative w-full flex-1">
+      <!-- Frameless spatial choreography stage: 6 distinct 3D formations across all 41 official app logos -->
+      <div id="cinematic-orbital-stage" class="relative z-10 w-full flex-1">
         {
           serviceGroups.map((group, gIdx) => (
             <div
               data-tunnel-group={gIdx}
               data-tunnel-group-label={group.label}
+              data-tunnel-group-subtitle={group.subtitle}
+              data-tunnel-group-watermark={group.watermark}
               aria-hidden={gIdx !== 0 ? 'true' : 'false'}
               style={gIdx === 0 ? '' : 'opacity: 0; pointer-events: none;'}
               class="absolute inset-0"
@@ -102,19 +156,19 @@ const serviceGroups = categoryOrder.map((cat) => ({
                     data-product-logo={withBase(service.logo)}
                     aria-label={`Lihat detail ${service.name}`}
                     title={service.name}
-                    class="group absolute left-1/2 top-1/2 -ml-[26px] -mt-[26px] flex h-[52px] w-[52px] items-center justify-center rounded-2xl bg-white p-2 shadow-[0_14px_38px_rgba(56,189,248,0.42)] transition-shadow duration-300 hover:shadow-[0_18px_48px_rgba(125,211,252,0.72)] sm:-ml-9 sm:-mt-9 sm:h-[72px] sm:w-[72px] sm:p-2.5"
+                    class="group absolute left-1/2 top-1/2 -ml-[26px] -mt-[26px] flex h-[52px] w-[52px] items-center justify-center rounded-2xl bg-white p-2 ring-1 ring-white/80 shadow-[0_14px_38px_rgba(56,189,248,0.42),0_0_0_5px_rgba(125,211,252,0.12)] transition-shadow duration-300 hover:z-30 hover:ring-2 hover:ring-[#BAE6FD] hover:shadow-[0_20px_50px_rgba(125,211,252,0.85),0_0_0_8px_rgba(186,230,253,0.24)] sm:-ml-[34px] sm:-mt-[34px] sm:h-[68px] sm:w-[68px] sm:p-2.5"
                     style="opacity: 0; will-change: transform, opacity;"
                   >
                     <img
                       src={withBase(service.logo)}
                       alt={`Logo ${service.name}`}
-                      width="56"
-                      height="56"
+                      width="52"
+                      height="52"
                       loading="lazy"
                       decoding="async"
                       class="h-full w-full object-contain"
                     />
-                    <span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap font-display text-[11px] font-bold tracking-[0.02em] text-sky-light opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100">
+                    <span class="pointer-events-none absolute -bottom-7 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#041d34]/75 px-2 py-0.5 font-display text-[10px] font-bold tracking-[0.02em] text-[#E0F2FE] backdrop-blur-[2px] opacity-0 transition-opacity duration-200 sm:text-[11px] sm:opacity-95 group-hover:text-white group-hover:opacity-100 group-focus-visible:opacity-100">
                       {service.name}
                     </span>
                   </a>
@@ -125,24 +179,40 @@ const serviceGroups = categoryOrder.map((cat) => ({
         }
       </div>
 
-      <!-- Minimal frameless bottom progress indicator (zero card) -->
-      <div class="pointer-events-none relative z-20 flex flex-col items-center gap-2.5">
-        <div class="flex items-center gap-1.5" aria-hidden="true">
+      <!-- Interactive frameless 6-world jump switcher & warp hairline (zero cards) -->
+      <div
+        id="cinematic-world-nav"
+        class="relative z-20 flex flex-col items-center gap-2.5"
+        style="pointer-events: none;"
+      >
+        <div
+          role="tablist"
+          aria-label="Pilih kategori dunia layanan AMC"
+          class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"
+        >
           {
-            serviceGroups.map((_, idx) => (
-              <span
+            serviceGroups.map((group, idx) => (
+              <button
+                type="button"
+                role="tab"
+                aria-selected={idx === 0 ? 'true' : 'false'}
                 data-tunnel-dot={idx}
-                class={`h-1.5 rounded-full transition-all duration-300 ${
-                  idx === 0 ? 'w-7 bg-sky-light' : 'w-2 bg-white/30'
+                class={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 font-display text-[10px] font-bold uppercase tracking-[0.12em] transition-all duration-300 sm:px-3 sm:py-1.5 sm:text-[11px] ${
+                  idx === 0
+                    ? 'border-[#7DD3FC]/70 bg-[#38BDF8]/25 text-white shadow-[0_0_20px_rgba(56,189,248,0.35)]'
+                    : 'border-white/15 bg-white/[0.04] text-white/60 hover:border-white/35 hover:text-white'
                 }`}
-              ></span>
+              >
+                <span class="text-[9px] text-[#7DD3FC]">0{idx + 1}</span>
+                <span>{group.shortLabel}</span>
+              </button>
             ))
           }
         </div>
-        <div class="h-[2px] w-40 overflow-hidden rounded-full bg-white/15 sm:w-56" aria-hidden="true">
+        <div class="h-[2px] w-44 overflow-hidden rounded-full bg-white/15 sm:w-64" aria-hidden="true">
           <div
             id="cinematic-showcase-bar"
-            class="h-full w-full origin-left scale-x-[0.04] rounded-full bg-gradient-to-r from-sky-light to-sky"
+            class="h-full w-full origin-left scale-x-[0.04] rounded-full bg-gradient-to-r from-[#BAE6FD] via-[#7DD3FC] to-[#38BDF8]"
           ></div>
         </div>
       </div>
