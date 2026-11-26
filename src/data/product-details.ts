@@ -88,8 +88,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'ChatGPT Plus',
     heroImage: '/showcase/chatgpt.webp',
     galleryImage: '/showcase/ai-productivity-gallery.webp',
-    heroImageAlt: 'Visual 3D cincin orbital dan inti kristal biru langit untuk ChatGPT Plus GPT-6.2',
-    galleryImageAlt: 'Visual 3D ruang kerja digital modular AI & Produktivitas AMC',
+    heroImageAlt: 'Visual studio laptop kaca, gelembung chat AI, blok kode, dan mikrofon suara untuk ChatGPT Plus GPT-6.2',
+    galleryImageAlt: 'Galeri bento workstation AI dan produktivitas Al Muthi Creative',
     updateTag: 'UPDATE NOVEMBER 2026 • GPT-6.2 ASTRA & SOL',
     tagline: 'Akses penuh generasi GPT-6.2 Astra & GPT-6.2 Sol di akun pribadi milikmu sendiri.',
     overview: [
@@ -144,8 +144,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'Claude Pro',
     heroImage: '/showcase/claude.webp',
     galleryImage: '/showcase/ai-productivity-gallery.webp',
-    heroImageAlt: 'Visual 3D monolit kaca dan keramik bertingkat untuk Claude Opus 5.5, Sonnet 5.5, dan Fable 5.2',
-    galleryImageAlt: 'Visual 3D ruang kerja digital modular AI & Produktivitas AMC',
+    heroImageAlt: 'Visual studio laptop dan panel artefak kode berdampingan kaca buram untuk Claude Opus 5.5, Sonnet 5.5, dan Fable 5.2',
+    galleryImageAlt: 'Galeri bento workstation AI dan produktivitas Al Muthi Creative',
     updateTag: 'UPDATE NOVEMBER 2026 • OPUS 5.5, SONNET 5.5 & FABLE 5.2',
     tagline: 'Tiga mesin Anthropic terbaru dengan konteks 1 juta token dan kualitas tulisan serta coding paling rapi.',
     overview: [
@@ -200,8 +200,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'Gemini AI Pro',
     heroImage: '/showcase/gemini.webp',
     galleryImage: '/showcase/ai-productivity-gallery.webp',
-    heroImageAlt: 'Visual 3D tiga pahatan elemen Hydrogen, Neon, dan Carbon untuk Gemini AI Pro November 2026',
-    galleryImageAlt: 'Visual 3D ruang kerja digital modular AI & Produktivitas AMC',
+    heroImageAlt: 'Visual studio laptop dan tablet multimodal dengan kristal bintang Gemini untuk Gemini AI Pro November 2026',
+    galleryImageAlt: 'Galeri bento workstation AI dan produktivitas Al Muthi Creative',
     updateTag: 'UPDATE NOVEMBER 2026 • GEMINI 4 HYDROGEN, NEON & CARBON',
     tagline: 'Ekspansi penuh keluarga Gemini 4 terbaru plus invite resmi ke akun Google pribadimu.',
     overview: [
@@ -256,8 +256,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'Grok AI',
     heroImage: '/showcase/supergrok.webp',
     galleryImage: '/showcase/ai-productivity-gallery.webp',
-    heroImageAlt: 'Visual 3D cincin singularitas kaca biru langit untuk Grok 4.7 dan Imagine Video 1.5',
-    galleryImageAlt: 'Visual 3D ruang kerja digital modular AI & Produktivitas AMC',
+    heroImageAlt: 'Visual studio layar ultra-wide titanium dengan grafik neural real-time dan pratinjau video sinema untuk Grok 4.7',
+    galleryImageAlt: 'Galeri bento workstation AI dan produktivitas Al Muthi Creative',
     updateTag: 'UPDATE NOVEMBER 2026 • GROK 4.7 & IMAGINE VIDEO 1.5',
     tagline: 'Akses Grok 4.7 untuk riset real-time, coding agentic, serta kreasi visual Imagine Video 1.5.',
     overview: [
@@ -307,8 +307,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'Adobe CC',
     heroImage: '/showcase/adobe.webp',
     galleryImage: '/showcase/creative-studio-gallery.webp',
-    heroImageAlt: 'Visual 3D papan seni kaca dan prisma lensa sinema untuk Adobe Creative Cloud MAX 2026',
-    galleryImageAlt: 'Visual 3D studio kreatif triptych kaca buram dan kurva krom AMC',
+    heroImageAlt: 'Visual studio monitor desain dengan panel kurva bezier, histogram warna, timeline video, dan dial warna untuk Adobe Creative Cloud MAX 2026',
+    galleryImageAlt: 'Galeri bento workstation desain kreatif dan editing video Al Muthi Creative',
     updateTag: 'UPDATE NOVEMBER 2026 • ADOBE MAX 2026 & CREATIVE AGENT',
     tagline: 'Photoshop, Illustrator, Premiere, After Effects, dan Firefly AI Creative Studio edisi MAX 2026.',
     overview: [
@@ -363,8 +363,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'Adobe Express',
     heroImage: '/showcase/adobe-express.webp',
     galleryImage: '/showcase/creative-studio-gallery.webp',
-    heroImageAlt: 'Visual 3D kartu tata letak keramik dan pita akrilik mengilap untuk Adobe Express',
-    galleryImageAlt: 'Visual 3D studio kreatif triptych kaca buram dan kurva krom AMC',
+    heroImageAlt: 'Visual studio tablet modern dengan kartu desain media sosial dan palet warna berlapis untuk Adobe Express',
+    galleryImageAlt: 'Galeri bento workstation desain kreatif dan editing video Al Muthi Creative',
     updateTag: 'UPDATE NOVEMBER 2026 • FIREFLY QUICK ACTIONS',
     tagline: 'Desain konten media sosial, video pendek, dan aset brand cepat aktif 1 tahun penuh.',
     overview: [
@@ -414,8 +414,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'Canva Pro',
     heroImage: '/showcase/canva.webp',
     galleryImage: '/showcase/creative-studio-gallery.webp',
-    heroImageAlt: 'Visual 3D pita kaca cair biru langit dan bingkai studio desain untuk Canva Pro',
-    galleryImageAlt: 'Visual 3D studio kreatif triptych kaca buram dan kurva krom AMC',
+    heroImageAlt: 'Visual studio laptop, tablet desain, slide presentasi, dan palet warna untuk Canva Pro dan Affinity Studio',
+    galleryImageAlt: 'Galeri bento workstation desain kreatif dan editing video Al Muthi Creative',
     updateTag: 'UPDATE 2026 • CANVA AI STUDIO & AFFINITY STUDIO',
     tagline: 'Template Pro, Brand Kit, Canva AI Studio, plus integrasi mulus ke Affinity Studio.',
     overview: [
@@ -465,8 +465,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'CapCut Pro',
     heroImage: '/showcase/capcut.webp',
     galleryImage: '/showcase/creative-studio-gallery.webp',
-    heroImageAlt: 'Visual 3D bilah timeline 4K kaca berlapis dan playhead biru langit untuk CapCut Pro',
-    galleryImageAlt: 'Visual 3D studio kreatif triptych kaca buram dan kurva krom AMC',
+    heroImageAlt: 'Visual studio ponsel video vertikal dan timeline multi-track 4K dengan playhead biru langit untuk CapCut Pro',
+    galleryImageAlt: 'Galeri bento workstation desain kreatif dan editing video Al Muthi Creative',
     updateTag: 'UPDATE NOVEMBER 2026 • CAPCUT WORLD 2026',
     tagline: 'Edit video 4K multitrack tanpa watermark dengan AI Captions dan ruang kerja tim.',
     overview: [
@@ -516,8 +516,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'Netflix 4K',
     heroImage: '/showcase/netflix.webp',
     galleryImage: '/showcase/streaming-cinema-gallery.webp',
-    heroImageAlt: 'Visual 3D layar lengkung sinema 4K HDR dan cincin audio spasial untuk Netflix Premium',
-    galleryImageAlt: 'Visual 3D lensa optik sinema dan lapisan audio spasial AMC',
+    heroImageAlt: 'Visual studio TV OLED lengkung 4K HDR dengan soundbar putih minimalis untuk Netflix Premium',
+    galleryImageAlt: 'Galeri bento layanan streaming 4K dan musik lossless Al Muthi Creative',
     updateTag: 'STANDAR 2026 • 4K ULTRA HD, HDR & SPATIAL AUDIO',
     tagline: 'Streaming film dan serial kelas atas dalam 4K UHD HDR, Dolby Atmos, dengan profil milik sendiri.',
     overview: [
@@ -568,7 +568,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/youtube.webp',
     galleryImage: '/showcase/streaming-cinema-gallery.webp',
     heroImageAlt: 'Visual 3D prisma putar kaca bening dan panel layar keramik untuk YouTube Premium',
-    galleryImageAlt: 'Visual 3D lensa optik sinema dan lapisan audio spasial AMC',
+    galleryImageAlt: 'Galeri bento layanan streaming 4K dan musik lossless Al Muthi Creative',
     updateTag: 'STANDAR 2026 • 1080P ENHANCED BITRATE & YT MUSIC',
     tagline: 'Nonton tanpa iklan, 1080p Enhanced Bitrate lebih tajam, background play, plus YouTube Music.',
     overview: [
@@ -619,7 +619,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/spotify.webp',
     galleryImage: '/showcase/streaming-cinema-gallery.webp',
     heroImageAlt: 'Visual 3D gelombang akustik konsentris 24-bit dan kapsul suara untuk Spotify Lossless 2026',
-    galleryImageAlt: 'Visual 3D lensa optik sinema dan lapisan audio spasial AMC',
+    galleryImageAlt: 'Galeri bento layanan streaming 4K dan musik lossless Al Muthi Creative',
     updateTag: 'UPDATE 2026 • SPOTIFY LOSSLESS FLAC 24-BIT',
     tagline: 'Audio Lossless 24-bit/44.1kHz FLAC resmi di paket Premium, bebas iklan, dan download offline.',
     overview: [
@@ -670,7 +670,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/ai-productivity-gallery.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D ruang komunitas digital modular biru langit untuk Discord Nitro',
-    galleryImageAlt: 'Visual 3D salib geometris kaca dan bola refraktif ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'UPDATE 2026 • STREAMING HD, 500MB UPLOAD & 2 BOOST',
     tagline: 'Streaming layar resolusi tinggi, unggah berkas hingga 500MB, 2 Server Boost, dan kustomisasi profil.',
     overview: [
@@ -721,7 +721,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/ai-productivity-gallery.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D ruang kerja digital modular untuk Zoom Pro dengan AI Companion 2026',
-    galleryImageAlt: 'Visual 3D salib geometris kaca dan bola refraktif ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'UPDATE 2026 • MEETING 30 JAM & ZOOM AI COMPANION',
     tagline: 'Rapat hingga 30 jam tanpa putus, 100 peserta, cloud recording, dan Zoom AI Companion otomatis.',
     overview: [
@@ -772,7 +772,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/ai-productivity-gallery.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D blok penyimpanan awan kaca biru langit untuk Google Drive dan Google One',
-    galleryImageAlt: 'Visual 3D salib geometris kaca dan bola refraktif ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'UPDATE 2026 • GOOGLE ONE CLOUD STORAGE',
     tagline: 'Ruang penyimpanan cloud lega untuk Google Drive, Gmail, dan Google Photos tanpa takut penuh.',
     overview: [
@@ -823,7 +823,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/ai-productivity-gallery.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D blok komunikasi digital putih dan biru langit untuk Gmail Fresh',
-    galleryImageAlt: 'Visual 3D salib geometris kaca dan bola refraktif ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'READY STOK 2026 • AKUN BERSIH SIAP PAKAI',
     tagline: 'Akun Gmail baru bersih untuk kebutuhan administrasi bisnis, pendaftaran platform, atau proyek tim.',
     overview: [
@@ -923,7 +923,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/ai-productivity-gallery.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D pustaka digital kaca berlapis biru langit untuk Scribd Premium',
-    galleryImageAlt: 'Visual 3D salib geometris kaca dan bola refraktif ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'STANDAR 2026 • DOKUMEN, E-BOOK & REFERENSI TANPA BATAS',
     tagline: 'Akses dan unduh jutaan dokumen akademik, jurnal, presentasi, dan buku digital secara bebas.',
     overview: [
@@ -1273,7 +1273,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/streaming-cinema-gallery.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D ruang tayangan hiburan Asia kaca biru langit untuk Viu Premium',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'STANDAR 2026 • DRAKOR, VARIETY SHOW & VIO ORIGINALS',
     tagline: 'Nonton drama Korea, drama Asia, dan variety show terbaru tanpa iklan dengan subtitle cepat.',
     overview: [
@@ -1323,7 +1323,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/streaming-cinema-gallery.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D ruang streaming drama dan anime Asia untuk WeTV VIP',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'STANDAR 2026 • DRAMA ASIA, ANIME & SERIAL LOKAL VIP',
     tagline: 'Akses episode VIP lebih awal untuk drama China, serial Indonesia, dan anime dalam Blu-ray 1080p.',
     overview: [
@@ -1472,8 +1472,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'ExpressVPN',
     heroImage: '/showcase/vpn-security-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
-    heroImageAlt: 'Visual 3D perisai kristal geometris dan cincin meridian biru langit untuk ExpressVPN',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    heroImageAlt: 'Visual studio tablet peta koneksi terenkripsi AES-256 dan ponsel perisai privasi untuk ExpressVPN',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'STANDAR 2026 • PROTOKOL LIGHTWAY & PRIVASI NO-LOGS',
     tagline: 'Koneksi VPN berkecepatan tinggi dengan protokol Lightway, server global, dan enkripsi kuat.',
     overview: [
@@ -1522,8 +1522,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'Surfshark VPN',
     heroImage: '/showcase/vpn-security-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
-    heroImageAlt: 'Visual 3D perisai kristal keamanan siber untuk Surfshark VPN',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    heroImageAlt: 'Visual studio tablet peta koneksi terenkripsi AES-256 dan ponsel perisai privasi untuk Surfshark VPN',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'STANDAR 2026 • WIREGUARD, CLEANWEB & MULTI-PERANGKAT',
     tagline: 'VPN cepat berprotokol WireGuard lengkap dengan pemblokir iklan CleanWeb dan koneksi fleksibel.',
     overview: [
@@ -1573,7 +1573,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/buzzer-social-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D grafik pertumbuhan dan cincin jangkauan biru langit untuk Buzzer Instagram',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'LAYANAN SOSMED 2026 • TANPA PASSWORD AKUN',
     tagline: 'Layanan followers, likes, views Reels, dan interaksi Instagram aman hanya dengan username.',
     overview: [
@@ -1623,7 +1623,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/buzzer-social-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D grafik pertumbuhan dan gelombang jangkauan untuk Buzzer TikTok',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'LAYANAN SOSMED 2026 • DORONG JANGKAUAN TIKTOK',
     tagline: 'Followers, likes, views video, dan interaksi TikTok aman tanpa login akun.',
     overview: [
@@ -1673,7 +1673,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/buzzer-social-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D grafik pertumbuhan dan gelombang jangkauan untuk Buzzer Facebook',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'LAYANAN SOSMED 2026 • HALAMAN & PROFIL FACEBOOK',
     tagline: 'Tingkatkan pengikut halaman, likes postingan, dan views video Facebook tanpa password.',
     overview: [
@@ -1723,7 +1723,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/buzzer-social-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D grafik pertumbuhan dan cincin jangkauan untuk Buzzer Telegram',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'LAYANAN SOSMED 2026 • CHANNEL & GRUP TELEGRAM',
     tagline: 'Penambahan member channel, grup, dan views postingan Telegram cukup lewat link publik.',
     overview: [
@@ -1773,7 +1773,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/buzzer-social-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D grafik pertumbuhan toko dan jangkauan biru langit untuk Buzzer Shopee',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'LAYANAN MARKETPLACE 2026 • FOLLOWERS & FAVORIT TOKO',
     tagline: 'Tingkatkan pengikut toko dan interaksi produk Shopee untuk mendongkrak kepercayaan pembeli.',
     overview: [
@@ -1822,8 +1822,8 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     shortName: 'Mobile Legends',
     heroImage: '/showcase/gaming-arena-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
-    heroImageAlt: 'Visual 3D kristal prisma arena esports biru langit untuk Top Up Diamond Mobile Legends',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    heroImageAlt: 'Visual studio kontroler gaming putih, ponsel game MOBA, diamond biru langit, dan koin emas untuk Top Up Mobile Legends',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'TOP UP INSTAN 2026 • DIAMOND & WEEKLY DIAMOND PASS',
     tagline: 'Top up Diamond MLBB dan Weekly Diamond Pass masuk 1 sampai 3 menit cukup pakai User ID & Zone ID.',
     overview: [
@@ -1873,7 +1873,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/gaming-arena-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D kristal prisma biru langit untuk Top Up Robux Roblox',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'TOP UP INSTAN 2026 • ROBUX & VOUCHER RESMI',
     tagline: 'Isi Robux untuk avatar, game pass, dan item eksklusif dengan pembayaran QRIS praktis.',
     overview: [
@@ -1923,7 +1923,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/gaming-arena-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D kristal arena esports untuk Top Up Valorant Points',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'TOP UP INSTAN 2026 • VALORANT POINTS (VP) RIOT ID',
     tagline: 'Isi Valorant Points untuk Battle Pass, Night Market, dan bundle skin cukup dengan Riot ID.',
     overview: [
@@ -1973,7 +1973,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/gaming-arena-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D kristal prisma biru langit untuk Top Up Diamond Free Fire',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'TOP UP INSTAN 2026 • DIAMOND FF & MEMBERSHIP',
     tagline: 'Top up Diamond Free Fire dan Membership Mingguan/Bulanan instan cukup dengan Player ID.',
     overview: [
@@ -2023,7 +2023,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/gaming-arena-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D kristal prisma arena untuk Top Up UC PUBG Mobile',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'TOP UP INSTAN 2026 • UNKNOWN CASH (UC) RESMI',
     tagline: 'Top up UC PUBG Mobile legal masuk cepat ke Character ID untuk Royale Pass dan crate eksklusif.',
     overview: [
@@ -2073,7 +2073,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/gaming-arena-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D kristal prisma biru langit untuk Top Up Genesis Crystals Genshin Impact',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'TOP UP INSTAN 2026 • GENESIS CRYSTALS & WELKIN MOON',
     tagline: 'Isi Blessing of the Welkin Moon dan Genesis Crystals aman cukup menggunakan UID & Server.',
     overview: [
@@ -2123,7 +2123,7 @@ const DETAIL_OVERRIDES: Record<string, RawDetailOverride> = {
     heroImage: '/showcase/gaming-arena-hero.webp',
     galleryImage: '/showcase/amc-ecosystem-gallery.webp',
     heroImageAlt: 'Visual 3D kristal prisma arena MOBA untuk Top Up Token Honor of Kings',
-    galleryImageAlt: 'Visual 3D salib geometris kaca ekosistem AMC',
+    galleryImageAlt: 'Galeri 4 pilar layanan aplikasi premium Al Muthi Creative',
     updateTag: 'TOP UP INSTAN 2026 • HOK TOKENS & HONOR PASS',
     tagline: 'Isi Token Honor of Kings dan Weekly Card instan cukup dengan Player ID untuk skin & event 11.11.',
     overview: [
