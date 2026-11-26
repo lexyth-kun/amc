@@ -45,37 +45,28 @@ const resolvedHref = external ? targetHref : withBase(targetHref);
   <a
     href={resolvedHref}
     data-next-page-link
-    class="group relative z-10 block px-4 pt-12 pb-12 text-white no-underline transition-colors duration-300 hover:bg-[#0C4A6E]/40 sm:px-6 md:pt-16 md:pb-16"
+    class="group relative z-10 block px-4 pt-10 pb-10 text-white no-underline transition-colors duration-300 hover:bg-[#0C4A6E]/40 sm:px-6 md:pt-11 md:pb-11"
   >
     <div class="mx-auto max-w-amc">
       <!-- Top Lusion crosshair indicator row -->
-      <div class="mb-7 flex items-center justify-between gap-4 text-[11px] font-extrabold tracking-[0.22em] text-sky-light sm:text-xs">
+      <div class="mb-5 flex items-center justify-between gap-4 text-[11px] font-extrabold tracking-[0.22em] text-sky-light sm:text-xs">
         <span aria-hidden="true">+</span>
         <span class="font-display text-center uppercase">{eyebrow}</span>
         <span aria-hidden="true">+</span>
       </div>
 
-      <div class="grid grid-cols-1 items-end gap-8 lg:grid-cols-12">
+      <div class="grid grid-cols-1 items-end gap-6 lg:grid-cols-12">
         <div class="lg:col-span-8">
-          <div class="flex flex-wrap items-center gap-2.5">
-            <p class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.2em] text-white/75">
-              {nextLabel}
-            </p>
-            {
-              external && (
-                <span class="inline-flex items-center rounded-full border border-[#7DD3FC]/40 bg-[#0C4A6E]/80 px-2.5 py-0.5 font-display text-[10px] font-extrabold uppercase tracking-[0.14em] text-sky-light">
-                  CHECKOUT 24 JAM
-                </span>
-              )
-            }
-          </div>
+          <p class="m-0 font-display text-xs font-extrabold uppercase tracking-[0.2em] text-white/75">
+            {nextLabel}
+          </p>
 
-          <h2 class="m-0 mt-2.5 font-display text-[clamp(2.35rem,6.8vw,5.6rem)] font-extrabold leading-[0.98] tracking-[-0.035em] text-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2">
+          <h2 class="m-0 mt-2 font-display text-[clamp(2.35rem,6.4vw,5.25rem)] font-extrabold leading-[0.98] tracking-[-0.035em] text-white transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-x-2">
             {title}
           </h2>
         </div>
 
-        <div class="flex flex-col items-start gap-3 lg:col-span-4 lg:items-end">
+        <div class="flex flex-col items-start gap-2.5 lg:col-span-4 lg:items-end">
           <div class="flex items-center gap-4">
             <span
               id="next-page-charge-pct"
@@ -131,7 +122,7 @@ const resolvedHref = external ? targetHref : withBase(targetHref);
       </div>
 
       <!-- Full-width overscroll charge progress bar -->
-      <div class="mt-9 h-[4px] w-full overflow-hidden rounded-full bg-white/15" aria-hidden="true">
+      <div class="mt-6 h-[4px] w-full overflow-hidden rounded-full bg-white/15" aria-hidden="true">
         <div
           id="next-page-charge-bar"
           class="h-full w-full origin-left scale-x-0 rounded-full bg-gradient-to-r from-[#7DD3FC] via-[#38BDF8] to-white transition-transform duration-75 ease-out"
