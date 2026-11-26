@@ -9,21 +9,21 @@ export interface FluidTrailDrop {
   decay: number;
   huePhase: number;
   swirl: number;
-  kind: 'slick' | 'ripple';
+  kind: 'droplet' | 'ripple';
 }
 
 export interface OilWaterColorStops {
-  inner: string;
-  mid: string;
-  outer: string;
-  rim: string;
+  coreWhite: string;
+  outlineLight: string;
+  outlineBlue: string;
+  outlinePrism: string;
+  shadowBlue: string;
 }
 
 /**
- * Generates light-blue dominant iridescent oil-on-water color stops.
- * Anchors around Sky Blue (196deg) while shifting organically across
- * aqua-mint (176deg), ice-cyan (192deg), periwinkle-sky (222deg),
- * and whisper lilac-pearl (262deg) like thin-film interference on water.
+ * Generates restrained clear-white oil-on-water color stops where the main body
+ * stays pure translucent white and only the outer shadow & refractive contour
+ * outline shimmer in light sky blue with a whisper of water-oil iridescence.
  */
 export function computeOilWaterStopColors(
   phase: number,
@@ -31,28 +31,21 @@ export function computeOilWaterStopColors(
   velocityNorm = 0.5
 ): OilWaterColorStops {
   const alpha = Math.max(0, Math.min(1, life));
-  const shimmer = Math.sin(phase) * 0.5 + 0.5;
-  const shift = Math.cos(phase * 0.72 + velocityNorm * 1.4);
-
-  // Dominant light sky blue core (192..204 deg)
-  const coreHue = Math.round(197 + Math.sin(phase * 0.55) * 8);
-  // Aqua-cyan oil shimmer (174..206 deg)
-  const midHue = Math.round(188 + shift * 18);
-  // Subtle rainbow thin-film edge drifting between aqua-mint (168) and pastel periwinkle-lilac (268)
-  const prismHue = Math.round(218 + Math.sin(phase * 0.9 + 1.1) * 46);
-  const rimHue = Math.round(190 + shimmer * 68);
+  const blueHue = Math.round(199 + Math.sin(phase * 0.65) * 6);
+  const prismHue = Math.round(206 + Math.sin(phase * 0.95 + velocityNorm) * 28);
 
   return {
-    inner: `hsla(${coreHue}, 96%, 76%, ${(alpha * 0.42).toFixed(3)})`,
-    mid: `hsla(${midHue}, 92%, 74%, ${(alpha * 0.30).toFixed(3)})`,
-    outer: `hsla(${prismHue}, 88%, 78%, ${(alpha * 0.22).toFixed(3)})`,
-    rim: `hsla(${rimHue}, 90%, 72%, ${(alpha * 0.34).toFixed(3)})`,
+    coreWhite: `rgba(255, 255, 255, ${(alpha * 0.56).toFixed(3)})`,
+    outlineLight: `rgba(255, 255, 255, ${(alpha * 0.82).toFixed(3)})`,
+    outlineBlue: `hsla(${blueHue}, 94%, 62%, ${(alpha * 0.58).toFixed(3)})`,
+    outlinePrism: `hsla(${prismHue}, 88%, 74%, ${(alpha * 0.36).toFixed(3)})`,
+    shadowBlue: `hsla(${blueHue}, 92%, 68%, ${(alpha * 0.24).toFixed(3)})`,
   };
 }
 
 /**
- * Advances fluid oil-on-water trail droplets with gentle curl dispersion,
- * radius expansion, velocity damping, and automatic pruning of expired drops.
+ * Advances restrained clear-white oil-on-water trail droplets with subtle liquid
+ * drift, gentle expansion, and automatic pruning once evaporated.
  */
 export function stepFluidTrailDrops(
   drops: FluidTrailDrop[],
@@ -64,20 +57,18 @@ export function stepFluidTrailDrops(
   for (let i = 0; i < drops.length; i++) {
     const d = drops[i];
     d.life -= d.decay * step;
-    if (d.life <= 0.008) continue;
+    if (d.life <= 0.01) continue;
 
-    d.huePhase += 0.055 * step;
-    // Gentle water-current curl drift
-    const curlX = Math.cos(d.huePhase * 1.3 + d.swirl) * 0.16 * step;
-    const curlY = Math.sin(d.huePhase * 1.1 - d.swirl) * 0.16 * step;
+    d.huePhase += 0.05 * step;
+    const curlX = Math.cos(d.huePhase * 1.1 + d.swirl) * 0.12 * step;
+    const curlY = Math.sin(d.huePhase * 0.95 - d.swirl) * 0.12 * step;
 
     d.x += (d.vx + curlX) * step;
     d.y += (d.vy + curlY) * step;
-    d.vx *= Math.pow(0.93, step);
-    d.vy *= Math.pow(0.93, step);
+    d.vx *= Math.pow(0.91, step);
+    d.vy *= Math.pow(0.91, step);
 
-    // Oil film spreads wider as it dissolves into water
-    const spreadRate = d.kind === 'ripple' ? 0.12 : 0.065;
+    const spreadRate = d.kind === 'ripple' ? 0.11 : 0.075;
     d.radius += (d.maxRadius - d.radius) * spreadRate * step;
     alive.push(d);
   }

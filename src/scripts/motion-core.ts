@@ -321,49 +321,89 @@ function initCustomCursor(): void {
     drops = stepFluidTrailDrops(drops, dt);
     trailCtx.clearRect(0, 0, trailW, trailH);
 
-    for (let i = 0; i < drops.length; i++) {
-      const d = drops[i];
-      const velNorm = Math.min(1, Math.hypot(d.vx, d.vy) / 10);
-      const colors = computeOilWaterStopColors(d.huePhase, d.life, velNorm);
+    // Single seamless closed liquid oil-on-water ribbon polygon:
+    // Pure white translucent interior fill with ONLY its continuous outer silhouette
+    // carrying a soft light-blue water shadow and crisp refractive oil-on-water outline.
+    const pts = drops.filter((d) => d.kind === 'droplet');
+    if (pts.length >= 3) {
+      const n = pts.length;
+      const leftX = new Float32Array(n);
+      const leftY = new Float32Array(n);
+      const rightX = new Float32Array(n);
+      const rightY = new Float32Array(n);
 
-      if (d.kind === 'slick') {
-        const ox = Math.cos(d.huePhase) * d.radius * 0.24;
-        const oy = Math.sin(d.huePhase * 0.8) * d.radius * 0.24;
-        const grad = trailCtx.createRadialGradient(
-          d.x + ox,
-          d.y + oy,
-          d.radius * 0.08,
-          d.x,
-          d.y,
-          d.radius
-        );
-        grad.addColorStop(0, colors.inner);
-        grad.addColorStop(0.42, colors.mid);
-        grad.addColorStop(0.76, colors.outer);
-        grad.addColorStop(1, 'rgba(125, 211, 252, 0)');
+      for (let i = 0; i < n; i++) {
+        const prev = pts[Math.max(0, i - 1)];
+        const next = pts[Math.min(n - 1, i + 1)];
+        let tx = next.x - prev.x;
+        let ty = next.y - prev.y;
+        const len = Math.hypot(tx, ty) || 1;
+        tx /= len;
+        ty /= len;
+        const nx = -ty;
+        const ny = tx;
 
-        trailCtx.fillStyle = grad;
-        trailCtx.beginPath();
-        trailCtx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
-        trailCtx.fill();
-      } else {
-        // Delicate shimmering oil-water surface ripple ring
-        trailCtx.save();
-        trailCtx.beginPath();
-        trailCtx.ellipse(
-          d.x,
-          d.y,
-          d.radius,
-          d.radius * 0.84,
-          d.swirl,
-          0,
-          Math.PI * 2
-        );
-        trailCtx.strokeStyle = colors.rim;
-        trailCtx.lineWidth = 1.25;
-        trailCtx.stroke();
-        trailCtx.restore();
+        const t = i / (n - 1); // 0 tail -> 1 cursor head
+        const taper = Math.pow(t, 0.85) * Math.sin(Math.min(1, t * 1.06) * Math.PI * 0.88);
+        const halfW = Math.max(0.6, pts[i].radius * 0.56 * taper * pts[i].life);
+
+        leftX[i] = pts[i].x + nx * halfW;
+        leftY[i] = pts[i].y + ny * halfW;
+        rightX[i] = pts[i].x - nx * halfW;
+        rightY[i] = pts[i].y - ny * halfW;
       }
+
+      const head = pts[n - 1];
+      const tail = pts[0];
+      const avgLife = Math.min(1, head.life * 0.95);
+      const colors = computeOilWaterStopColors(head.huePhase, avgLife, 0.55);
+
+      trailCtx.save();
+      trailCtx.beginPath();
+      trailCtx.moveTo(tail.x, tail.y);
+
+      // Left silhouette edge from tail to cursor head
+      for (let i = 1; i < n; i++) {
+        const mx = (leftX[i - 1] + leftX[i]) * 0.5;
+        const my = (leftY[i - 1] + leftY[i]) * 0.5;
+        trailCtx.quadraticCurveTo(leftX[i - 1], leftY[i - 1], mx, my);
+      }
+
+      // Smooth rounded liquid droplet tip at cursor head
+      trailCtx.quadraticCurveTo(leftX[n - 1], leftY[n - 1], head.x, head.y);
+      trailCtx.quadraticCurveTo(rightX[n - 1], rightY[n - 1], rightX[n - 1], rightY[n - 1]);
+
+      // Right silhouette edge back from cursor head to tail
+      for (let i = n - 2; i >= 0; i--) {
+        const mx = (rightX[i + 1] + rightX[i]) * 0.5;
+        const my = (rightY[i + 1] + rightY[i]) * 0.5;
+        trailCtx.quadraticCurveTo(rightX[i + 1], rightY[i + 1], mx, my);
+      }
+      trailCtx.closePath();
+
+      // 1. Pure white clear-water interior + soft light-blue caustic outer shadow ONLY
+      trailCtx.shadowColor = colors.shadowBlue;
+      trailCtx.shadowBlur = 16;
+      trailCtx.shadowOffsetX = 2;
+      trailCtx.shadowOffsetY = 4;
+      trailCtx.fillStyle = `rgba(255, 255, 255, ${(avgLife * 0.88).toFixed(3)})`;
+      trailCtx.fill();
+
+      // 2. Crisp continuous refractive light-blue oil-on-water contour outline (no internal seams)
+      trailCtx.shadowBlur = 0;
+      trailCtx.shadowOffsetX = 0;
+      trailCtx.shadowOffsetY = 0;
+      const rimGrad = trailCtx.createLinearGradient(tail.x, tail.y, head.x, head.y);
+      rimGrad.addColorStop(0, 'rgba(125, 211, 252, 0)');
+      rimGrad.addColorStop(0.35, colors.outlinePrism);
+      rimGrad.addColorStop(0.75, colors.outlineBlue);
+      rimGrad.addColorStop(1, colors.outlineLight);
+      trailCtx.strokeStyle = rimGrad;
+      trailCtx.lineWidth = 1.35;
+      trailCtx.lineJoin = 'round';
+      trailCtx.stroke();
+
+      trailCtx.restore();
     }
 
     if (drops.length > 0) {
@@ -422,49 +462,34 @@ function initCustomCursor(): void {
       const dy = nextY - prevMy;
       const dist = Math.hypot(dx, dy);
 
-      if (trailCtx && trailCanvas && !hoveringInput && dist > 1.5) {
-        const steps = Math.min(7, Math.max(1, Math.ceil(dist / 8)));
-        const speedBoost = Math.min(1.5, dist / 24);
+      if (trailCtx && trailCanvas && !hoveringInput && dist >= 5) {
+        const steps = Math.min(3, Math.max(1, Math.floor(dist / 14)));
+        const speedBoost = Math.min(1, dist / 34);
+        const angle = Math.atan2(dy, dx);
         for (let s = 1; s <= steps; s++) {
           const t = s / steps;
           const sx = prevMx + dx * t;
           const sy = prevMy + dy * t;
-          phaseCursor += 0.22;
+          phaseCursor += 0.28;
           spawnCounter++;
 
           drops.push({
-            x: sx + (Math.cos(phaseCursor * 1.7) * 2.5),
-            y: sy + (Math.sin(phaseCursor * 1.3) * 2.5),
-            vx: (dx / steps) * 0.24 + Math.cos(phaseCursor) * 0.35,
-            vy: (dy / steps) * 0.24 + Math.sin(phaseCursor) * 0.35,
-            radius: 10 + speedBoost * 7,
-            maxRadius: 34 + speedBoost * 26,
-            life: 0.92,
-            decay: 0.022 + (spawnCounter % 3) * 0.004,
+            x: sx,
+            y: sy,
+            vx: (dx / steps) * 0.08,
+            vy: (dy / steps) * 0.08,
+            radius: 10 + speedBoost * 6,
+            maxRadius: 19 + speedBoost * 10,
+            life: 0.9,
+            decay: 0.042,
             huePhase: phaseCursor,
-            swirl: phaseCursor * 0.5,
-            kind: 'slick',
+            swirl: angle,
+            kind: 'droplet',
           });
-
-          if (dist > 14 && spawnCounter % 5 === 0) {
-            drops.push({
-              x: sx,
-              y: sy,
-              vx: (dx / steps) * 0.14,
-              vy: (dy / steps) * 0.14,
-              radius: 10,
-              maxRadius: 42 + speedBoost * 24,
-              life: 0.72,
-              decay: 0.028,
-              huePhase: phaseCursor + 1.2,
-              swirl: Math.atan2(dy, dx),
-              kind: 'ripple',
-            });
-          }
         }
 
-        if (drops.length > 96) {
-          drops.splice(0, drops.length - 96);
+        if (drops.length > 22) {
+          drops.splice(0, drops.length - 22);
         }
         if (trailCanvas.dataset.trailActive !== 'true') {
           trailCanvas.dataset.trailActive = 'true';

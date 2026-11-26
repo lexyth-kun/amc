@@ -73,19 +73,19 @@ describe('About Page (Hologram Solo Creator, 3D Flip Reviews, Movable Spheres & 
     expect(joined).toContain('1.300+');
   });
 
-  it('computes light-blue dominant oil-on-water iridescent fluid trail colors and prunes faded drops cleanly', () => {
+  it('computes pure-white droplet body with light-blue oil-on-water outline and shadow stops, pruning faded drops cleanly', () => {
     const stops = computeOilWaterStopColors(0.8, 0.9, 0.7);
-    expect(stops.inner).toMatch(/^hsla\((18[5-9]|19[0-9]|20[0-9]),/);
-    expect(stops.mid).toMatch(/^hsla\(/);
-    expect(stops.outer).toMatch(/^hsla\(/);
+    expect(stops.coreWhite).toMatch(/^rgba\(255, 255, 255,/);
+    expect(stops.outlineBlue).toMatch(/^hsla\((19[0-9]|20[0-9]),/);
+    expect(stops.shadowBlue).toMatch(/^hsla\((19[0-9]|20[0-9]),/);
 
     const drops: FluidTrailDrop[] = [
-      { x: 100, y: 100, vx: 3, vy: -2, radius: 14, maxRadius: 48, life: 0.8, decay: 0.04, huePhase: 0, swirl: 0.5, kind: 'slick' },
-      { x: 120, y: 120, vx: 0, vy: 0, radius: 30, maxRadius: 40, life: 0.02, decay: 0.04, huePhase: 1, swirl: 1.0, kind: 'ripple' },
+      { x: 100, y: 100, vx: 3, vy: -2, radius: 10, maxRadius: 26, life: 0.8, decay: 0.04, huePhase: 0, swirl: 0.5, kind: 'droplet' },
+      { x: 120, y: 120, vx: 0, vy: 0, radius: 22, maxRadius: 30, life: 0.02, decay: 0.04, huePhase: 1, swirl: 1.0, kind: 'ripple' },
     ];
     const next = stepFluidTrailDrops(drops, 1);
     expect(next).toHaveLength(1);
-    expect(next[0].radius).toBeGreaterThan(14);
+    expect(next[0].radius).toBeGreaterThan(10);
     expect(next[0].life).toBeLessThan(0.8);
   });
 
