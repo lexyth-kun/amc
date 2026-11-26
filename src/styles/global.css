@@ -98,6 +98,9 @@
 }
 
 .amc-text-gradient {
+  display: inline-block;
+  padding-bottom: 0.16em;
+  margin-bottom: -0.16em;
   background: linear-gradient(135deg, #0369A1 0%, #0284C7 55%, #0790D0 100%);
   -webkit-background-clip: text;
   background-clip: text;

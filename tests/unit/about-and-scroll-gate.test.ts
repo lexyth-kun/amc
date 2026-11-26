@@ -30,7 +30,9 @@ function collectStrings(value: unknown): string[] {
 }
 
 describe('About Page (Hologram Solo Creator, 3D Flip Reviews, Movable Spheres & Auto Scroll Gate)', () => {
-  it('lists strictly one solo creator named Adrian Ali Muthi with real portrait photo and zero fabricated team members', () => {
+  it('lists strictly one solo creator named Adrian Ali Muthi with real portrait photo and keeps SEO title clean', () => {
+    expect(aboutData.seo.title).toBe('Tentang Al Muthi Creative | AMC');
+    expect(aboutData.seo.title).not.toMatch(/Adrian Ali Muthi/i);
     expect(aboutData.creators).toHaveLength(1);
     expect(aboutData.creators[0].index).toBe('001');
     expect(aboutData.creators[0].name).toBe('Adrian Ali Muthi');
