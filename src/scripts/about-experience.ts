@@ -28,32 +28,80 @@ interface ReviewWaveData {
   reviews: ReviewItemData[];
 }
 
-interface BustSlice {
-  y: number;
-  rx: number;
-  rz: number;
-  yTilt?: number;
-}
+function createHologramPortraitTexture(
+  img: HTMLImageElement,
+  tint: 'primary' | 'ghost'
+): HTMLCanvasElement {
+  const outW = 380;
+  const outH = 440;
+  const off = document.createElement('canvas');
+  off.width = outW;
+  off.height = outH;
+  const octx = off.getContext('2d');
+  if (!octx) return off;
 
-// Anatomical 3D silhouette slices (normalized coordinates) for futuristic wireframe hologram bust
-const HOLO_BUST_SLICES: BustSlice[] = [
-  { y: -1.04, rx: 0.14, rz: 0.14 },
-  { y: -0.96, rx: 0.28, rz: 0.30 },
-  { y: -0.84, rx: 0.37, rz: 0.41 },
-  { y: -0.70, rx: 0.41, rz: 0.45 },
-  { y: -0.54, rx: 0.40, rz: 0.44 },
-  { y: -0.38, rx: 0.36, rz: 0.40 },
-  { y: -0.24, rx: 0.29, rz: 0.33 },
-  { y: -0.12, rx: 0.21, rz: 0.24 },
-  { y: 0.0, rx: 0.19, rz: 0.20 },
-  { y: 0.12, rx: 0.22, rz: 0.22 },
-  { y: 0.24, rx: 0.38, rz: 0.26 },
-  { y: 0.36, rx: 0.66, rz: 0.32 },
-  { y: 0.48, rx: 0.86, rz: 0.37 },
-  { y: 0.62, rx: 0.94, rz: 0.40 },
-  { y: 0.78, rx: 0.96, rz: 0.41 },
-  { y: 0.94, rx: 0.95, rz: 0.40 },
-];
+  // Cover-fit portrait centered cleanly on Adrian's face & shoulders
+  const imgAspect = img.naturalWidth / Math.max(1, img.naturalHeight);
+  const boxAspect = outW / outH;
+  let sx = 0;
+  let sy = 0;
+  let sw = img.naturalWidth;
+  let sh = img.naturalHeight;
+  if (imgAspect > boxAspect) {
+    sw = img.naturalHeight * boxAspect;
+    sx = (img.naturalWidth - sw) * 0.5;
+  } else {
+    sh = img.naturalWidth / boxAspect;
+    sy = (img.naturalHeight - sh) * 0.12;
+  }
+
+  octx.drawImage(img, sx, sy, sw, sh, 0, 0, outW, outH);
+  const frame = octx.getImageData(0, 0, outW, outH);
+  const data = frame.data;
+
+  const cx = outW * 0.5;
+  const cy = outH * 0.46;
+
+  for (let y = 0; y < outH; y++) {
+    const scanStripe = y % 3 === 0 ? 0.80 : 1.06;
+    const ny = (y - cy) / (outH * 0.48);
+    for (let x = 0; x < outW; x++) {
+      const idx = (y * outW + x) * 4;
+      const r = data[idx];
+      const g = data[idx + 1];
+      const b = data[idx + 2];
+
+      // Perceptual luminance with crisp S-curve portrait contrast
+      let lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      lum = Math.max(0, Math.min(1, (lum - 0.08) * 1.18));
+      const curved = Math.pow(lum, 0.88) * scanStripe;
+
+      // Soft radial hologram vignette mask + gentle fade at bottom emitter merge
+      const nx = (x - cx) / (outW * 0.45);
+      const radialDist = Math.sqrt(nx * nx * 1.08 + ny * ny * 0.92);
+      const edgeFade = Math.max(0, Math.min(1, 1 - Math.max(0, radialDist - 0.62) / 0.38));
+      const bottomFade = y > outH * 0.78 ? Math.max(0, 1 - (y - outH * 0.78) / (outH * 0.22)) : 1;
+      const maskAlpha = edgeFade * bottomFade;
+
+      if (tint === 'primary') {
+        // Luminous Lusion Sky Blue / Cyan Hologram ramp
+        data[idx] = Math.min(255, Math.round(14 + Math.pow(curved, 1.55) * 215));
+        data[idx + 1] = Math.min(255, Math.round(78 + curved * 176));
+        data[idx + 2] = Math.min(255, Math.round(138 + curved * 117));
+        data[idx + 3] = Math.round(Math.min(1, (0.28 + curved * 0.78) * maskAlpha) * 255);
+      } else {
+        // Chromatic cyan-indigo parallax echo ghost
+        data[idx] = Math.min(255, Math.round(92 + curved * 130));
+        data[idx + 1] = Math.min(255, Math.round(188 + curved * 67));
+        data[idx + 2] = 255;
+        data[idx + 3] = Math.round(Math.min(1, curved * 0.42 * maskAlpha) * 255);
+      }
+    }
+  }
+
+  octx.putImageData(frame, 0, 0);
+  return off;
+}
 
 function initFounderHologram(): void {
   const card = document.getElementById('founder-hologram-card');
@@ -63,26 +111,28 @@ function initFounderHologram(): void {
   if (!ctx) return;
 
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const photoSrc = canvas.dataset.photoSrc || '';
   let width = 360;
   let height = 380;
   let dpr = Math.min(window.devicePixelRatio || 1, 2);
   let visible = true;
   let rafId = 0;
 
-  let autoYaw = 0.28;
-  let targetOffsetYaw = 0;
-  let targetPitch = -0.12;
-  let currentOffsetYaw = 0;
-  let currentPitch = -0.12;
-  let scanPhase = 0;
+  let targetNx = 0;
+  let targetNy = 0;
+  let currentNx = 0;
+  let currentNy = 0;
 
-  // Deterministic floating hologram voxel sparks
-  const motes = Array.from({ length: 34 }, (_, idx) => ({
-    angle: (idx * 2.39996) % (Math.PI * 2),
-    radius: 0.48 + ((idx * 19) % 72) / 100,
-    y: -1.1 + ((idx * 13) % 220) / 100,
-    speed: 0.004 + (idx % 5) * 0.0018,
-    size: 1.2 + (idx % 3) * 0.7,
+  let primaryHoloTex: HTMLCanvasElement | null = null;
+  let ghostHoloTex: HTMLCanvasElement | null = null;
+
+  // Deterministic floating hologram data motes
+  const motes = Array.from({ length: 30 }, (_, idx) => ({
+    x: ((idx * 37) % 100) / 100,
+    y: ((idx * 23) % 100) / 100,
+    speed: 0.0022 + (idx % 5) * 0.0009,
+    size: 1.1 + (idx % 3) * 0.65,
+    phase: idx * 0.7,
   }));
 
   const resize = () => {
@@ -95,61 +145,35 @@ function initFounderHologram(): void {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   };
 
-  const project = (x: number, y: number, z: number, yaw: number, pitch: number) => {
-    const cy = Math.cos(yaw);
-    const sy = Math.sin(yaw);
-    const rx = x * cy - z * sy;
-    const rz1 = x * sy + z * cy;
-
-    const cp = Math.cos(pitch);
-    const sp = Math.sin(pitch);
-    const ry = y * cp - rz1 * sp;
-    const rz = y * sp + rz1 * cp;
-
-    const camDist = 3.85;
-    const scale = (Math.min(width, height) * 0.43) * (camDist / (camDist + rz));
-    return {
-      sx: width * 0.5 + rx * scale,
-      sy: height * 0.48 + ry * scale,
-      depth: rz,
-      scale,
-    };
-  };
-
   const drawHologram = (now: number) => {
     ctx.clearRect(0, 0, width, height);
 
-    if (!reduced) {
-      autoYaw = 0.24 + Math.sin(now * 0.00055) * 0.34;
-      scanPhase = (now * 0.00045) % 1;
-    }
+    currentNx += (targetNx - currentNx) * 0.1;
+    currentNy += (targetNy - currentNy) * 0.1;
 
-    currentOffsetYaw += (targetOffsetYaw - currentOffsetYaw) * 0.1;
-    currentPitch += (targetPitch - currentPitch) * 0.1;
+    const t = now * 0.001;
+    const scanPhase = reduced ? 0.36 : (t * 0.32) % 1;
+    const emitterY = height * 0.90;
 
-    const yaw = autoYaw + currentOffsetYaw;
-    const pitch = currentPitch;
-
-    // 1. Volumetric emitter light cone from base upward
-    const emitterY = height * 0.87;
-    const coneGrad = ctx.createLinearGradient(width * 0.5, emitterY, width * 0.5, height * 0.14);
+    // 1. Volumetric upward projection light cone from hologram emitter
+    const coneGrad = ctx.createLinearGradient(width * 0.5, emitterY, width * 0.5, height * 0.06);
     coneGrad.addColorStop(0, 'rgba(56, 189, 248, 0.36)');
-    coneGrad.addColorStop(0.45, 'rgba(125, 211, 252, 0.12)');
+    coneGrad.addColorStop(0.42, 'rgba(125, 211, 252, 0.11)');
     coneGrad.addColorStop(1, 'rgba(125, 211, 252, 0)');
     ctx.beginPath();
-    ctx.moveTo(width * 0.32, emitterY);
-    ctx.lineTo(width * 0.68, emitterY);
-    ctx.lineTo(width * 0.86, height * 0.14);
-    ctx.lineTo(width * 0.14, height * 0.14);
+    ctx.moveTo(width * 0.28, emitterY);
+    ctx.lineTo(width * 0.72, emitterY);
+    ctx.lineTo(width * 0.94, height * 0.06);
+    ctx.lineTo(width * 0.06, height * 0.06);
     ctx.closePath();
     ctx.fillStyle = coneGrad;
     ctx.fill();
 
     // 2. Concentric holographic emitter base pedestal rings
     const emitterRadii = [
-      { rx: width * 0.30, ry: height * 0.055, alpha: 0.34, dash: [6, 6] },
-      { rx: width * 0.22, ry: height * 0.04, alpha: 0.65, dash: [] },
-      { rx: width * 0.12, ry: height * 0.022, alpha: 0.9, dash: [] },
+      { rx: width * 0.34, ry: height * 0.052, alpha: 0.36, dash: [6, 6] },
+      { rx: width * 0.24, ry: height * 0.036, alpha: 0.65, dash: [] },
+      { rx: width * 0.13, ry: height * 0.020, alpha: 0.9, dash: [] },
     ];
     for (const ring of emitterRadii) {
       ctx.save();
@@ -157,154 +181,121 @@ function initFounderHologram(): void {
       ctx.setLineDash(ring.dash);
       ctx.ellipse(width * 0.5, emitterY, ring.rx, ring.ry, 0, 0, Math.PI * 2);
       ctx.strokeStyle = `rgba(125, 211, 252, ${ring.alpha})`;
-      ctx.lineWidth = ring.dash.length ? 1.2 : 1.8;
+      ctx.lineWidth = ring.dash.length ? 1.2 : 1.7;
       ctx.stroke();
       ctx.restore();
     }
 
-    // Emitter bright core glow
     const coreGlow = ctx.createRadialGradient(
       width * 0.5,
       emitterY,
       2,
       width * 0.5,
       emitterY,
-      width * 0.28
+      width * 0.30
     );
     coreGlow.addColorStop(0, 'rgba(224, 242, 254, 0.92)');
-    coreGlow.addColorStop(0.35, 'rgba(56, 189, 248, 0.42)');
+    coreGlow.addColorStop(0.38, 'rgba(56, 189, 248, 0.42)');
     coreGlow.addColorStop(1, 'rgba(56, 189, 248, 0)');
     ctx.fillStyle = coreGlow;
     ctx.beginPath();
-    ctx.ellipse(width * 0.5, emitterY, width * 0.28, height * 0.06, 0, 0, Math.PI * 2);
+    ctx.ellipse(width * 0.5, emitterY, width * 0.30, height * 0.058, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // 3. Tilted 3D holographic orbital ring surrounding the bust
-    const orbitSegments = 48;
+    // 3. Subtle background holographic orbital telemetry ellipse
+    ctx.save();
+    ctx.translate(width * 0.5 + currentNx * 6, height * 0.46 + currentNy * 4);
+    ctx.rotate(-0.16 + currentNx * 0.08);
     ctx.beginPath();
-    for (let i = 0; i <= orbitSegments; i++) {
-      const a = (i / orbitSegments) * Math.PI * 2;
-      const ox = Math.cos(a) * 1.18;
-      const oz = Math.sin(a) * 1.18;
-      const oy = Math.sin(a) * 0.24 - 0.12;
-      const pt = project(ox, oy, oz, yaw * 0.8, pitch);
-      if (i === 0) ctx.moveTo(pt.sx, pt.sy);
-      else ctx.lineTo(pt.sx, pt.sy);
-    }
-    ctx.strokeStyle = 'rgba(125, 211, 252, 0.28)';
+    ctx.ellipse(0, 0, width * 0.43, height * 0.14, 0, 0, Math.PI * 2);
+    ctx.strokeStyle = 'rgba(125, 211, 252, 0.26)';
     ctx.lineWidth = 1.1;
     ctx.stroke();
 
-    // Orbiting telemetry node on the ring
-    const nodeAngle = (now * 0.0012) % (Math.PI * 2);
-    const nodePt = project(
-      Math.cos(nodeAngle) * 1.18,
-      Math.sin(nodeAngle) * 0.24 - 0.12,
-      Math.sin(nodeAngle) * 1.18,
-      yaw * 0.8,
-      pitch
-    );
+    const orbitA = reduced ? 0.5 : t * 1.15;
+    const nodeX = Math.cos(orbitA) * width * 0.43;
+    const nodeY = Math.sin(orbitA) * height * 0.14;
     ctx.beginPath();
-    ctx.arc(nodePt.sx, nodePt.sy, 3.6, 0, Math.PI * 2);
+    ctx.arc(nodeX, nodeY, 3.2, 0, Math.PI * 2);
     ctx.fillStyle = '#FFFFFF';
     ctx.fill();
     ctx.beginPath();
-    ctx.arc(nodePt.sx, nodePt.sy, 8, 0, Math.PI * 2);
-    ctx.fillStyle = 'rgba(56, 189, 248, 0.45)';
+    ctx.arc(nodeX, nodeY, 7.5, 0, Math.PI * 2);
+    ctx.fillStyle = 'rgba(56, 189, 248, 0.42)';
     ctx.fill();
+    ctx.restore();
 
-    // 4. 3D Hologram Bust: Meridian wireframe ribs
-    const ribs = 14;
-    const scanY = -1.08 + scanPhase * 2.12;
-    for (let r = 0; r < ribs; r++) {
-      const a = (r / ribs) * Math.PI * 2;
-      ctx.beginPath();
-      let avgDepth = 0;
-      for (let sIdx = 0; sIdx < HOLO_BUST_SLICES.length; sIdx++) {
-        const sl = HOLO_BUST_SLICES[sIdx];
-        const px = Math.cos(a) * sl.rx;
-        const pz = Math.sin(a) * sl.rz;
-        const pt = project(px, sl.y, pz, yaw, pitch);
-        avgDepth += pt.depth;
-        if (sIdx === 0) ctx.moveTo(pt.sx, pt.sy);
-        else ctx.lineTo(pt.sx, pt.sy);
-      }
-      avgDepth /= HOLO_BUST_SLICES.length;
-      const frontFactor = Math.max(0.18, Math.min(0.82, 0.52 - avgDepth * 0.35));
-      ctx.strokeStyle = `rgba(56, 189, 248, ${(frontFactor * 0.55).toFixed(3)})`;
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    }
+    // 4. Adrian Ali Muthi's Real Hologram Portrait Projection
+    if (primaryHoloTex && ghostHoloTex) {
+      const floatY = reduced ? 0 : Math.sin(t * 1.7) * 3.5;
+      const drawH = height * 0.88;
+      const drawW = drawH * (primaryHoloTex.width / primaryHoloTex.height);
+      const baseX = (width - drawW) * 0.5 + currentNx * 10;
+      const baseY = height * 0.03 + floatY + currentNy * 7;
 
-    // 5. 3D Hologram Bust: Horizontal latitude scan-slices + sweeping bright scan band
-    const ringPoints = 32;
-    for (const sl of HOLO_BUST_SLICES) {
-      const distToScan = Math.abs(sl.y - scanY);
-      const scanBoost = Math.max(0, 1 - distToScan / 0.28);
+      const splitX = 4 + Math.abs(currentNx) * 6;
+      const flicker = reduced ? 1 : 0.92 + Math.sin(t * 11) * 0.035 + Math.cos(t * 17) * 0.025;
 
-      ctx.beginPath();
-      for (let k = 0; k <= ringPoints; k++) {
-        const a = (k / ringPoints) * Math.PI * 2;
-        const px = Math.cos(a) * sl.rx;
-        const pz = Math.sin(a) * sl.rz;
-        const pt = project(px, sl.y, pz, yaw, pitch);
-        if (k === 0) ctx.moveTo(pt.sx, pt.sy);
-        else ctx.lineTo(pt.sx, pt.sy);
-      }
+      // Chromatic cyan-lilac holographic echo layer
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      ctx.globalAlpha = 0.55 * flicker;
+      ctx.drawImage(ghostHoloTex, baseX + splitX, baseY - 1, drawW, drawH);
+      ctx.globalAlpha = 0.34 * flicker;
+      ctx.drawImage(ghostHoloTex, baseX - splitX * 0.7, baseY + 1, drawW, drawH);
 
-      if (scanBoost > 0.15) {
-        ctx.strokeStyle = `rgba(224, 242, 254, ${(0.55 + scanBoost * 0.45).toFixed(3)})`;
-        ctx.lineWidth = 1.4 + scanBoost * 1.4;
-      } else {
-        ctx.strokeStyle = 'rgba(125, 211, 252, 0.62)';
-        ctx.lineWidth = 1.25;
-      }
-      ctx.stroke();
+      // Primary sharp cyan hologram portrait
+      ctx.globalAlpha = 0.96 * flicker;
+      ctx.drawImage(primaryHoloTex, baseX, baseY, drawW, drawH);
 
-      // Luminous hologram vertices along each slice
-      for (let k = 0; k < ringPoints; k += 4) {
-        const a = (k / ringPoints) * Math.PI * 2;
-        const pt = project(Math.cos(a) * sl.rx, sl.y, Math.sin(a) * sl.rz, yaw, pitch);
-        if (pt.depth < 0.25) {
-          ctx.beginPath();
-          ctx.arc(pt.sx, pt.sy, scanBoost > 0.2 ? 2.1 : 1.35, 0, Math.PI * 2);
-          ctx.fillStyle =
-            scanBoost > 0.2 ? 'rgba(255, 255, 255, 0.95)' : 'rgba(186, 230, 253, 0.78)';
-          ctx.fill();
+      // Subtle holographic glitch-slice offset during scan wave
+      if (!reduced) {
+        const glitchY = Math.floor(scanPhase * primaryHoloTex.height);
+        const sliceH = 18;
+        if (glitchY > 12 && glitchY < primaryHoloTex.height - 24) {
+          const destY = baseY + (glitchY / primaryHoloTex.height) * drawH;
+          const destH = (sliceH / primaryHoloTex.height) * drawH;
+          const jitterX = Math.sin(t * 28) * 5.5;
+          ctx.globalAlpha = 0.65;
+          ctx.drawImage(
+            primaryHoloTex,
+            0,
+            glitchY,
+            primaryHoloTex.width,
+            sliceH,
+            baseX + jitterX,
+            destY,
+            drawW,
+            destH
+          );
         }
       }
+      ctx.restore();
     }
 
-    // 6. Subtle Holographic Visor Accent across eye line (futuristic identity signature)
-    ctx.beginPath();
-    for (let k = 0; k <= 14; k++) {
-      const a = -0.78 + (k / 14) * 1.56;
-      const pt = project(Math.sin(a) * 0.42, -0.58, -Math.cos(a) * 0.46, yaw, pitch);
-      if (k === 0) ctx.moveTo(pt.sx, pt.sy);
-      else ctx.lineTo(pt.sx, pt.sy);
-    }
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.88)';
-    ctx.lineWidth = 2.4;
-    ctx.stroke();
+    // 5. Sweeping luminous horizontal holographic scanner laser bar
+    const scanBarY = height * (0.08 + scanPhase * 0.78);
+    const barGrad = ctx.createLinearGradient(0, scanBarY - 22, 0, scanBarY + 22);
+    barGrad.addColorStop(0, 'rgba(125, 211, 252, 0)');
+    barGrad.addColorStop(0.45, 'rgba(125, 211, 252, 0.22)');
+    barGrad.addColorStop(0.5, 'rgba(224, 242, 254, 0.68)');
+    barGrad.addColorStop(0.55, 'rgba(125, 211, 252, 0.22)');
+    barGrad.addColorStop(1, 'rgba(125, 211, 252, 0)');
+    ctx.fillStyle = barGrad;
+    ctx.fillRect(0, scanBarY - 22, width, 44);
 
-    // 7. Rising holographic data motes
+    // 6. Rising holographic light motes around the portrait
     for (const m of motes) {
       if (!reduced) {
         m.y -= m.speed;
-        m.angle += 0.008;
-        if (m.y < -1.18) m.y = 1.05;
+        if (m.y < 0.04) m.y = 0.92;
       }
-      const pt = project(
-        Math.cos(m.angle) * m.radius,
-        m.y,
-        Math.sin(m.angle) * m.radius,
-        yaw * 0.5,
-        pitch
-      );
-      const fade = 1 - Math.abs(m.y) / 1.25;
+      const mx = m.x * width + Math.sin(t * 1.4 + m.phase) * 8 + currentNx * 6;
+      const my = m.y * height;
+      const fade = Math.sin(m.y * Math.PI);
       ctx.beginPath();
-      ctx.arc(pt.sx, pt.sy, m.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(125, 211, 252, ${Math.max(0.12, fade * 0.72).toFixed(3)})`;
+      ctx.arc(mx, my, m.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(186, 230, 253, ${Math.max(0.12, fade * 0.72).toFixed(3)})`;
       ctx.fill();
     }
 
@@ -314,6 +305,19 @@ function initFounderHologram(): void {
   };
 
   resize();
+
+  if (photoSrc) {
+    const img = new Image();
+    img.decoding = 'async';
+    img.onload = () => {
+      primaryHoloTex = createHologramPortraitTexture(img, 'primary');
+      ghostHoloTex = createHologramPortraitTexture(img, 'ghost');
+      canvas.dataset.hologramPhotoLoaded = 'true';
+      drawHologram(performance.now());
+    };
+    img.src = photoSrc;
+  }
+
   drawHologram(performance.now());
 
   if (reduced) return;
@@ -324,20 +328,20 @@ function initFounderHologram(): void {
       const rect = card.getBoundingClientRect();
       const nx = (e.clientX - rect.left) / Math.max(1, rect.width);
       const ny = (e.clientY - rect.top) / Math.max(1, rect.height);
-      targetOffsetYaw = (nx - 0.5) * 1.15;
-      targetPitch = -0.12 + (ny - 0.5) * 0.45;
+      targetNx = (nx - 0.5) * 2;
+      targetNy = (ny - 0.5) * 2;
       card.style.setProperty('--holo-x', `${(nx * 100).toFixed(1)}%`);
       card.style.setProperty('--holo-y', `${(ny * 100).toFixed(1)}%`);
-      const tiltY = ((nx - 0.5) * 8).toFixed(2);
-      const tiltX = ((0.5 - ny) * 7).toFixed(2);
+      const tiltY = ((nx - 0.5) * 9).toFixed(2);
+      const tiltX = ((0.5 - ny) * 8).toFixed(2);
       card.style.transform = `perspective(1200px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
     },
     { passive: true }
   );
 
   card.addEventListener('pointerleave', () => {
-    targetOffsetYaw = 0;
-    targetPitch = -0.12;
+    targetNx = 0;
+    targetNy = 0;
     card.style.setProperty('--holo-x', '50%');
     card.style.setProperty('--holo-y', '42%');
     card.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';

@@ -241,6 +241,32 @@
   animation-play-state: paused;
 }
 
+/* Hide default OS arrow cursor on fine-pointer desktop when custom cursor is active */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor body,
+  html.has-custom-cursor a,
+  html.has-custom-cursor button,
+  html.has-custom-cursor summary,
+  html.has-custom-cursor select,
+  html.has-custom-cursor label,
+  html.has-custom-cursor [role='button'],
+  html.has-custom-cursor [role='tab'],
+  html.has-custom-cursor [role='switch'],
+  html.has-custom-cursor .amc-spheres-stage,
+  html.has-custom-cursor .amc-spheres-stage.is-grabbing {
+    cursor: none !important;
+  }
+
+  html.has-custom-cursor input[type='text'],
+  html.has-custom-cursor input[type='tel'],
+  html.has-custom-cursor input[type='email'],
+  html.has-custom-cursor input[type='search'],
+  html.has-custom-cursor textarea {
+    cursor: text !important;
+  }
+}
+
 /* Custom desktop cursor */
 #amc-cursor-dot,
 #amc-cursor-ring {
@@ -256,10 +282,11 @@
 }
 
 #amc-cursor-dot {
-  width: 8px;
-  height: 8px;
-  margin: -4px 0 0 -4px;
-  background: var(--amc);
+  width: 9px;
+  height: 9px;
+  margin: -4.5px 0 0 -4.5px;
+  background: radial-gradient(circle at 35% 35%, #E0F2FE 0%, #38BDF8 55%, #0284C7 100%);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.7);
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
@@ -268,10 +295,11 @@
 }
 
 #amc-cursor-ring {
-  width: 36px;
-  height: 36px;
-  margin: -18px 0 0 -18px;
-  border: 1.5px solid rgba(2, 132, 199, 0.48);
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1.5px solid rgba(56, 189, 248, 0.65);
+  box-shadow: 0 0 18px rgba(125, 211, 252, 0.28);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -318,6 +346,7 @@ html.amc-portal-entering #main-content {
 }
 
 @media (hover: none), (pointer: coarse) {
+  #amc-fluid-trail,
   #amc-cursor-dot,
   #amc-cursor-ring {
     display: none !important;

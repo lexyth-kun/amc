@@ -54,11 +54,11 @@ function mountInteractiveSphereCanvas(canvas: HTMLCanvasElement): SphereInstance
   const count =
     density === 'cta'
       ? isMobile
-        ? 10
-        : 18
+        ? 16
+        : 34
       : isMobile
-        ? 13
-        : 24;
+        ? 22
+        : 46;
 
   let width = 0;
   let height = 0;
@@ -90,29 +90,41 @@ function mountInteractiveSphereCanvas(canvas: HTMLCanvasElement): SphereInstance
 
   const seed = () => {
     spheres.length = 0;
-    const tones: SphereBody['tone'][] = ['pearl', 'light', 'sky', 'light', 'deep', 'pearl'];
+    const tones: SphereBody['tone'][] = ['pearl', 'light', 'sky', 'light', 'deep', 'pearl', 'sky'];
+    const goldenAngle = 2.3999632;
     for (let i = 0; i < count; i++) {
+      // Varied sizes: crisp pearl beads + medium glassy spheres + sculptural hero orbs
+      const sizeBucket = i % 5;
       const radius = isMobile
-        ? 16 + ((i * 11) % 20)
-        : 22 + ((i * 17) % 34);
-      // Distribute organically with richer clusters around right/perimeter so headline stays super readable
-      const angle = (i / count) * Math.PI * 2 + 0.35;
-      const ringBias = i % 3 === 0 ? 0.42 : 0.28 + (i % 5) * 0.04;
+        ? sizeBucket === 0
+          ? 28 + (i % 7)
+          : sizeBucket < 3
+            ? 17 + (i % 8)
+            : 11 + (i % 6)
+        : sizeBucket === 0
+          ? 36 + (i % 12)
+          : sizeBucket < 3
+            ? 22 + (i % 12)
+            : 12 + (i % 9);
+
+      const t = (i + 0.5) / count;
+      const radial = Math.sqrt(t);
+      const angle = i * goldenAngle + 0.4;
       const x = Math.max(
-        radius + 12,
-        Math.min(width - radius - 12, width * (0.52 + Math.cos(angle) * ringBias))
+        radius + 10,
+        Math.min(width - radius - 10, width * (0.5 + Math.cos(angle) * radial * 0.48))
       );
       const y = Math.max(
-        radius + 12,
-        Math.min(height - radius - 12, height * (0.5 + Math.sin(angle) * ringBias))
+        radius + 10,
+        Math.min(height - radius - 10, height * (0.5 + Math.sin(angle) * radial * 0.46))
       );
       spheres.push({
         x,
         y,
-        vx: ((i % 2 === 0 ? 1 : -1) * (0.25 + (i % 4) * 0.12)),
-        vy: ((i % 3 === 0 ? -1 : 1) * (0.2 + (i % 3) * 0.12)),
+        vx: (i % 2 === 0 ? 1 : -1) * (0.28 + (i % 4) * 0.14),
+        vy: (i % 3 === 0 ? -1 : 1) * (0.24 + (i % 3) * 0.14),
         radius,
-        mass: (radius / 26) * (radius / 26),
+        mass: Math.max(0.35, (radius / 24) * (radius / 24)),
         tone: tones[i % tones.length],
         phase: (i * 1.17) % (Math.PI * 2),
       });

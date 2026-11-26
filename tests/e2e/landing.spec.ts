@@ -471,16 +471,29 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     expect(aboutText).toContain('1.266');
     expect(aboutText).toContain('1.300+');
     expect(aboutText).not.toContain('—');
+    expect(aboutText.toLowerCase()).not.toContain('gerakkan bola-bola 3d');
+    expect(aboutText.toLowerCase()).not.toContain('geser & lempar bola 3d');
     expect(aboutText).not.toMatch(/\b(project|projects|portofolio|klien studio|case study)\b/i);
 
-    // 1. Movable 3D sphere particles in hero respond to pointer drag/move
+    // 0. Default OS arrow cursor is suppressed on desktop and oil-on-water fluid trail activates on pointer move
+    const cursorState = await page.evaluate(() => ({
+      hasClass: document.documentElement.classList.contains('has-custom-cursor'),
+      bodyCursor: getComputedStyle(document.body).cursor,
+    }));
+    expect(cursorState.hasClass).toBe(true);
+    expect(cursorState.bodyCursor).toBe('none');
+
+    // 1. Dense movable 3D sphere particles in hero (>= 40 desktop) respond to pointer drag/move & activate fluid trail
     const heroSpheresCanvas = page.locator('#about-particles-canvas');
     await expect(heroSpheresCanvas).toBeVisible();
+    const heroSphereCount = Number(await heroSpheresCanvas.getAttribute('data-sphere-count'));
+    expect(heroSphereCount).toBeGreaterThanOrEqual(40);
     await page.mouse.move(900, 320);
     await page.mouse.down();
     await page.mouse.move(1080, 410, { steps: 6 });
     await page.mouse.up();
     await expect(heroSpheresCanvas).toHaveAttribute('data-spheres-moved', 'true');
+    await expect(page.locator('#amc-fluid-trail')).toHaveAttribute('data-trail-active', 'true');
 
     // Pause control on 3D spheres works (R-39)
     await page.click('#about-particles-pause');
@@ -488,10 +501,11 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     await page.click('#about-particles-pause');
     await expect(page.locator('#about-particles-pause')).toHaveAttribute('aria-pressed', 'false');
 
-    // 2. Interactive 3D Hologram Solo Creator Chamber renders and reacts to hover
+    // 2. Interactive 3D Hologram Solo Creator Chamber renders Adrian's real photo and reacts to hover
     const holoCanvas = page.locator('#founder-hologram-canvas');
     await holoCanvas.scrollIntoViewIfNeeded();
     await expect(holoCanvas).toBeVisible();
+    await expect(holoCanvas).toHaveAttribute('data-hologram-photo-loaded', 'true', { timeout: 5000 });
     const holoBox = await holoCanvas.boundingBox();
     expect(holoBox?.width ?? 0).toBeGreaterThan(250);
     expect(holoBox?.height ?? 0).toBeGreaterThan(250);

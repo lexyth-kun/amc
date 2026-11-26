@@ -14,6 +14,11 @@ import {
   waveIndexToScrollProgress,
   type SphereBody,
 } from '@/utils/about-interactive';
+import {
+  computeOilWaterStopColors,
+  stepFluidTrailDrops,
+  type FluidTrailDrop,
+} from '@/utils/fluid-trail';
 
 function collectStrings(value: unknown): string[] {
   if (typeof value === 'string') return [value];
@@ -25,10 +30,11 @@ function collectStrings(value: unknown): string[] {
 }
 
 describe('About Page (Hologram Solo Creator, 3D Flip Reviews, Movable Spheres & Auto Scroll Gate)', () => {
-  it('lists strictly one solo creator named Adrian Ali Muthi with zero fabricated team members', () => {
+  it('lists strictly one solo creator named Adrian Ali Muthi with real portrait photo and zero fabricated team members', () => {
     expect(aboutData.creators).toHaveLength(1);
     expect(aboutData.creators[0].index).toBe('001');
     expect(aboutData.creators[0].name).toBe('Adrian Ali Muthi');
+    expect(aboutData.creators[0].photo).toBe('/adrian-founder.webp');
   });
 
   it('groups real buyer reviews into 3 flip clusters (Adobe CC, ChatGPT/Claude/Gemini, CapCut/Canva/Wink) with Ayo Order Sekarang CTA and zero slop', () => {
@@ -57,12 +63,30 @@ describe('About Page (Hologram Solo Creator, 3D Flip Reviews, Movable Spheres & 
     for (const s of allStrings) {
       expect(s, `Found em dash in about.json: "${s}"`).not.toContain('—');
       expect(s, `Found forbidden word in about.json: "${s}"`).not.toMatch(forbiddenWords);
+      expect(s.toLowerCase()).not.toContain('gerakkan bola-bola 3d');
+      expect(s.toLowerCase()).not.toContain('geser & lempar bola 3d');
     }
 
     const joined = allStrings.join(' ');
     expect(joined).toContain('1.266');
     expect(joined).toContain('4.8');
     expect(joined).toContain('1.300+');
+  });
+
+  it('computes light-blue dominant oil-on-water iridescent fluid trail colors and prunes faded drops cleanly', () => {
+    const stops = computeOilWaterStopColors(0.8, 0.9, 0.7);
+    expect(stops.inner).toMatch(/^hsla\((18[5-9]|19[0-9]|20[0-9]),/);
+    expect(stops.mid).toMatch(/^hsla\(/);
+    expect(stops.outer).toMatch(/^hsla\(/);
+
+    const drops: FluidTrailDrop[] = [
+      { x: 100, y: 100, vx: 3, vy: -2, radius: 14, maxRadius: 48, life: 0.8, decay: 0.04, huePhase: 0, swirl: 0.5, kind: 'slick' },
+      { x: 120, y: 120, vx: 0, vy: 0, radius: 30, maxRadius: 40, life: 0.02, decay: 0.04, huePhase: 1, swirl: 1.0, kind: 'ripple' },
+    ];
+    const next = stepFluidTrailDrops(drops, 1);
+    expect(next).toHaveLength(1);
+    expect(next[0].radius).toBeGreaterThan(14);
+    expect(next[0].life).toBeLessThan(0.8);
   });
 
   it('computes reversible 3D scroll-flip angles (0 -> 180 -> 360 deg) across 3 review waves without mirroring text', () => {

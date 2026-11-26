@@ -1,10 +1,20 @@
 const PALETTE = [
-  { main: '#FFFFFF', edge: '#BAE6FD' },
-  { main: '#7DD3FC', edge: '#38BDF8' },
-  { main: '#38BDF8', edge: '#0284C7' },
+  { main: '#FFFFFF', edge: '#BAE6FD', detail: '#0284C7' },
+  { main: '#7DD3FC', edge: '#38BDF8', detail: '#082F49' },
+  { main: '#38BDF8', edge: '#0284C7', detail: '#FFFFFF' },
 ] as const;
 
-interface PlusShape2D {
+type FallbackIconKind = 'robot' | 'editing' | 'gamepad' | 'buzzer' | 'streaming' | 'shield';
+const ICON_KINDS: FallbackIconKind[] = [
+  'robot',
+  'editing',
+  'gamepad',
+  'buzzer',
+  'streaming',
+  'shield',
+];
+
+interface HeroIcon2D {
   nx: number;
   ny: number;
   size: number;
@@ -12,6 +22,7 @@ interface PlusShape2D {
   rotSpeed: number;
   phase: number;
   colorIdx: number;
+  kind: FallbackIconKind;
   pulse: number;
 }
 
@@ -19,18 +30,19 @@ export function mountHeroCanvas2DFallback(canvas: HTMLCanvasElement, count = 9):
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return () => {};
 
-  const shapes: PlusShape2D[] = Array.from({ length: count }, (_, idx) => {
+  const icons: HeroIcon2D[] = Array.from({ length: count }, (_, idx) => {
     const ringAngle = (idx / count) * Math.PI * 2 + 0.3;
     const radiusX = 0.32 + (idx % 2) * 0.1;
     const radiusY = 0.28 + ((idx + 1) % 3) * 0.09;
     return {
       nx: 0.5 + Math.cos(ringAngle) * radiusX,
       ny: 0.48 + Math.sin(ringAngle) * radiusY,
-      size: 18 + (idx % 3) * 7,
-      rot: ringAngle,
-      rotSpeed: (idx % 2 === 0 ? 1 : -1) * 0.008,
+      size: 20 + (idx % 3) * 6,
+      rot: ((idx % 2 === 0 ? 1 : -1) * 0.18),
+      rotSpeed: (idx % 2 === 0 ? 1 : -1) * 0.004,
       phase: idx * 0.9,
       colorIdx: idx % 2 === 0 ? 0 : idx % 3 === 0 ? 2 : 1,
+      kind: ICON_KINDS[idx % ICON_KINDS.length],
       pulse: 0,
     };
   });
@@ -56,23 +68,107 @@ export function mountHeroCanvas2DFallback(canvas: HTMLCanvasElement, count = 9):
     drawFrame(performance.now());
   };
 
-  const drawBeveledPlus = (size: number, colorIdx: number) => {
-    const arm = size * 0.35;
-    const r = arm * 0.44;
+  const drawServiceIcon = (kind: FallbackIconKind, size: number, colorIdx: number) => {
     const swatch = PALETTE[colorIdx];
+    const r = size * 0.32;
 
-    // Extruded 3D depth offset (zero Gaussian shadowBlur CPU cost)
+    // Soft extruded 3D card badge base + crisp AMC service glyph
     ctx.fillStyle = swatch.edge;
     ctx.beginPath();
-    ctx.roundRect(-arm + 3, -size + 4, arm * 2, size * 2, r);
-    ctx.roundRect(-size + 3, -arm + 4, size * 2, arm * 2, r);
+    ctx.roundRect(-size + 3, -size + 4, size * 2, size * 2, r);
     ctx.fill();
 
     ctx.fillStyle = swatch.main;
+    ctx.strokeStyle = swatch.edge;
+    ctx.lineWidth = 1.4;
     ctx.beginPath();
-    ctx.roundRect(-arm, -size, arm * 2, size * 2, r);
-    ctx.roundRect(-size, -arm, size * 2, arm * 2, r);
+    ctx.roundRect(-size, -size, size * 2, size * 2, r);
     ctx.fill();
+    ctx.stroke();
+
+    ctx.strokeStyle = swatch.detail;
+    ctx.fillStyle = swatch.detail;
+    ctx.lineWidth = Math.max(1.8, size * 0.095);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    const u = size * 0.56;
+    if (kind === 'robot') {
+      ctx.beginPath();
+      ctx.roundRect(-u, -u * 0.62, u * 2, u * 1.42, u * 0.34);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(0, -u * 0.62);
+      ctx.lineTo(0, -u * 1.05);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(-u * 0.38, u * 0.02, u * 0.14, 0, Math.PI * 2);
+      ctx.arc(u * 0.38, u * 0.02, u * 0.14, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (kind === 'editing') {
+      ctx.beginPath();
+      ctx.roundRect(-u, -u * 0.8, u * 2, u * 1.6, u * 0.24);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-u, -u * 0.3);
+      ctx.lineTo(u, -u * 0.3);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-u * 0.22, -u * 0.02);
+      ctx.lineTo(u * 0.36, u * 0.28);
+      ctx.lineTo(-u * 0.22, u * 0.58);
+      ctx.closePath();
+      ctx.fill();
+    } else if (kind === 'gamepad') {
+      ctx.beginPath();
+      ctx.roundRect(-u * 1.05, -u * 0.62, u * 2.1, u * 1.24, u * 0.56);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-u * 0.62, 0);
+      ctx.lineTo(-u * 0.26, 0);
+      ctx.moveTo(-u * 0.44, -u * 0.18);
+      ctx.lineTo(-u * 0.44, u * 0.18);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(u * 0.34, -u * 0.12, u * 0.11, 0, Math.PI * 2);
+      ctx.arc(u * 0.56, u * 0.12, u * 0.11, 0, Math.PI * 2);
+      ctx.fill();
+    } else if (kind === 'buzzer') {
+      ctx.beginPath();
+      ctx.moveTo(-u * 0.8, -u * 0.22);
+      ctx.lineTo(u * 0.58, -u * 0.72);
+      ctx.lineTo(u * 0.58, u * 0.58);
+      ctx.lineTo(-u * 0.8, u * 0.22);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-u * 0.5, u * 0.26);
+      ctx.lineTo(-u * 0.34, u * 0.82);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(u * 0.72, -u * 0.06, u * 0.35, -0.7, 0.7);
+      ctx.stroke();
+    } else if (kind === 'streaming') {
+      ctx.beginPath();
+      ctx.arc(0, 0, u * 0.82, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-u * 0.24, -u * 0.38);
+      ctx.lineTo(u * 0.42, 0);
+      ctx.lineTo(-u * 0.24, u * 0.38);
+      ctx.closePath();
+      ctx.fill();
+    } else {
+      ctx.beginPath();
+      ctx.moveTo(0, -u * 0.92);
+      ctx.lineTo(u * 0.78, -u * 0.56);
+      ctx.lineTo(u * 0.72, u * 0.12);
+      ctx.quadraticCurveTo(u * 0.55, u * 0.68, 0, u * 0.96);
+      ctx.quadraticCurveTo(-u * 0.55, u * 0.68, -u * 0.72, u * 0.12);
+      ctx.lineTo(-u * 0.78, -u * 0.56);
+      ctx.closePath();
+      ctx.stroke();
+    }
   };
 
   const drawFrame = (now: number) => {
@@ -82,7 +178,7 @@ export function mountHeroCanvas2DFallback(canvas: HTMLCanvasElement, count = 9):
 
     ctx.clearRect(0, 0, width, height);
 
-    for (const s of shapes) {
+    for (const s of icons) {
       s.rot += s.rotSpeed;
       s.pulse *= 0.85;
       const floatY = Math.sin(t * 1.1 + s.phase) * 9;
@@ -91,9 +187,9 @@ export function mountHeroCanvas2DFallback(canvas: HTMLCanvasElement, count = 9):
 
       ctx.save();
       ctx.translate(s.nx * width + floatX + smoothX * 18, s.ny * height + floatY + smoothY * 18);
-      ctx.rotate(s.rot);
+      ctx.rotate(Math.sin(s.rot) * 0.26);
       ctx.scale(scale, scale);
-      drawBeveledPlus(s.size, s.colorIdx);
+      drawServiceIcon(s.kind, s.size, s.colorIdx);
       ctx.restore();
     }
   };
@@ -110,7 +206,7 @@ export function mountHeroCanvas2DFallback(canvas: HTMLCanvasElement, count = 9):
     const cx = e.clientX - rect.left;
     const cy = e.clientY - rect.top;
 
-    for (const s of shapes) {
+    for (const s of icons) {
       const sx = s.nx * width + smoothX * 18;
       const sy = s.ny * height + smoothY * 18;
       if (Math.hypot(cx - sx, cy - sy) <= s.size * 1.6) {

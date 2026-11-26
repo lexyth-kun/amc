@@ -6,7 +6,6 @@
   "hero": {
     "eyebrow": "TENTANG AL MUTHI CREATIVE",
     "scrollCue": "SCROLL UNTUK JELAJAHI",
-    "particleHint": "Geser & lempar bola 3D",
     "lines": [
       "TOKO DIGITAL",
       "AKUN PREMIUM",
@@ -21,6 +20,7 @@
       "name": "Adrian Ali Muthi",
       "role": "Founder & Pembuat Tunggal, Al Muthi Creative",
       "monogram": "AAM",
+      "photo": "/adrian-founder.webp",
       "hologramTag": "HOLOGRAM PROFIL • 1 / 1 PEMBUAT TUNGGAL",
       "hologramHint": "Gerakkan kursor untuk memutar proyeksi hologram",
       "summary": "Seluruh fondasi Al Muthi Creative, mulai dari desain antarmuka amc.web.id, katalog interaktif, sistem Web Shop otomatis order.amc.web.id, hingga integrasi Bot WhatsApp 24 jam, dirancang dan dijalankan langsung oleh satu orang: Adrian Ali Muthi.",
@@ -197,7 +197,6 @@
     "botLabel": "Order Via Bot WA",
     "botHref": "https://wa.me/27748304118?text=Halo%20Bot%20AMC%2C%20saya%20mau%20order",
     "shopLabel": "Order di Web Shop",
-    "shopHref": "https://order.amc.web.id",
-    "particleHint": "Gerakkan bola-bola 3D dengan kursor atau jari"
+    "shopHref": "https://order.amc.web.id"
   }
 }

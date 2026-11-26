@@ -1,6 +1,11 @@
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import {
+  computeOilWaterStopColors,
+  stepFluidTrailDrops,
+  type FluidTrailDrop,
+} from '@/utils/fluid-trail';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -278,8 +283,113 @@ function initCustomCursor(): void {
   const ring = document.getElementById('amc-cursor-ring');
   if (!dot || !ring) return;
 
+  // Hide default OS arrow cursor cleanly on fine-pointer desktop
+  document.documentElement.classList.add('has-custom-cursor');
+
+  const trailCanvas = document.getElementById('amc-fluid-trail') as HTMLCanvasElement | null;
+  const trailCtx = trailCanvas?.getContext('2d') ?? null;
+
+  let trailW = window.innerWidth;
+  let trailH = window.innerHeight;
+  let trailDpr = Math.min(window.devicePixelRatio || 1, 2);
+  let drops: FluidTrailDrop[] = [];
+  let trailRafId = 0;
+  let trailRunning = false;
+  let lastTrailFrame = performance.now();
+  let phaseCursor = 0;
+  let spawnCounter = 0;
+  let hoveringInput = false;
+
+  const resizeTrail = () => {
+    if (!trailCanvas || !trailCtx) return;
+    trailW = window.innerWidth;
+    trailH = window.innerHeight;
+    trailDpr = Math.min(window.devicePixelRatio || 1, 2);
+    trailCanvas.width = Math.round(trailW * trailDpr);
+    trailCanvas.height = Math.round(trailH * trailDpr);
+    trailCtx.setTransform(trailDpr, 0, 0, trailDpr, 0, 0);
+  };
+
+  const renderTrail = (now: number) => {
+    if (!trailCtx || !trailCanvas) {
+      trailRunning = false;
+      return;
+    }
+    const dt = Math.min(2, Math.max(0.4, (now - lastTrailFrame) / 16.667));
+    lastTrailFrame = now;
+
+    drops = stepFluidTrailDrops(drops, dt);
+    trailCtx.clearRect(0, 0, trailW, trailH);
+
+    for (let i = 0; i < drops.length; i++) {
+      const d = drops[i];
+      const velNorm = Math.min(1, Math.hypot(d.vx, d.vy) / 10);
+      const colors = computeOilWaterStopColors(d.huePhase, d.life, velNorm);
+
+      if (d.kind === 'slick') {
+        const ox = Math.cos(d.huePhase) * d.radius * 0.24;
+        const oy = Math.sin(d.huePhase * 0.8) * d.radius * 0.24;
+        const grad = trailCtx.createRadialGradient(
+          d.x + ox,
+          d.y + oy,
+          d.radius * 0.08,
+          d.x,
+          d.y,
+          d.radius
+        );
+        grad.addColorStop(0, colors.inner);
+        grad.addColorStop(0.42, colors.mid);
+        grad.addColorStop(0.76, colors.outer);
+        grad.addColorStop(1, 'rgba(125, 211, 252, 0)');
+
+        trailCtx.fillStyle = grad;
+        trailCtx.beginPath();
+        trailCtx.arc(d.x, d.y, d.radius, 0, Math.PI * 2);
+        trailCtx.fill();
+      } else {
+        // Delicate shimmering oil-water surface ripple ring
+        trailCtx.save();
+        trailCtx.beginPath();
+        trailCtx.ellipse(
+          d.x,
+          d.y,
+          d.radius,
+          d.radius * 0.84,
+          d.swirl,
+          0,
+          Math.PI * 2
+        );
+        trailCtx.strokeStyle = colors.rim;
+        trailCtx.lineWidth = 1.25;
+        trailCtx.stroke();
+        trailCtx.restore();
+      }
+    }
+
+    if (drops.length > 0) {
+      trailRafId = window.requestAnimationFrame(renderTrail);
+    } else {
+      trailRunning = false;
+      trailRafId = 0;
+    }
+  };
+
+  const ensureTrailLoop = () => {
+    if (trailRunning || !trailCtx) return;
+    trailRunning = true;
+    lastTrailFrame = performance.now();
+    trailRafId = window.requestAnimationFrame(renderTrail);
+  };
+
+  if (trailCanvas && trailCtx) {
+    resizeTrail();
+    window.addEventListener('resize', resizeTrail);
+  }
+
   let mx = -100;
   let my = -100;
+  let prevMx = -100;
+  let prevMy = -100;
   let rx = -100;
   let ry = -100;
   let scale = 1;
@@ -290,15 +400,82 @@ function initCustomCursor(): void {
     'pointermove',
     (e) => {
       if (e.pointerType && e.pointerType !== 'mouse') return;
-      mx = e.clientX;
-      my = e.clientY;
+      const nextX = e.clientX;
+      const nextY = e.clientY;
+
       if (!active) {
         active = true;
-        rx = mx;
-        ry = my;
-        dot.style.opacity = '1';
-        ring.style.opacity = '1';
+        mx = nextX;
+        my = nextY;
+        prevMx = nextX;
+        prevMy = nextY;
+        rx = nextX;
+        ry = nextY;
+        if (!hoveringInput) {
+          dot.style.opacity = '1';
+          ring.style.opacity = '1';
+        }
+        return;
       }
+
+      const dx = nextX - prevMx;
+      const dy = nextY - prevMy;
+      const dist = Math.hypot(dx, dy);
+
+      if (trailCtx && trailCanvas && !hoveringInput && dist > 1.5) {
+        const steps = Math.min(7, Math.max(1, Math.ceil(dist / 8)));
+        const speedBoost = Math.min(1.5, dist / 24);
+        for (let s = 1; s <= steps; s++) {
+          const t = s / steps;
+          const sx = prevMx + dx * t;
+          const sy = prevMy + dy * t;
+          phaseCursor += 0.22;
+          spawnCounter++;
+
+          drops.push({
+            x: sx + (Math.cos(phaseCursor * 1.7) * 2.5),
+            y: sy + (Math.sin(phaseCursor * 1.3) * 2.5),
+            vx: (dx / steps) * 0.24 + Math.cos(phaseCursor) * 0.35,
+            vy: (dy / steps) * 0.24 + Math.sin(phaseCursor) * 0.35,
+            radius: 10 + speedBoost * 7,
+            maxRadius: 34 + speedBoost * 26,
+            life: 0.92,
+            decay: 0.022 + (spawnCounter % 3) * 0.004,
+            huePhase: phaseCursor,
+            swirl: phaseCursor * 0.5,
+            kind: 'slick',
+          });
+
+          if (dist > 14 && spawnCounter % 5 === 0) {
+            drops.push({
+              x: sx,
+              y: sy,
+              vx: (dx / steps) * 0.14,
+              vy: (dy / steps) * 0.14,
+              radius: 10,
+              maxRadius: 42 + speedBoost * 24,
+              life: 0.72,
+              decay: 0.028,
+              huePhase: phaseCursor + 1.2,
+              swirl: Math.atan2(dy, dx),
+              kind: 'ripple',
+            });
+          }
+        }
+
+        if (drops.length > 96) {
+          drops.splice(0, drops.length - 96);
+        }
+        if (trailCanvas.dataset.trailActive !== 'true') {
+          trailCanvas.dataset.trailActive = 'true';
+        }
+        ensureTrailLoop();
+      }
+
+      prevMx = nextX;
+      prevMy = nextY;
+      mx = nextX;
+      my = nextY;
     },
     { passive: true }
   );
@@ -306,8 +483,8 @@ function initCustomCursor(): void {
   document.addEventListener('mouseover', (e) => {
     const target = e.target as HTMLElement | null;
     if (!target) return;
-    const isInput = Boolean(target.closest('input, textarea, select'));
-    if (isInput) {
+    hoveringInput = Boolean(target.closest('input, textarea, select'));
+    if (hoveringInput) {
       dot.style.opacity = '0';
       ring.style.opacity = '0';
       return;
@@ -320,7 +497,7 @@ function initCustomCursor(): void {
     const interactive = Boolean(target.closest('a, button, [role="button"], summary'));
     ring.classList.toggle('is-product-hover', productEl);
     dot.classList.toggle('is-product-hover', productEl);
-    targetScale = productEl ? 1.05 : interactive ? 1.6 : 1;
+    targetScale = productEl ? 1.05 : interactive ? 1.55 : 1;
   });
 
   window.addEventListener('mouseout', (e) => {
@@ -330,13 +507,17 @@ function initCustomCursor(): void {
       ring.classList.remove('is-product-hover');
       dot.classList.remove('is-product-hover');
       active = false;
+      if (trailRafId && drops.length === 0) {
+        window.cancelAnimationFrame(trailRafId);
+        trailRunning = false;
+      }
     }
   });
 
   gsap.ticker.add(() => {
     if (!active) return;
-    rx += (mx - rx) * 0.16;
-    ry += (my - ry) * 0.16;
+    rx += (mx - rx) * 0.18;
+    ry += (my - ry) * 0.18;
     scale += (targetScale - scale) * 0.18;
     dot.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
     ring.style.transform = `translate3d(${rx.toFixed(1)}px, ${ry.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`;
