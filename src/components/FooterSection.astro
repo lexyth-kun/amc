@@ -81,12 +81,12 @@ const {
           </li>
           <li>
             <a
-              href={content.footer.contacts.waAdminHref}
+              href={content.footer.contacts.waBotHref}
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex min-h-[44px] items-center font-display text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
             >
-              WhatsApp ↗
+              Bot WhatsApp ↗
             </a>
           </li>
           <li>
@@ -102,22 +102,10 @@ const {
         </ul>
       </div>
 
-      <!-- Col 2: Direct Contact Inquiries (Lusion General / Business cadence) -->
+      <!-- Col 2: Direct Contact Inquiries (Order via Bot WA, CS strictly for support) -->
       <div class="flex flex-col gap-5 lg:col-span-3">
         <div>
-          <p class="m-0 text-xs font-semibold text-body">Admin & Order</p>
-          <a
-            href={content.footer.contacts.waAdminHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="mt-0.5 inline-flex min-h-[44px] items-center font-display text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
-          >
-            {content.footer.contacts.waAdminDisplay}
-          </a>
-        </div>
-
-        <div>
-          <p class="m-0 text-xs font-semibold text-body">Bot Otomatis 24 Jam</p>
+          <p class="m-0 text-xs font-semibold text-body">Order Otomatis (Bot WA 24 Jam)</p>
           <a
             href={content.footer.contacts.waBotHref}
             target="_blank"
@@ -125,6 +113,18 @@ const {
             class="mt-0.5 inline-flex min-h-[44px] items-center font-display text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
           >
             {content.footer.contacts.waBotDisplay}
+          </a>
+        </div>
+
+        <div>
+          <p class="m-0 text-xs font-semibold text-body">Bantuan & Klaim Garansi (CS)</p>
+          <a
+            href={content.footer.contacts.waAdminHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-0.5 inline-flex min-h-[44px] items-center font-display text-sm font-bold text-navy no-underline transition-colors hover:text-sky-ink"
+          >
+            {content.footer.contacts.waAdminDisplay}
           </a>
         </div>
 
@@ -139,7 +139,7 @@ const {
         </div>
       </div>
 
-      <!-- Col 3 (Right Half): Monumental Lusion-Style Frameless Info WA Opt-In -->
+      <!-- Col 3 (Right Half): Monumental Lusion-Style Frameless Info WA Opt-In -> Direct to Bot WA -->
       <div class="sm:col-span-2 lg:col-span-5 lg:col-start-8">
         <form class="js-newsletter-form" novalidate>
           <label
@@ -174,15 +174,6 @@ const {
           </div>
 
           <p class="js-newsletter-feedback mt-2.5 text-xs leading-relaxed text-body" role="status" aria-live="polite"></p>
-          <a
-            href={content.footer.contacts.waAdminHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            hidden
-            class="js-wa-confirm-link amc-btn-wa mt-2 !min-h-[44px] !px-4 !py-2 !text-xs"
-          >
-            Konfirmasi via WhatsApp Admin →
-          </a>
         </form>
       </div>
     </div>

@@ -7,7 +7,7 @@
   "header": {
     "brandName": "AL MUTHI CREATIVE",
     "ctaLabel": "Order Sekarang",
-    "ctaHref": "https://order.amc.web.id",
+    "ctaHref": "https://wa.me/27748304118?text=menu",
     "menuButtonLabel": "MENU",
     "closeButtonLabel": "TUTUP",
     "navLinks": [
@@ -34,10 +34,10 @@
     "headlineBefore": "Semua Akun",
     "headlineHighlight": "Premium,",
     "headlineAfter": "Satu Tempat.",
-    "subheadline": "ChatGPT, Claude, Adobe, Canva, Netflix, sampai Top Up Game. Proses kilat, bergaransi penuh, admin 24 jam.",
+    "subheadline": "ChatGPT, Claude, Adobe, Canva, Netflix, sampai Top Up Game. Proses kilat, bergaransi penuh, bot otomatis 24 jam.",
     "primaryCta": {
-      "label": "Lihat Semua Produk →",
-      "href": "https://order.amc.web.id"
+      "label": "Order Sekarang →",
+      "href": "https://wa.me/27748304118?text=menu"
     },
     "secondaryCta": {
       "label": "Cara Order",
@@ -60,7 +60,7 @@
     "playButtonLabel": "PLAY",
     "caption": "Klik tombol Play untuk melihat 4 langkah order otomatis sampai akun aktif.",
     "ctaLabel": "Order Sekarang →",
-    "ctaHref": "https://order.amc.web.id",
+    "ctaHref": "https://wa.me/27748304118?text=menu",
     "steps": [
       {
         "step": "01",
@@ -104,18 +104,18 @@
     "phase4Headline": "Dan biarkan imajinasimu jalan terus.",
     "phase4Sub": "Seluruh 41 layanan siap aktif dalam hitungan menit dengan perlindungan garansi penuh AMC.",
     "ctaLabel": "Order Sekarang →",
-    "ctaHref": "https://order.amc.web.id",
+    "ctaHref": "https://wa.me/27748304118?text=menu",
     "catalogCtaLabel": "Jelajahi Halaman Produk →",
     "catalogCtaHref": "/produk/"
   },
   "howToOrder": {
     "eyebrow": "ALUR PEMESANAN",
     "headline": "Order semudah chat.",
-    "primaryCtaLabel": "Order lewat Web Shop →",
-    "primaryCtaHref": "https://order.amc.web.id",
-    "botCtaLabel": "Chat Bot WA Otomatis",
-    "botCtaHref": "https://wa.me/27748304118?text=menu",
-    "helperNote": "Atau chat admin WA kalau bingung.",
+    "primaryCtaLabel": "Order via Bot WA →",
+    "primaryCtaHref": "https://wa.me/27748304118?text=menu",
+    "botCtaLabel": "Buka Web Shop",
+    "botCtaHref": "https://order.amc.web.id",
+    "helperNote": "Kendala akun atau klaim garansi? Chat CS.",
     "helperHref": "https://wa.me/6285117120101",
     "steps": [
       {
@@ -270,25 +270,25 @@
     "headlineBefore": "Siap",
     "headlineHighlight": "upgrade",
     "headlineAfter": "akunmu?",
-    "subheadline": "Stok Flash Sale menipis, order sekarang sebelum kehabisan.",
-    "primaryLabel": "Order di Web Shop →",
-    "primaryHref": "https://order.amc.web.id",
-    "waLabel": "Chat Admin WA",
-    "waHref": "https://wa.me/6285117120101"
+    "subheadline": "Stok Flash Sale menipis, order otomatis 24 jam lewat Bot WhatsApp AMC sekarang.",
+    "primaryLabel": "Order Sekarang (Bot WA) →",
+    "primaryHref": "https://wa.me/27748304118?text=menu",
+    "waLabel": "Buka Web Shop",
+    "waHref": "https://order.amc.web.id"
   },
   "footer": {
     "tagline": "Proses cepat, bergaransi. Al Muthi Creative.",
     "newsletterLabel": "Info Promo & Stok Baru (No. Telepon / WhatsApp)",
     "newsletterPlaceholder": "0812-3456-7890 atau +62812...",
-    "newsletterButton": "Daftar Info WA",
-    "newsletterSuccess": "Nomor tercatat di perangkat ini. Klik tombol konfirmasi di bawah untuk langsung mengaktifkan info promo & stok baru via WhatsApp Admin AMC.",
+    "newsletterButton": "Kirim ke Bot WA",
+    "newsletterSuccess": "Nomor diarahkan langsung ke Bot WhatsApp AMC (+27 74 830 4118).",
     "copyright": "© 2026 Al Muthi Creative",
     "madeIn": "Dibuat dengan ♥ di Indonesia",
     "contacts": {
       "waAdminDisplay": "+62 851-1712-0101",
       "waAdminHref": "https://wa.me/6285117120101",
       "waBotDisplay": "+27 74 830 4118",
-      "waBotHref": "https://wa.me/27748304118",
+      "waBotHref": "https://wa.me/27748304118?text=menu",
       "instagramDisplay": "@almuthi_creative",
       "instagramHref": "https://www.instagram.com/almuthi_creative",
       "emailDisplay": "info@amc.web.id",

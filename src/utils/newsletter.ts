@@ -2,12 +2,11 @@ export interface WhatsappOptInResult {
   status: 'empty' | 'invalid' | 'valid';
   message: string;
   normalizedPhone?: string;
-  waConfirmUrl?: string;
+  waBotUrl?: string;
 }
 
-const AMC_ADMIN_WA = '6285117120101';
+export const AMC_BOT_WA = '27748304118';
 
-// TODO(v2): Connect phone/WhatsApp opt-in directly to automated AMC broadcast API when backend is enabled.
 export function validateWhatsappOptIn(rawPhone: string): WhatsappOptInResult {
   const trimmed = rawPhone.trim();
   if (!trimmed) {
@@ -37,14 +36,13 @@ export function validateWhatsappOptIn(rawPhone: string): WhatsappOptInResult {
   }
 
   const text = encodeURIComponent(
-    `Halo Admin AMC, saya mau daftar info promo & stok baru untuk nomor WhatsApp ${digits}.`
+    `Halo Bot AMC, daftar info promo & stok baru untuk nomor ${digits}`
   );
   return {
     status: 'valid',
     normalizedPhone: digits,
-    waConfirmUrl: `https://wa.me/${AMC_ADMIN_WA}?text=${text}`,
-    message:
-      'Nomor tercatat di perangkat ini. Klik tombol konfirmasi WhatsApp di bawah agar admin mengaktifkan info promo & stok terbaru.',
+    waBotUrl: `https://wa.me/${AMC_BOT_WA}?text=${text}`,
+    message: `Nomor ${digits} diarahkan langsung ke Bot WhatsApp AMC (+27 74 830 4118).`,
   };
 }
 

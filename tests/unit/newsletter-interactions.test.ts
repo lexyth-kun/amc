@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { formatAnimatedCounter, validateWhatsappOptIn } from '@/utils/newsletter';
 
 describe('WhatsApp / Phone Promo Opt-In Validation & Counter Formatting', () => {
-  it('returns explicit empty, invalid, and valid states with normalized WhatsApp link (R-26, R-27)', () => {
+  it('returns explicit empty, invalid, and valid states targeting Bot WA (+27 74 830 4118) directly without extra confirmation', () => {
     expect(validateWhatsappOptIn('')).toEqual({
       status: 'empty',
       message: 'Masukkan nomor telepon atau WhatsApp terlebih dahulu.',
@@ -16,12 +16,15 @@ describe('WhatsApp / Phone Promo Opt-In Validation & Counter Formatting', () => 
     const localId = validateWhatsappOptIn('0812-3456-7890');
     expect(localId.status).toBe('valid');
     expect(localId.normalizedPhone).toBe('6281234567890');
-    expect(localId.waConfirmUrl).toContain('https://wa.me/6285117120101?text=');
-    expect(localId.waConfirmUrl).toContain('6281234567890');
+    expect(localId.waBotUrl).toContain('https://wa.me/27748304118?text=');
+    expect(localId.waBotUrl).toContain('6281234567890');
+    expect(localId.waBotUrl).not.toContain('6285117120101');
+    expect(localId.message.toLowerCase()).not.toContain('konfirmasi');
 
     const intl = validateWhatsappOptIn('+62 851 1712 0101');
     expect(intl.status).toBe('valid');
     expect(intl.normalizedPhone).toBe('6285117120101');
+    expect(intl.waBotUrl).toContain('https://wa.me/27748304118?text=');
   });
 
   it('formats animated counter values with Indonesian thousands separators and suffixes', () => {

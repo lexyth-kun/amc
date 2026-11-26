@@ -2183,8 +2183,8 @@ const ALL_DETAILS: ProductDetail[] = products.allServices.map((svc, idx, arr) =>
   const next = arr[(idx + 1) % arr.length];
   const prev = arr[(idx - 1 + arr.length) % arr.length];
   const displayName = override.name ?? featured?.name ?? svc.name;
-  const waMessage = encodeURIComponent(
-    `Halo Admin AMC, saya mau tanya dan order layanan ${displayName} (${svc.category}).`
+  const botKeyword = encodeURIComponent(
+    svc.slug.replace(/^game-|^buzzer-/, '')
   );
 
   return {
@@ -2194,7 +2194,7 @@ const ALL_DETAILS: ProductDetail[] = products.allServices.map((svc, idx, arr) =>
     category: svc.category,
     logo: svc.logo,
     orderHref: svc.href,
-    waOrderHref: `https://wa.me/6285117120101?text=${waMessage}`,
+    waOrderHref: `https://wa.me/27748304118?text=${botKeyword}`,
     price: featured?.price ?? null,
     duration: featured?.duration ?? null,
     badge: featured?.badge ?? null,

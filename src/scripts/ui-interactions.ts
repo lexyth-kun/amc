@@ -402,7 +402,6 @@ function initWhatsappPromoForms(): void {
   document.querySelectorAll<HTMLFormElement>('.js-newsletter-form').forEach((form) => {
     const input = form.querySelector<HTMLInputElement>('input[name="phone"]');
     const feedback = form.querySelector<HTMLElement>('.js-newsletter-feedback');
-    const waLink = form.querySelector<HTMLAnchorElement>('.js-wa-confirm-link');
     if (!input || !feedback) return;
 
     form.addEventListener('submit', (e) => {
@@ -410,19 +409,33 @@ function initWhatsappPromoForms(): void {
       const result = validateWhatsappOptIn(input.value);
       feedback.textContent = result.message;
 
-      if (result.status === 'valid') {
-        feedback.className = 'js-newsletter-feedback mt-2 text-xs font-semibold leading-relaxed text-sky-ink';
+      if (result.status === 'valid' && result.waBotUrl) {
+        feedback.className = 'js-newsletter-feedback mt-2.5 text-xs font-semibold leading-relaxed text-sky-ink';
+        form.dataset.lastBotUrl = result.waBotUrl;
         try {
           window.localStorage.setItem('amc_wa_promo_v1', result.normalizedPhone || input.value.trim());
         } catch {}
-        if (waLink && result.waConfirmUrl) {
-          waLink.href = result.waConfirmUrl;
-          waLink.hidden = false;
+
+        // Optional server webhook hook if connected later to AMC Bot API
+        const webhook = form.dataset.botWebhook;
+        if (webhook) {
+          void fetch(webhook, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              phone: result.normalizedPhone,
+              source: 'amc.web.id',
+              botNumber: '27748304118',
+            }),
+          }).catch(() => {});
         }
+
+        // Open Bot WA (+27 74 830 4118) directly inside user submit gesture (zero extra confirm click)
+        window.open(result.waBotUrl, '_blank', 'noopener,noreferrer');
         input.value = '';
       } else {
-        feedback.className = 'js-newsletter-feedback mt-2 text-xs font-semibold leading-relaxed text-sale-ink';
-        if (waLink) waLink.hidden = true;
+        feedback.className = 'js-newsletter-feedback mt-2.5 text-xs font-semibold leading-relaxed text-sale-ink';
+        delete form.dataset.lastBotUrl;
         input.focus();
       }
     });

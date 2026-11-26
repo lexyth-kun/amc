@@ -193,9 +193,17 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     await page.keyboard.press('Escape');
     await expect(page.locator('#tnc-modal')).toBeHidden();
 
-    // Footer Phone / WhatsApp Promo Opt-In: empty -> invalid -> valid with live WA confirm button
+    // Header Order Sekarang CTA routes directly to Bot WA (+27 74 830 4118), never Admin
+    await expect(page.locator('header a', { hasText: 'Order Sekarang' })).toHaveAttribute(
+      'href',
+      'https://wa.me/27748304118?text=menu'
+    );
+
+    // Footer Phone / WhatsApp Promo Form: empty -> invalid -> valid dispatches directly to Bot WA without confirmation button
     await page.locator('#kontak').scrollIntoViewIfNeeded();
     const footerForm = page.locator('#kontak .js-newsletter-form');
+    await expect(footerForm.locator('.js-wa-confirm-link')).toHaveCount(0);
+
     await footerForm.locator('button[type="submit"]').click();
     await expect(footerForm.locator('.js-newsletter-feedback')).toContainText('terlebih dahulu');
 
@@ -203,12 +211,29 @@ test.describe('AMC × Lusion Multi-Page & Spatial Scroll E2E Verification', () =
     await footerForm.locator('button[type="submit"]').click();
     await expect(footerForm.locator('.js-newsletter-feedback')).toContainText('Format nomor');
 
+    // Intercept window.open so Playwright verifies immediate direct Bot WA dispatch cleanly offline
+    await page.evaluate(() => {
+      const win = window as Window & { __openedBotUrls?: string[] };
+      win.__openedBotUrls = [];
+      window.open = ((url?: string | URL) => {
+        win.__openedBotUrls?.push(String(url ?? ''));
+        return null;
+      }) as typeof window.open;
+    });
+
     await footerForm.locator('input[name="phone"]').fill('0812-3456-7890');
     await footerForm.locator('button[type="submit"]').click();
-    await expect(footerForm.locator('.js-newsletter-feedback')).toContainText('Nomor tercatat');
-    const waConfirmHref = await footerForm.locator('.js-wa-confirm-link').getAttribute('href');
-    expect(waConfirmHref).toContain('https://wa.me/6285117120101?text=');
-    expect(waConfirmHref).toContain('6281234567890');
+    await expect(footerForm.locator('.js-newsletter-feedback')).toContainText('+27 74 830 4118');
+
+    const lastBotUrl = await footerForm.getAttribute('data-last-bot-url');
+    expect(lastBotUrl).toContain('https://wa.me/27748304118?text=');
+    expect(lastBotUrl).toContain('6281234567890');
+    expect(lastBotUrl).not.toContain('6285117120101');
+
+    const openedUrls = await page.evaluate(
+      () => (window as Window & { __openedBotUrls?: string[] }).__openedBotUrls ?? []
+    );
+    expect(openedUrls[0]).toBe(lastBotUrl);
 
     expect(errors).toEqual([]);
   });

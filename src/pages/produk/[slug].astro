@@ -131,26 +131,26 @@ const flashStockPct = detail.flashSale
             <!-- Price & Direct Action Row -->
             <div data-detail-hero-item class="mt-5 flex flex-wrap items-center gap-3">
               <a
-                href={detail.orderHref}
+                href={detail.waOrderHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-magnetic
                 class="amc-btn-primary"
               >
-                <span>Order di Web Shop</span>
+                <span>Order Sekarang (Bot WA)</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                   <path d="M5 12h14M13 5l7 7-7 7"></path>
                 </svg>
               </a>
 
               <a
-                href={detail.waOrderHref}
+                href={detail.orderHref}
                 target="_blank"
                 rel="noopener noreferrer"
                 data-magnetic
                 class="amc-btn-ghost"
               >
-                <span>Tanya Admin WA</span>
+                <span>Lihat di Web Shop</span>
               </a>
             </div>
 
@@ -589,34 +589,25 @@ const flashStockPct = detail.flashSale
 
           <div class="mt-7 flex flex-wrap items-center gap-3">
             <a
-              href={detail.orderHref}
+              href={detail.waOrderHref}
               target="_blank"
               rel="noopener noreferrer"
               data-magnetic
               class="amc-btn-primary"
             >
-              <span>Order di order.amc.web.id</span>
+              <span>Order Sekarang (Bot WA)</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M5 12h14M13 5l7 7-7 7"></path>
               </svg>
             </a>
 
             <a
-              href="https://wa.me/27748304118?text=menu"
+              href={detail.orderHref}
               target="_blank"
               rel="noopener noreferrer"
               class="amc-btn-ghost"
             >
-              <span>Bot WA 24 Jam</span>
-            </a>
-
-            <a
-              href={detail.waOrderHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="amc-btn-wa"
-            >
-              <span>Chat Admin WA</span>
+              <span>Lihat di order.amc.web.id</span>
             </a>
           </div>
         </div>

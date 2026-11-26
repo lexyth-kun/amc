@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import products from '@/data/products.json';
+import content from '@/data/content.json';
 import { getAllProductDetails, getProductDetailBySlug } from '@/data/product-details';
 import {
   computeActivePanelIndex,
@@ -19,7 +20,7 @@ function collectStrings(value: unknown): string[] {
 }
 
 describe('Product Detail Pages (November 2026 Catalog & Horizontal Scroll Math)', () => {
-  it('provides a complete detail page entry for all 41 AMC services with valid next/prev circular navigation', () => {
+  it('provides a complete detail page entry for all 41 AMC services with valid next/prev circular navigation and Bot WA order routing', () => {
     const details = getAllProductDetails();
     expect(details).toHaveLength(products.allServices.length);
 
@@ -34,9 +35,19 @@ describe('Product Detail Pages (November 2026 Catalog & Horizontal Scroll Math)'
       expect(getProductDetailBySlug(d.nextSlug)).toBeDefined();
       expect(getProductDetailBySlug(d.prevSlug)).toBeDefined();
       expect(d.orderHref.startsWith('https://order.amc.web.id')).toBe(true);
+      expect(d.waOrderHref.startsWith('https://wa.me/27748304118?text=')).toBe(true);
+      expect(d.waOrderHref).not.toContain('6285117120101');
       expect(d.highlights2026.length).toBeGreaterThanOrEqual(3);
       expect(d.metadataServices.length).toBeGreaterThanOrEqual(3);
     }
+
+    // All primary Order / Order Sekarang CTAs always point to Bot WA (+27 74 830 4118), never Admin
+    expect(content.header.ctaHref).toMatch(/^https:\/\/wa\.me\/27748304118/);
+    expect(content.hero.primaryCta.href).toMatch(/^https:\/\/wa\.me\/27748304118/);
+    expect(content.showreel.ctaHref).toMatch(/^https:\/\/wa\.me\/27748304118/);
+    expect(content.cinematic.ctaHref).toMatch(/^https:\/\/wa\.me\/27748304118/);
+    expect(content.howToOrder.primaryCtaHref).toMatch(/^https:\/\/wa\.me\/27748304118/);
+    expect(content.finalCta.primaryHref).toMatch(/^https:\/\/wa\.me\/27748304118/);
   });
 
   it('references existing showcase WebP visuals in public/ for every product hero and gallery frame', () => {
